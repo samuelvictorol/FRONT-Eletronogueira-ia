@@ -20,7 +20,7 @@
         <!-- Ações desktop -->
         <div class="nav-actions gt-sm">
           <q-btn flat class="nav-link" @click="scrollTo('#produtos')">Catálogo</q-btn>
-          <q-btn flat class="nav-link" @click="scrollTo('#horarios')">Horários</q-btn>
+          <q-btn flat class="nav-link q-mx-xs" @click="scrollTo('#horarios')">Horários</q-btn>
           <q-btn color="secondary" unelevated class="btn primary text-bold text-shadow" href="tel:+556136290040">
             (61) 3629-0040
           </q-btn>
@@ -51,8 +51,18 @@
             src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
             alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
       </div>
-      <div class="absolute-bottom text-center q-pb-md">
-        Eletro Nogueira - 26.931.014/0001-12
+      <div class="absolute-bottom w100 row justify-center q-pb-md">
+        <div class="brand">
+          <div class="logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
+              alt="EN" style="border-radius:100%; width:44px; height:44px" />
+          </div>
+          <div class="brand-text">
+            <strong class="text-secondary">ELETRO NOGUEIRA</strong>
+            <small>Valparaíso de Goiás • BR-040</small>
+            <small class="text-negative text-bold">26.931.014/0001-12</small>
+          </div>
+        </div>
       </div>
     </q-drawer>
 
@@ -120,11 +130,58 @@
             </div>
           </div>
         </section>
-
-        <!-- PRODUTOS -->
-        <section id="produtos" class="section light">
-          <div class="container bg-grey-3 rounded-borders q-pa-sm">
+        <section id="produtos">
+          <div class=" bg-secondary text-white q-pt-sm">
             <h2 class="center">Catálogo de produtos</h2>
+            <q-carousel v-model="slide" v-model:fullscreen="fs" transition-prev="slide-right"
+              transition-next="slide-left" animated control-color="primary" navigation padding arrows swipeable
+              height="400px" class="bg-secondary rounded-borders">
+              <template #control>
+                <q-btn flat dense color="primary" round :icon="fs ? 'fullscreen_exit' : 'fullscreen'" @click="fs = !fs"
+                  class="q-ml-sm q-mt-sm" />
+              </template>
+              <q-carousel-slide :name="1" class="column no-wrap">
+                <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
+                  <q-img class="rounded-borders col-6 full-height"
+                    src="https://lh3.googleusercontent.com/p/AF1QipNu9WuJF2DhEH0KdB7Qtl9uCiecop1aUaciuSx2=s680-w680-h510-rw" />
+                  <q-img class="rounded-borders col-6 full-height"
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxQ5ryS1tpHhdI2779-8TuNGST8BqID2yx46lRYEOfh35jSIJb9ctsjZe4P80oaPBQWmLVCZra8fwiyJ4d7IY5iZ8uPzjlvLdCV-GJc6gBPxB5o86vMd_PJDri9q3R1FWhTKYP5=s680-w680-h510-rw" />
+                </div>
+              </q-carousel-slide>
+              <q-carousel-slide :name="2" class="column no-wrap">
+                <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
+                  <q-img class="rounded-borders col-6 full-height"
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzZBzEFOf3nhbpu82xl4XLquokjRWj6h1OMmp0ZJwKrSVjTQCbD79NB3N5Wqe_dKCb5Cz9YzK1U0czuWSnwInOVR8prGbb-G3blw812pIw5Wyoe2-FQUqB3YhVi-SJSt3TmtGPa_g=s680-w680-h510-rw" />
+                  <q-img class="rounded-borders col-6 full-height"
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyagXSk9RxAoFfbktDFmHkXfBM65tJlcZjN1_R3pjYH3XNAusscYbSw5Nu-1U0tVubxB9psqmRMn7-IcnL-llcs0Q-TnCdj45pQqOUo6PguO6WpaIgV_bTcdXNp8nqBR-mdw-RKsQ=s680-w680-h510-rw" />
+                </div>
+              </q-carousel-slide>
+              <q-carousel-slide :name="3" class="column no-wrap">
+                <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
+                  <q-img class="rounded-borders col-6 full-height"
+                    src="https://lh3.googleusercontent.com/p/AF1QipN-mmS6_z1lg5Irtn_XpIHLte5Tt_R2CLqpv2F2=s680-w680-h510-rw" />
+                  <q-img class="rounded-borders col-6 full-height"
+                    src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwZkbDh93brg_iTpOSVN73R0WWeZiUyRO_2KHmW9y8Di4_BQQeCRN-T1F2_4vxN5lxhUvs80cnzderCjt_9ERohbzt6TB_yYo-XXxD8M9OCdkJeKupTnvBykHZNARwXrSK9GYrZNA=s680-w680-h510-rw" />
+                </div>
+              </q-carousel-slide>
+              <q-carousel-slide :name="4" class="column no-wrap">
+                <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
+                  <q-img class="rounded-borders col-6 full-height"
+                    src="https://lh3.googleusercontent.com/p/AF1QipPs3aLH9VNuJDuv5xUxOFwIKg_e4AIHKkSvxelo=s680-w680-h510-rw" />
+                  <q-img class="rounded-borders col-6 full-height"
+                    src="https://lh3.googleusercontent.com/p/AF1QipPQf6F4n63OrwWlYr5hpOwPuz3ZlahG18SFf46C=s680-w680-h510-rw" />
+                </div>
+              </q-carousel-slide>
+            </q-carousel>
+          </div>
+        </section>
+        <!-- PRODUTOS -->
+        <section class="section light bg-secondary q-pb-lg">
+          <div class="w100 row justify-center no-wrap">
+            <q-btn color="blue" class=" text-white  text-bold q-pa-sm"  label="Ver Catálogo Completo"
+              icon-right="search" />
+          </div>
+          <div class="container rounded-borders q-pa-sm">
             <div class="cards">
               <article class="product glass">
                 <h4>Ferramentas Elétricas</h4>
@@ -160,7 +217,7 @@
               </article>
             </div>
             <div class="center mt">
-              <q-btn unelevated class="btn whats" type="a" target="_blank" rel="noopener"
+              <q-btn flat class="btn whats text-white" type="a" target="_blank" rel="noopener"
                 href="https://wa.me/556136290040?text=Ol%C3%A1!%20Pode%20me%20enviar%20o%20pre%C3%A7o%20e%20disponibilidade%20deste%20item%3F"
                 label="Pedir orçamento no WhatsApp" />
             </div>
@@ -275,9 +332,10 @@ import { useQuasar } from 'quasar'
 const $q = useQuasar()
 const leftDrawerOpen = ref(false)
 const year = new Date().getFullYear()
-const heroImg = '/assets/store.jpg' // coloque a imagem em /public/assets
+const heroImg = '/assets/store.webp' // coloque a imagem em /public/assets
+const slide = ref(1)
+const fs = ref(false)
 
-// status "Aberto agora"
 const schedule = {
   1: ['08:00', '18:00'],
   2: ['08:00', '18:00'],
@@ -350,9 +408,7 @@ a {
   margin: 0 auto
 }
 
-.section {
-  padding: 72px 0
-}
+.section {}
 
 .section.alt {
   background: linear-gradient(180deg, rgba(30, 74, 168, .06), transparent 70%)
@@ -378,6 +434,12 @@ a {
   border: 1px solid var(--glass-brd);
   border-radius: 18px;
   box-shadow: var(--shadow);
+  transition: background 0.3s ease;
+  cursor: pointer;
+}
+
+.glass:hover {
+  background: whitesmoke;
 }
 
 .card {
@@ -458,7 +520,7 @@ a {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
   filter: saturate(105%) contrast(105%) brightness(.92)
 }
 
