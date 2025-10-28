@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-lg flex flex-center">
     <div class="column items-center q-gutter-md" style="max-width: 480px; width: 100%;">
-      <div class="text-h6 text-center">Gerar QR do WhatsApp</div>
+      <div class="text-h4 text-secondary text-center">Gerar QR do WhatsApp</div>
 
       <q-banner
         v-if="error"
@@ -20,7 +20,7 @@
           style="width: 300px; height: 300px; border: 1px solid var(--q-dark-border,#ddd); border-radius: 8px;"
         />
         <div v-else class="text-grey">
-          Nenhum QR disponível (talvez já esteja autenticado).
+          Nenhum QR disponível.
         </div>
 
         <div class="text-caption">
@@ -32,6 +32,7 @@
         <q-btn
           color="secondary"
           label="Gerar QR Code"
+          icon-right="qr_code" glossy
           :loading="loading"
           @click="generate"
         />
@@ -86,6 +87,4 @@ async function copyRaw () {
   }
 }
 
-// opcional: já chama ao abrir a página
-generate()
 </script>

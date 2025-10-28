@@ -2,7 +2,7 @@
 
 // app global css in SCSS form
 * {
-    font-family: "Roboto", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
 }
 
@@ -10,3 +10,6 @@
     background-color: #efefef
 }
 
+.text-shadow{
+    text-shadow: 1px 1px 1px #0b0b0b71;
+}
