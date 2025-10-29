@@ -66,10 +66,10 @@
       <div class=" bg-secondary text-white q-pt-sm">
         <h2 class="center">Catálogo de Produtos</h2>
         <q-carousel v-model="slide" v-model:fullscreen="fs" transition-prev="slide-right" transition-next="slide-left"
-          animated control-color="primary" navigation padding arrows swipeable height="400px"
+          animated control-color="secondary" navigation padding arrows swipeable height="400px"
           class="bg-secondary-grad">
           <template #control>
-            <q-btn flat dense color="primary" round :icon="fs ? 'fullscreen_exit' : 'fullscreen'" @click="fs = !fs"
+            <q-btn flat dense color="secondary" round :icon="fs ? 'fullscreen_exit' : 'fullscreen'" @click="fs = !fs"
               class="q-ml-sm q-mt-sm" />
           </template>
           <q-carousel-slide :name="1" class="column no-wrap">
@@ -110,7 +110,7 @@
     <!-- PRODUTOS -->
     <section class="section  bg-secondary-grad-2 q-pb-lg">
       <div class="w100 row justify-center no-wrap">
-        <q-btn color="secondary" class=" text-white  text-bold q-pa-md q-mt-lg" to="/catalogo"
+        <q-btn color="secondary" class=" text-white  text-bold q-pa-md " to="/catalogo"
           label="Ver Catálogo Completo" icon-right="search" />
       </div>
       <div class="container rounded-borders q-pa-sm">
@@ -149,7 +149,7 @@
           </article>
         </div>
         <div class="center mt">
-          <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold" color="positive" type="a" target="_blank" rel="noopener"
+          <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold text-shadow" color="positive" type="a" target="_blank" rel="noopener" glossy
             href="https://wa.me/556136290040?text=Ol%C3%A1!%20Pode%20me%20enviar%20o%20pre%C3%A7o%20e%20disponibilidade%20deste%20item%3F">Pedir
             orçamento no WhatsApp<q-img class="q-ml-sm"
               src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
@@ -226,13 +226,13 @@
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
                   alt="Eletro Nogueira Logo" /></div>
               <div class="brand-text">
-                <strong>Eletro Nogueira</strong>
+                <strong class="text-secondary">Eletro Nogueira</strong>
                 <small>Em frente à BR-040 • Valparaíso de Goiás</small>
               </div>
             </div>
             <p class="foot-copy q-pt-sm">Soluções em elétrica, hidráulica, automação e agro. Pronta-entrega e
               suporte
-              técnico.
+              técnico.<br><br>CNPJ • <strong>26.931.014/0001-12.</strong>
             </p>
           </div>
           <div class="foot-links">
@@ -309,5 +309,7 @@ onMounted(() => {
 
 
 <style scoped>
-
+.section.alt {
+  background: linear-gradient(180deg, rgba(30, 74, 168, .06), transparent 70%)
+}
 </style>

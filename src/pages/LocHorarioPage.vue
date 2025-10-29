@@ -1,5 +1,5 @@
 <template>
-<q-page class="bg-grey-3">
+<q-page class="">
         <section  class="section alt q-py-md">
       <div class="container grid-2">
         <div class="glass card">
