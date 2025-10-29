@@ -1,12 +1,12 @@
 <template>
-  <q-page class="q-pa-md bg-grey-1">
+  <q-page class="q-pa-md bg-grey-3 q-pb-xl">
     <!-- Filtros -->
     <!-- 🔎 FILTROS -->
     <div class="q-pa-md bg-white rounded-borders q-mb-md shadow-1">
       <div class="row q-col-gutter-md items-end">
         <div class="col-12 col-md-4">
-          <q-input color="secondary" v-model="filters.descricaoProduto" label="Buscar por produto" dense outlined
-            clearable hint="Ex.: furadeira, bomba, martelo">
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoProduto"
+            label="Buscar por produto" dense outlined clearable hint="Ex.: furadeira, bomba, martelo">
             <template #prepend>
               <q-icon name="search" />
             </template>
@@ -14,17 +14,18 @@
         </div>
 
         <div class="col-12 col-md-3">
-          <q-select color="secondary" v-model="filters.descricaoMarca" label="Marca (opcional)" dense outlined clearable
-            use-input fill-input :options="brandOptions" @filter="filterBrand" hint="Digite para sugerir marcas">
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoMarca"
+            label="Buscar por marca" dense outlined clearable hint="Ex.: makita, bosch, fortlev">
             <template #prepend>
               <q-icon name="sell" />
             </template>
-          </q-select>
+          </q-input>
+
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input color="secondary" maxlength="9" prefix="R$" mask="####,##" reverse-fill-mask v-model="priceMinStr"
-            label="Preço mín." dense outlined clearable hint="Ex.: 199,90">
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
+            reverse-fill-mask v-model="priceMinStr" label="Preço mín." dense outlined clearable hint="Ex.: 199,90">
             <template #prepend>
               <q-icon name="payments" />
             </template>
@@ -32,8 +33,8 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input color="secondary" maxlength="9" prefix="R$" mask="####,##" reverse-fill-mask v-model="priceMaxStr"
-            label="Preço máx." dense outlined clearable hint="Ex.: 1299,00">
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
+            reverse-fill-mask v-model="priceMaxStr" label="Preço máx." dense outlined clearable hint="Ex.: 1299,00">
             <template #prepend>
               <q-icon name="price_check" />
             </template>
@@ -49,22 +50,15 @@
     </div>
 
     <div class="row items-center q-mb-sm q-gutter-sm">
-      <div class="col-grow text-grey-8">
-        <span v-if="!loading">{{ total }} resultado(s)</span>
-        <span v-else>Carregando…</span>
+      <div class="row justify-between w100 text-grey-8">
+        <div class="w100 row justify-center q-gutter-x-sm q-mb-sm">
+          <q-select v-model="orderBy" :options="orderOptions" dense outlined style="min-width: 210px" emit-value
+            map-options @update:model-value="onOrderChange" />
+          <q-select v-model="limit" :options="[10, 20, 30]" dense outlined style="width: 90px" label="Limite"
+            @update:model-value="onLimitChange" />
+        </div>
       </div>
-      <div class="col-auto">
-        <q-select v-model="orderBy" :options="orderOptions" dense outlined style="min-width: 210px" emit-value
-          map-options @update:model-value="onOrderChange" />
-      </div>
-      <div class="col-auto">
-        <q-select v-model="limit" :options="[10, 24, 48, 96]" dense outlined style="width: 90px" label="Limite"
-          @update:model-value="onLimitChange" />
-      </div>
-      <div class="col-auto">
-        <q-pagination v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links dense
-          @update:model-value="onPageChange" />
-      </div>
+
     </div>
 
     <!-- Grid de produtos -->
@@ -110,6 +104,12 @@
           </q-card-actions>
         </q-card>
       </template>
+    </div>
+    <div class="w100 row justify-between items-center q-mt-md">
+      <span v-if="!loading">{{ total }} resultado(s)</span>
+      <span v-else>Carregando…</span>
+      <q-pagination v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links dense
+        @update:model-value="onPageChange" />
     </div>
 
     <!-- Detalhes (simples) -->

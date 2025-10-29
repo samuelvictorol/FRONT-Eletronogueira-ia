@@ -1,7 +1,7 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-grey-3">
+  <q-layout view="hHh lpR fFf" class="bg-grey-3 relative">
     <!-- HEADER -->
-    <q-header class="text-dark glass navbar">
+    <q-header class="text-dark glass navbar" style="position: sticky; top: 8px;">
       <q-toolbar class="q-py-sm">
         <q-btn flat dense round class="lt-md q-mr-sm" icon="menu" aria-label="Abrir menu"
           @click="leftDrawerOpen = !leftDrawerOpen" />
@@ -20,8 +20,8 @@
         <!-- Ações desktop -->
         <div class="nav-actions gt-sm">
           <q-btn flat class="nav-link" to="/">Início</q-btn>
-          <q-btn flat class="nav-link" @click="scrollTo('#produtos')">Catálogo</q-btn>
-          <q-btn flat class="nav-link q-mx-xs" @click="scrollTo('#horarios')">Horários</q-btn>
+          <q-btn flat class="nav-link q-ml-xs" to="/catalogo">Catálogo</q-btn>
+          <q-btn flat class="nav-link q-mx-xs" to="/localizacao">Localização</q-btn>
           <q-btn color="secondary" unelevated class="btn primary text-bold text-shadow" href="tel:+556136290040">
             (61) 3629-0040
           </q-btn>
@@ -39,8 +39,9 @@
     <!-- DRAWER MOBILE -->
     <q-drawer v-model="leftDrawerOpen" side="left" overlay bordered class="glass relative" :width="290">
       <div class="q-pa-md column q-gutter-sm">
-        <q-btn flat align="left" class="nav-link" @click="goAndClose('#produtos')">Catálogo</q-btn>
-        <q-btn flat align="left" class="nav-link" @click="goAndClose('#horarios')">Horários</q-btn>
+        <q-btn flat align="left" class="nav-link" to="/">Início</q-btn>
+        <q-btn flat align="left" class="nav-link" to="/catalogo">Catálogo</q-btn>
+        <q-btn flat align="left" class="nav-link" to="/localizacao">Localização</q-btn>
         <q-btn color="secondary" unelevated class="btn primary text-bold text-shadow" href="tel:+556136290040">
           (61) 3629-0040
         </q-btn>
@@ -67,7 +68,7 @@
       </div>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container style="padding-top: 20px;" class="bg-grey-3">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -123,7 +124,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* ===== Paleta clara + Glass ===== */
 :root {
   --white: #ffffff;
   --yellow: #FFD200;
@@ -138,328 +138,4 @@ onMounted(() => {
   --shadow: 0 10px 30px rgba(10, 42, 102, .12), 0 4px 12px rgba(10, 42, 102, .10);
 }
 
-body {
-  color: var(--text);
-  background:
-    radial-gradient(1200px 600px at 10% 0%, rgba(255, 210, 0, .20), transparent 60%),
-    radial-gradient(900px 500px at 100% 0%, rgba(30, 74, 168, .12), transparent 60%),
-    linear-gradient(180deg, var(--ink) 0%, #eef3ff 50%, #f7f9ff 100%);
-}
-
-a {
-  text-decoration: none;
-  color: inherit
-}
-
-.container {
-  width: min(1120px, 92vw);
-  margin: 0 auto
-}
-
-.section {}
-
-.section.alt {
-  background: linear-gradient(180deg, rgba(30, 74, 168, .06), transparent 70%)
-}
-
-.section.light {
-  background: linear-gradient(180deg, rgba(255, 255, 255, .7), rgba(255, 255, 255, .4))
-}
-
-.center {
-  text-align: center
-}
-
-.mt {
-  margin-top: 24px
-}
-
-.glass {
-  background: var(--glass-bg);
-  background-color: var(--glass-bg);
-  backdrop-filter: saturate(150%) blur(12px);
-  -webkit-backdrop-filter: saturate(150%) blur(12px);
-  border: 1px solid var(--glass-brd);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  transition: background 0.3s ease;
-  cursor: pointer;
-}
-
-.glass:hover {
-  background: whitesmoke;
-}
-
-.card {
-  padding: 28px
-}
-
-/* Navbar */
-.navbar {}
-
-.brand {
-  display: flex;
-  gap: 12px;
-  align-items: center
-}
-
-.logo {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px
-}
-
-.brand-text small {
-  display: block;
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: -4px
-}
-
-.nav-actions .nav-link {
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid transparent
-}
-
-.nav-actions .nav-link:hover {
-  border-color: rgba(10, 42, 102, .2);
-  background: #fff
-}
-
-.btn {
-  border-radius: 12px
-}
-
-.btn.primary {
-  background: linear-gradient(135deg, var(--blue), #4f7be0);
-  color: #fff
-}
-
-.btn.whats {
-  background: linear-gradient(135deg, var(--green), #59da86);
-  color: #06250f
-}
-
-.btn.ghost {
-  background: #fff;
-  border: 1px solid rgba(10, 42, 102, .18);
-  color: var(--blue)
-}
-
-.btn.outline {
-  border: 1px solid rgba(10, 42, 102, .25);
-  color: var(--blue)
-}
-
-/* Hero */
-.hero {
-  position: relative;
-  min-height: 70vh;
-  display: grid;
-  place-items: center;
-  padding: 60px 0
-}
-
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  filter: saturate(105%) contrast(105%) brightness(.92)
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, .3) 30%, rgba(255, 255, 255, .1) 100%),
-    radial-gradient(1000px 500px at 30% 30%, rgba(255, 210, 0, .25), transparent 70%);
-  mix-blend: lighten
-}
-
-.hero-content {
-  position: relative;
-  padding: 28px;
-  max-width: 860px;
-  background: rgba(255, 255, 255, .6)
-}
-
-.hero h1 {
-  font-size: clamp(28px, 4vw, 44px);
-  line-height: 1.1;
-  margin: 4px 0 12px;
-  color: var(--blue)
-}
-
-.hero h1 span {
-  color: var(--yellow)
-}
-
-.subtitle {
-  color: #1b2c52;
-  margin: 0 0 14px
-}
-
-.hero-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 16px 0 10px
-}
-
-.badge {
-  border: 1px dashed rgba(10, 42, 102, .25);
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  color: var(--navy);
-  background: #fff
-}
-
-.cta-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 12px 0 6px
-}
-
-.open-now {
-  font-weight: 600;
-  margin-top: 6px;
-  color: var(--navy)
-}
-
-/* Grid */
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px
-}
-
-@media (max-width:900px) {
-  .grid-2 {
-    grid-template-columns: 1fr
-  }
-}
-
-/* Cards */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 18px
-}
-
-.product {
-  padding: 20px;
-  min-height: 130px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  background: rgba(255, 255, 255, .7)
-}
-
-.product h4 {
-  margin: 0 0 6px;
-  color: var(--blue)
-}
-
-@media (max-width:1100px) {
-  .cards {
-    grid-template-columns: repeat(3, 1fr)
-  }
-}
-
-@media (max-width:800px) {
-  .cards {
-    grid-template-columns: repeat(2, 1fr)
-  }
-}
-
-@media (max-width:520px) {
-  .cards {
-    grid-template-columns: 1fr
-  }
-}
-
-/* Horários + mapa */
-.hours {
-  width: 100%;
-  border-collapse: collapse
-}
-
-.hours td {
-  padding: 8px 6px;
-  border-bottom: 1px dashed rgba(10, 42, 102, .15)
-}
-
-.note {
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 10px
-}
-
-.mini-map {
-  margin-top: 12px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow)
-}
-
-.mini-map iframe {
-  width: 100%;
-  height: 260px;
-  border: 0
-}
-
-/* Footer */
-.footer {
-  padding: 28px 0;
-  border-top: 1px solid rgba(10, 42, 102, .08);
-  background: linear-gradient(180deg, rgba(255, 210, 0, .15), transparent)
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 16px;
-  align-items: center
-}
-
-.foot-copy {
-  color: var(--muted)
-}
-
-.foot-links {
-  display: grid;
-  gap: 6px
-}
-
-.copy {
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
-  padding: 10px 0;
-  border-top: 1px solid rgba(10, 42, 102, .06)
-}
-
-.q-header {
-  width: min(1120px, 92vw) !important;
-  margin: 0 auto;
-}
-
-
-@media (max-width:820px) {
-  .q-header {
-    width: 100% !important;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr
-  }
-}
 </style>
