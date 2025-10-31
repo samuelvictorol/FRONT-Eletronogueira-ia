@@ -8,15 +8,6 @@ const routes = [
       { path: 'localizacao', component: () => import('src/pages/LocHorarioPage.vue') },
     ]
   },
-  {
-    path: '/ia',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('src/pages/ia/ConversasPage.vue') },
-      { path: 'qr', component: () => import('src/pages/ia/GenerateQrPage.vue') },
-    ]
-  },
-
   // Always leave this as last one,
   // but you can also remove it
   {

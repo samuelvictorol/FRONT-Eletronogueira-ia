@@ -42,16 +42,21 @@
         <q-btn flat align="left" class="nav-link" to="/">Início</q-btn>
         <q-btn flat align="left" class="nav-link" to="/catalogo">Catálogo</q-btn>
         <q-btn flat align="left" class="nav-link" to="/localizacao">Localização</q-btn>
-        <q-btn color="secondary" unelevated class="btn primary text-bold text-shadow" href="tel:+556136290040">
-          (61) 3629-0040
-        </q-btn>
-        <q-btn unelevated color="positive" class="text-bold text-shadow btn whats q-ml-xs" glossy type="a"
+        <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
+          label="(61) 3629-6858" />
+        <q-btn unelevated color="positive" class="text-bold text-shadow btn whats" glossy type="a"
           target="_blank" rel="noopener"
           href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
           WhatsApp
           <q-img
             src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
             alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
+        <q-btn unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
+          rel="noopener" href="https://www.instagram.com/nogueiravalparaiso/">
+          @nogueiravalparaiso
+          <q-img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
+            alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" /></q-btn>
       </div>
       <div class="absolute-bottom w100 row justify-center q-pb-md">
         <div class="brand">
@@ -137,5 +142,4 @@ onMounted(() => {
   --glass-brd: rgba(10, 42, 102, 0.14);
   --shadow: 0 10px 30px rgba(10, 42, 102, .12), 0 4px 12px rgba(10, 42, 102, .10);
 }
-
 </style>

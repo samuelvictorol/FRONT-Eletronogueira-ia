@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md bg-grey-3 q-pb-xl">
+  <q-page class="q-pa-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
     <!-- Filtros -->
     <!-- 🔎 FILTROS -->
     <div class="q-pa-md bg-white rounded-borders q-mb-md shadow-1">
@@ -51,10 +51,10 @@
 
     <div class="row items-center q-mb-sm q-gutter-sm">
       <div class="row justify-between w100 text-grey-8">
-        <div class="w100 row justify-center q-gutter-x-sm q-mb-sm">
-          <q-select v-model="orderBy" :options="orderOptions" dense outlined style="min-width: 210px" emit-value
+        <div class="w100 row justify-center q-gutter-x-sm q-gutter-y-sm q-mb-sm">
+          <q-select color="secondary" v-model="orderBy" :options="orderOptions" dense outlined style="min-width: 210px" emit-value
             map-options @update:model-value="onOrderChange" />
-          <q-select v-model="limit" :options="[10, 20, 30]" dense outlined style="width: 90px" label="Limite"
+          <q-select color="secondary" v-model="limit" :options="[12, 24, 36, 50]" dense outlined style="width: 90px" label="Limite"
             @update:model-value="onLimitChange" />
         </div>
       </div>
@@ -78,11 +78,11 @@
         <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="product-card">
           <q-img :src="p.imagemUrl || fallbackImage" ratio="16/9" spinner-color="primary" :alt="p.descricao" />
           <q-card-section class="q-pt-sm">
-            <div class="text-subtitle1 text-weight-medium ellipsis-2">{{ p.descricao }}</div>
             <div class="row items-center q-mt-xs q-col-gutter-sm">
               <div class="col-auto">
-                <q-badge v-if="p.marca" color="blue-2" text-color="blue-10" :label="p.marca" />
+                <q-badge v-if="p.marca" color="primary" class="text-bold q-pa-xs" text-color="blue-10" :label="p.marca" />
               </div>
+              <div class="text-subtitle1 text-weight-medium ellipsis-2">{{ p.descricao }}</div>
             </div>
 
             <div class="q-mt-sm">
@@ -106,9 +106,9 @@
       </template>
     </div>
     <div class="w100 row justify-between items-center q-mt-md">
-      <span v-if="!loading">{{ total }} resultado(s)</span>
+      <span v-if="!loading">{{ total - 1 }} resultado(s)</span>
       <span v-else>Carregando…</span>
-      <q-pagination v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links dense
+      <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links dense
         @update:model-value="onPageChange" />
     </div>
 
@@ -151,6 +151,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useQuasar, date } from 'quasar'
 import { api } from 'boot/axios'
 
+const isMobile = useQuasar().screen.lt.md
 const $q = useQuasar()
 
 /** ---------------- State base ---------------- */
@@ -158,14 +159,14 @@ const loading = ref(false)
 const items = ref([])
 const total = ref(0)
 
-const page = ref(1)
-const limit = ref(10)
+const page = ref(0)
+const limit = ref(12)
 const orderBy = ref('relevance') // 'relevance' | 'price_asc' | 'price_desc' | 'updated_desc'
 
 const filters = ref({
   descricaoProduto: '',
   descricaoMarca: '',
-  precoMin: null,
+  precoMin: 'null',
   precoMax: null
 })
 
@@ -277,7 +278,7 @@ function readFromURL() {
   filters.value.precoMax = m2 ? Number(m2) : null
   if (filters.value.precoMin != null) priceMinStr.value = numberToBR(filters.value.precoMin)
   if (filters.value.precoMax != null) priceMaxStr.value = numberToBR(filters.value.precoMax)
-  limit.value = Number(qs.get('limit')) || 10
+  limit.value = Number(qs.get('limit')) || 12
   page.value = Number(qs.get('page')) || 1
   orderBy.value = qs.get('orderBy') || 'relevance'
 }
@@ -328,34 +329,57 @@ function resetFilters() {
 async function applyFilters(updateURL = true) {
   loading.value = true
   try {
+    // Normaliza preços vindos dos inputs mascarados
     normalizePrice('min')
     normalizePrice('max')
 
+    // Overfetch: pede +1 para detectar se existe próxima página
+    const L = Number(limit.value) || 12
     const body = {
       descricaoProduto: filters.value.descricaoProduto || null,
       descricaoMarca: filters.value.descricaoMarca || null,
       precoMin: filters.value.precoMin,
       precoMax: filters.value.precoMax,
-      limit: limit.value,
-      offset: offset.value
+      limit: L + 1,                 // 👈 overfetch +1
+      offset: offset.value,
+      // Envie a ordenação se o backend aceitar
+      orderBy: orderBy.value || 'relevance'
     }
 
     const { data } = await api.post('/catalogo/produtos/buscar', body)
 
-    // 💡 Normaliza campos para minúsculas
-    const arr = data.data ?? data.items ?? data.results ?? data
-    items.value = (arr || []).map(p => ({
-      id: p.CODPRODUTO,
-      descricao: p.DESCRICAO,
-      marca: p.MARCA,
-      preco: p.PRECO,
-      precoPromocao: p.PRECOPROMOCAO,
-      precoEfetivo: p.PRECO_EFETIVO,
-      imagemUrl: p.IMAGEM_URL || null,
-      dataAtualizacao: p.DATAATUALIZACAO
+    // Normaliza a coleção vinda do backend
+    const raw =
+      (Array.isArray(data?.data) && data.data) ||
+      (Array.isArray(data?.items) && data.items) ||
+      (Array.isArray(data?.results) && data.results) ||
+      (Array.isArray(data) ? data : [])
+
+    const hasNext = raw.length > L
+    const arr = hasNext ? raw.slice(0, L) : raw
+
+    // Mapeia para o shape do front
+    items.value = arr.map(p => ({
+      id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
+      descricao: p.DESCRICAO ?? p.descricao,
+      marca: p.MARCA ?? p.marca,
+      preco: p.PRECO ?? p.preco,
+      precoPromocao: p.PRECOPROMOCAO ?? p.precoPromocao,
+      precoEfetivo: p.PRECO_EFETIVO ?? p.precoEfetivo ?? (p.PRECOPROMOCAO > 0 ? p.PRECOPROMOCAO : p.PRECO),
+      imagemUrl: p.IMAGEM_URL ?? p.imagemUrl ?? null,
+      dataAtualizacao: p.DATAATUALIZACAO ?? p.dataAtualizacao ?? null
     }))
 
-    total.value = data.count ?? items.value.length
+    // Usa total do backend se existir; caso contrário, estima só para liberar paginação
+    const apiTotal = Number(data?.total ?? data?.count ?? data?.totalCount)
+    if (Number.isFinite(apiTotal) && apiTotal >= 0) {
+      total.value = apiTotal
+    } else {
+      total.value = hasNext
+        ? (Number(page.value) * L) + 1
+        : ((Number(page.value) - 1) * L) + items.value.length
+    }
+
     if (updateURL) writeToURL()
     await fetchBrandSuggestions('')
   } catch (err) {
@@ -367,6 +391,7 @@ async function applyFilters(updateURL = true) {
     loading.value = false
   }
 }
+
 
 /** ---------------- Detalhes ---------------- */
 const showDetails = ref(false)

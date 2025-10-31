@@ -230,9 +230,8 @@
                 <small>Em frente à BR-040 • Valparaíso de Goiás</small>
               </div>
             </div>
-            <p class="foot-copy q-pt-sm">Soluções em elétrica, hidráulica, automação e agro. Pronta-entrega e
-              suporte
-              técnico.<br><br>CNPJ • <strong>26.931.014/0001-12.</strong>
+            <p class="foot-copy q-pt-sm">Soluções em elétrica, hidráulica, automação e agro.<br>Pronta-entrega e
+              suporte técnico.<br><br>CNPJ • <strong>26.931.014/0001-12.</strong>
             </p>
           </div>
           <div class="foot-links">
@@ -251,8 +250,17 @@
                 alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
             <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040"
               label="(61) 3629-0040" />
+            <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
+              label="(61) 3629-6858" />
           </div>
         </div>
+        <div class="w100 column justify-center items-center text-center">Siga-nos no Instagram!! <br></br><br><q-btn unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
+              rel="noopener"
+              href="https://www.instagram.com/nogueiravalparaiso/">
+              @nogueiravalparaiso
+              <q-img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
+                alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" /></q-btn></div>
         <div class="copy q-mt-md">© {{ year }} Eletro Nogueira — 26.931.014/0001-12.</div>
       </footer>
   </q-page>
@@ -265,7 +273,7 @@ import { useQuasar } from 'quasar'
 const $q = useQuasar()
 const leftDrawerOpen = ref(false)
 const year = new Date().getFullYear()
-const heroImg = '/assets/store.webp' // coloque a imagem em /public/assets
+const heroImg = '/assets/store2.png' // coloque a imagem em /public/assets
 const slide = ref(3)
 const fs = ref(false)
 
