@@ -108,7 +108,7 @@
       </div>
     </section>
     <!-- PRODUTOS -->
-    <section class="section  bg-secondary-grad-2 q-pb-lg">
+    <section class="section  q-pb-lg">
       <div class="w100 row justify-center no-wrap">
         <q-btn color="secondary" class=" text-white  text-bold q-pa-md "
           to="/catalogo?min=199.9&max=599.9&limit=12&page=1&orderBy=relevance" label="Ver Catálogo Completo"
@@ -207,7 +207,7 @@
       </div>
     </section>
     <!-- PRODUTOS -->
-    <section class="section  bg-red-grad-2 q-pb-lg">
+    <section class="section q-pb-lg">
       <div class="w100 row justify-center no-wrap">
         <q-btn color="secondary"  class=" text-bold q-pa-md q-mt-md"
           to="/catalogo?min=799.9&max=999.9&limit=12&page=1&orderBy=relevance" label="Buscar por Marcas"
