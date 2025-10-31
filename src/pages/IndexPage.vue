@@ -115,35 +115,35 @@
       </div>
       <div class="container rounded-borders q-pa-sm">
         <div class="cards">
-          <article class="product glass">
+          <article class="product glass" @click="goTo('/catalogo?q=furadeira&limit=12&page=1&orderBy=relevance')">
             <h4>Ferramentas Elétricas</h4>
             <p>Furadeira, Parafusadeira, Martelete, Esmerilhadeira.</p>
           </article>
-          <article class="product glass">
+          <article class="product glass" @click="goTo('/catalogo?q=bomba&limit=12&page=1&orderBy=relevance')">
             <h4>Hidráulica & Bombas</h4>
             <p>Bombas palito, Anauger, incêndio, poço artesiano.</p>
           </article>
-          <article class="product glass">
+          <article class="product glass" @click="goTo('/catalogo?q=válvulas&limit=12&page=1&orderBy=relevance')">
             <h4>Automação & Pneumática</h4>
             <p>Conexões PU, válvulas, mangueiras, ferramentas pneumáticas.</p>
           </article>
-          <article class="product glass">
+          <article class="product glass" @click="goTo('/catalogo?q=motor&limit=12&page=1&orderBy=relevance')">
             <h4>Elétrica Industrial</h4>
             <p>Motores elétricos, inversoras, geradores, quadros.</p>
           </article>
-          <article class="product glass">
+          <article class="product glass" @click="goTo('/catalogo?q=jardim&limit=12&page=1&orderBy=relevance')">
             <h4>Agro & Jardim</h4>
             <p>Cortador de grama, pulverizador, motosserra, forrageira.</p>
           </article>
-          <article class="product glass">
+          <article class="product glass" @click="goTo('/catalogo?q=compressor&limit=12&page=1&orderBy=relevance')">
             <h4>Solda & Oficina</h4>
             <p>Máquinas de solda, EPI, compressores, acessórios.</p>
           </article>
-          <article class="product glass">
+          <article class="product glass" @click="goTo('/catalogo?q=ímetro&limit=12&page=1&orderBy=relevance')">
             <h4>Medição & Precisão</h4>
             <p>Paquímetro, multímetro, trena a laser, esquadro.</p>
           </article>
-          <article class="product glass">
+          <article class="product glass" @click="goTo('/catalogo?q=polia&limit=12&page=1&orderBy=relevance')">
             <h4>Acessórios & Transmissão</h4>
             <p>Correias, polias, Topfusion, mangueiras.</p>
           </article>
@@ -269,6 +269,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
 const leftDrawerOpen = ref(false)
@@ -276,6 +277,7 @@ const year = new Date().getFullYear()
 const heroImg = '/assets/store2.png' // coloque a imagem em /public/assets
 const slide = ref(3)
 const fs = ref(false)
+const router = useRouter()
 
 const schedule = {
   1: ['08:00', '18:00'],
@@ -298,6 +300,10 @@ const openNowText = computed(() => {
     ? `🟢 Aberto agora • ${start} - ${end}`
     : `🔴 Fechado no momento • ${start} – ${end}`
 })
+
+function goTo(path) {
+  router.push(path)
+}
 
 function scrollTo(selector) {
   const el = document.querySelector(selector)
