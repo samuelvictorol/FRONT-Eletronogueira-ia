@@ -29,9 +29,25 @@
 }
 
 .bg-secondary-grad-2 {
-    background: #ebebeb;
-    background: -webkit-linear-gradient(to bottom, #aecde2, #012060);
-    background: linear-gradient(to bottom, #aecde2, #012060);
+    background: #EEEEEE;
+    background: -webkit-linear-gradient(to bottom,#EEEEEE, #012060);
+    background: linear-gradient(to bottom, #EEEEEE, #012060);
+}
+
+.bg-yellow-grad {
+    background: #EEEEEE;
+    background: -webkit-linear-gradient(to top, #EEEEEE, #ffd54f);
+    background: linear-gradient(to top, #EEEEEE, #ffd54f);
+}
+.bg-yellow-grad-2 {
+    background: #EEEEEE;
+    background: -webkit-linear-gradient(to bottom, #EEEEEE, #ffd54f);
+    background: linear-gradient(to bottom, #EEEEEE, #ffd54f);
+}
+.bg-red-grad-2 {
+    background: #EEEEEE;
+    background: -webkit-linear-gradient(to bottom, #EEEEEE, #E43733);
+    background: linear-gradient(to bottom, #EEEEEE, #E43733);
 }
 
 .q-page {

@@ -52,10 +52,10 @@
     <div class="row items-center q-mb-sm q-gutter-sm">
       <div class="row justify-between w100 text-grey-8">
         <div class="w100 row justify-center q-gutter-x-sm q-gutter-y-sm q-mb-sm">
-          <q-select color="secondary" v-model="orderBy" :options="orderOptions" dense outlined style="min-width: 210px" emit-value
-            map-options @update:model-value="onOrderChange" />
-          <q-select color="secondary" v-model="limit" :options="[12, 24, 36, 50]" dense outlined style="width: 90px" label="Limite"
-            @update:model-value="onLimitChange" />
+          <q-select color="secondary" v-model="orderBy" :options="orderOptions" dense outlined style="min-width: 210px"
+            emit-value map-options @update:model-value="onOrderChange" />
+          <q-select color="secondary" v-model="limit" :options="[12, 24, 36, 50]" dense outlined style="width: 90px"
+            label="Limite" @update:model-value="onLimitChange" />
         </div>
       </div>
 
@@ -80,7 +80,8 @@
           <q-card-section class="q-pt-sm">
             <div class="row items-center q-mt-xs q-col-gutter-sm">
               <div class="col-auto">
-                <q-badge v-if="p.marca" color="primary" class="text-bold q-pa-xs" text-color="blue-10" :label="p.marca" />
+                <q-badge v-if="p.marca" color="primary" class="text-bold q-pa-xs" text-color="blue-10"
+                  :label="p.marca" />
               </div>
               <div class="text-subtitle1 text-weight-medium ellipsis-2">{{ p.descricao }}</div>
             </div>
@@ -108,8 +109,8 @@
     <div class="w100 row justify-between items-center q-mt-md">
       <span v-if="!loading">{{ total - 1 }} resultado(s)</span>
       <span v-else>Carregando…</span>
-      <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links dense
-        @update:model-value="onPageChange" />
+      <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links
+        dense @update:model-value="onPageChange" />
     </div>
 
     <!-- Detalhes (simples) -->
@@ -143,6 +144,46 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <div class="w100 q-py-xl"></div>
+    <footer class="footer q-pt-xl">
+      <div class="container footer-grid q-pb-md">
+        <div>
+          <div class="brand">
+            <div class="logo"><q-img style="border-radius: 20%;"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
+                alt="Eletro Nogueira Logo" /></div>
+            <div class="brand-text">
+              <strong class="text-secondary">Eletro Nogueira</strong>
+              <small>Em frente à BR-040 • Valparaíso de Goiás</small>
+            </div>
+          </div>
+          <p class="foot-copy q-pt-sm">Soluções em elétrica, hidráulica, automação e agro.<br>Pronta-entrega e
+            suporte técnico.<br><br>CNPJ • <strong>26.931.014/0001-12.</strong>
+          </p>
+        </div>
+        <div class="column">
+          <q-btn unelevated color="positive" class="text-shadow btn whats q-ml-xs" glossy type="a" target="_blank"
+            rel="noopener"
+            href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
+            WhatsApp
+            <q-img
+              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
+              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
+          <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040"
+            label="(61) 3629-0040" />
+          <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
+            label="(61) 3629-6858" />
+        </div>
+      </div>
+      <div class="w100 column justify-center items-center text-center">Siga-nos no Instagram!! <br></br><br><q-btn
+          unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
+          rel="noopener" href="https://www.instagram.com/nogueiravalparaiso/">
+          @nogueiravalparaiso
+          <q-img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
+            alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" /></q-btn></div>
+      <div class="copy q-mt-md">© {{ year }} Eletro Nogueira — 26.931.014/0001-12.</div>
+    </footer>
   </q-page>
 </template>
 

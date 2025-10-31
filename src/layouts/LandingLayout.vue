@@ -46,7 +46,7 @@
           label="(61) 3629-6858" />
         <q-btn unelevated color="positive" class="text-bold text-shadow btn whats" glossy type="a"
           target="_blank" rel="noopener"
-          href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
+          href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20realizar%20um%20or%C3%A7amento.">
           WhatsApp
           <q-img
             src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
