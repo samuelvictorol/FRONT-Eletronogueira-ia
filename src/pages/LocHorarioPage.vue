@@ -1,5 +1,11 @@
 <template>
-  <q-page class="">
+  <q-page class="q-pa-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
+    <div class="q-mb-md">
+      <q-breadcrumbs class="text-grey-7">
+        <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
+        <q-breadcrumbs-el label="Localização" to="/catalogo" />
+      </q-breadcrumbs>
+    </div>
     <section class="section alt q-py-md">
       <div class="container grid-2">
         <div id="como-chegar" class="glass card">
@@ -100,5 +106,9 @@
   </q-page>
 </template>
 <script setup>
+import { useQuasar } from 'quasar';
+
 const year = new Date().getFullYear()
+const isMobile = useQuasar().screen.lt.md
+
 </script>

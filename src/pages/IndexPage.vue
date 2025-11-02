@@ -6,7 +6,7 @@
       <img class="hero-bg" :src="heroImg" alt="Fachada Eletro Nogueira" />
       <div class="hero-overlay"></div>
 
-      <div class="hero-content glass q-mx-sm animate__animated animate__fadeInUp animate__delay-3s animate__slower">
+      <div class="hero-content glass q-mx-sm animate__animated animate__fadeInUp animate__delay-4s animate__slower">
         <div class="text-h5 text-secondary text-bold">
           <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
             alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
@@ -27,8 +27,10 @@
         <div class="cta-row">
           <q-btn color="secondary" unelevated class="btn primary text-shadow" @click="scrollTo('#produtos')"
             label="Ver produtos" />
+          <q-btn color="negative" unelevated class="btn primary text-shadow" @click="scrollTo('#servicos')"
+            label="Serviços e Manutenção" />
           <q-btn flat class="btn ghost text-secondary" color="secondary" icon-right="pin_drop"
-            @click="scrollTo('#como-chegar')" label="Como chegar (17 min)" />
+            @click="scrollTo('#como-chegar')" label="Como chegar" />
         </div>
       </div>
     </section>
@@ -59,6 +61,110 @@
             <li>Correias, polias, Topfusion, conexões PU</li>
             <li>Lavadoras, Makita e muito mais</li>
           </ul>
+        </div>
+      </div>
+    </section>
+    <section id="servicos">
+      <div class=" text-secondary">
+        <div class="bg-secondary text-white center text-h2 q-py-xl">Serviços</div>
+      </div>
+    </section>
+    <section class="section q-pb-lg">
+      <div class="container rounded-borders q-pa-sm">
+        <div class="cards text-secondary">
+          <article class="product glass">
+            <q-img src="https://armac.com.br/wordpress/wp-content/uploads/2023/01/armac-guindaste-e-munck-blog.jpg"
+              class="rounded-borders q-mb-sm"></q-img>
+            <h4>Munck</h4>
+            <p>É um sistema hidráulico com um braço articulado que possui um gancho na extremidade, montado na parte
+              traseira ou intermediária do caminhão.</p>
+          </article>
+          <article class="product glass">
+            <q-img
+              src="https://blog.ferramentaskennedy.com.br/wp-content/uploads/2024/05/o-que-um-torno-mecnico8695f1a75961409e918edbcd14fc128b.jpg"
+              class="rounded-borders q-mb-sm"></q-img>
+            <h4>Torno</h4>
+            <p>O torno é uma máquina-ferramenta utilizada para modelar e cortar materiais, enquanto a solda é o processo
+              de
+              união de metais através da fusão e solidificação.</p>
+          </article>
+          <article class="product glass">
+            <q-img src="https://oximig.com.br/wp-content/uploads/2023/10/Quando-devo-usar-Solda-TIG.jpg"
+              class="rounded-borders q-mb-sm"></q-img>
+            <h4>Solda</h4>
+            <p>A solda é o processo de união de metais através da fusão e solidificação.</p>
+          </article>
+          <article class="product glass">
+            <q-img src="https://www.agbrasil360.com.br/agreletrotecnica/imgs_eventos/53ec6-rebobinamento-6.jpg"
+              class="rounded-borders q-mb-sm"></q-img>
+            <h4>Rebobinagem de Motores Elétricos</h4>
+            <p>O processo de rebobinagem envolve a remoção do enrolamento danificado do motor e a substituição por novos
+              fios de cobre ou alumínio, garantindo que o motor volte a funcionar como novo</p>
+          </article>
+        </div>
+        <div class="center mt">
+          <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold text-shadow" color="positive" type="a"
+            target="_blank" rel="noopener" glossy
+            href="https://wa.me/556136296858?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20e%20servi%C3%A7os.">
+            Pedir Orçamento no whatsapp<q-img class="q-ml-sm"
+              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
+              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
+        </div>
+      </div>
+    </section>
+    <section id="manutencao">
+      <div class=" text-secondary">
+        <div class="bg-secondary text-white center text-h3 q-py-xl">Manutenção</div>
+      </div>
+    </section>
+    <section class="section q-pb-lg">
+      <div class="container rounded-borders q-pa-sm">
+        <div class="cards text-secondary">
+          <article class="product glass">
+            <q-img
+              src="https://blog.meritocomercial.com.br/wp-content/uploads/2023/11/manutencao-preventiva-bomba-de-agua-1024x683.jpg.webp"
+              class="rounded-borders q-mb-sm"></q-img>
+            <h4>Bombas D'água</h4>
+            <p>Manutenção preventiva/corretiva: troca de selo mecânico e rolamentos, limpeza de rotor e alinhamento.
+              Problemas comuns: vazamentos, cavitação e perda de pressão.</p>
+          </article>
+
+          <article class="product glass">
+            <q-img src="https://s1.kaercher-media.com/media/image/file/4413/d3/dicas_cuidado_equipamentos_karcher.webp"
+              class="rounded-borders q-mb-sm"></q-img>
+            <h4>Mangueira Hidráulicas e Lavadoras</h4>
+            <p>Reparo e substituição de mangueiras, conexões e crimpagem com teste de pressão. Problemas comuns:
+              fissuras,
+              vazamentos, baixa vazão e bicos obstruídos.</p>
+          </article>
+
+          <article class="product glass">
+            <q-img
+              src="https://locadoraequiloc.com.br/wp-content/uploads/2022/07/manutencao-de-compressores-servico.jpg"
+              class="rounded-borders q-mb-sm"></q-img>
+            <h4>Compressores</h4>
+            <p>Troca de óleo e filtros, revisão de válvulas/correias e drenagem de condensado. Problemas comuns: queda
+              de
+              pressão, aquecimento excessivo e água na linha.</p>
+          </article>
+
+          <article class="product glass">
+            <q-img src="https://blog.safetycontrol.ind.br/wp-content/uploads/2023/05/Manutencao-001.png"
+              class="rounded-borders q-mb-sm"></q-img>
+            <h4>Automação Industrial</h4>
+            <p>Diagnóstico de CLP/inversores, sensores e painéis, com atualização e reprogramação segura. Problemas
+              comuns:
+              paradas intermitentes, alarmes e leituras incorretas.</p>
+          </article>
+        </div>
+
+        <div class="center mt">
+          <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold text-shadow" color="positive" type="a"
+            target="_blank" rel="noopener" glossy
+            href="https://wa.me/556136296858?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20e%20servi%C3%A7os.">
+            Solicitar Assitência Técnica<q-img class="q-ml-sm"
+              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
+              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
         </div>
       </div>
     </section>
@@ -149,19 +255,11 @@
             <p>Correias, polias, Topfusion, mangueiras.</p>
           </article>
         </div>
-        <div class="center mt">
-          <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold text-shadow" color="positive" type="a"
-            target="_blank" rel="noopener" glossy
-            href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20realizar%20um%20or%C3%A7amento.">
-            Pedir orçamento no WhatsApp<q-img class="q-ml-sm"
-              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
-        </div>
+
       </div>
     </section>
-    <section id="produtos">
+    <section id="marcas">
       <div class=" text-secondary">
-        <div class="bg-negative text-white center text-h2 q-py-xl">Seleção de Marcas</div>
         <div class="" v-if="!isMobile">
           <q-carousel v-model="slide" v-model:fullscreen="fs" transition-prev="slide-right" transition-next="slide-left"
             animated control-color="secondary" navigation padding arrows swipeable height="300px" infinite
@@ -209,39 +307,39 @@
     <!-- PRODUTOS -->
     <section class="section q-pb-lg">
       <div class="w100 row justify-center no-wrap">
-        <q-btn color="secondary"  class=" text-bold q-pa-md q-mt-md"
+        <q-btn color="secondary" class=" text-bold q-pa-md q-mt-md"
           to="/catalogo?min=799.9&max=999.9&limit=12&page=1&orderBy=relevance" label="Buscar por Marcas"
           icon-right="search" />
       </div>
       <div class="container rounded-borders q-pa-sm">
         <div class="cards text-secondary">
-          <article class="product glass" @click="goTo('/catalogo?marca=makita&limit=12&page=1&orderBy=relevance')">
-            <h4>Makita</h4>
-            <p>Motossera, broca, disco diamantado, disco de corte etc.</p>
+          <article class=" bg-primary product glass" @click="goTo('/catalogo?marca=makita&limit=12&page=1&orderBy=relevance')">
+            <h4 class="text-bold">Makita</h4>
+            <p class="text-secondary">Motossera, broca, disco diamantado, disco de corte etc.</p>
           </article>
-          <article class="product glass" @click="goTo('/catalogo?marca=black+decker&limit=12&page=1&orderBy=relevance')">
-            <h4>Black & Decker</h4>
-            <p>Parafusadeira, jogo de brocas, esmerilhadeira, soprador térmico etc.</p>
+          <article class=" bg-primary product glass"
+            @click="goTo('/catalogo?marca=black+decker&limit=12&page=1&orderBy=relevance')">
+            <h4 class="text-bold">Black & Decker</h4>
+            <p class="text-secondary">Parafusadeira, jogo de brocas, esmerilhadeira, soprador térmico etc.</p>
           </article>
-          <article class="product glass" @click="goTo('/catalogo?marca=Stanley&limit=12&page=1&orderBy=relevance')">
-            <h4>Stanley</h4>
-            <p>Cabo, chave ingles, soquetes, chave de grife, jogo de saca-pino etc.</p>
+          <article class=" bg-primary product glass" @click="goTo('/catalogo?marca=Stanley&limit=12&page=1&orderBy=relevance')">
+            <h4 class="text-bold">Stanley</h4>
+            <p class="text-secondary">Cabo, chave ingles, soquetes, chave de grife, jogo de saca-pino etc.</p>
           </article>
-          <article class="product glass" @click="goTo('/catalogo?marca=eletro+nogueira&limit=12&page=1&orderBy=relevance')">
-            <h4>E muito mais!</h4>
-            <p>3M, Bosch, Nova Motores, Marluvas, Vonder, Tramontina e várias outras.</p>
+          <article class=" bg-primary product glass"
+            @click="goTo('/catalogo?marca=eletro+nogueira&limit=12&page=1&orderBy=relevance')">
+            <h4 class="text-bold">E muito mais!</h4>
+            <p class="text-secondary">3M, Bosch, Nova Motores, Marluvas, Vonder, Tramontina e várias outras.</p>
           </article>
         </div>
-        <div class="center mt">
-          <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold text-shadow" color="positive" type="a"
-            target="_blank" rel="noopener" glossy
-            
-            href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20e%20servi%C3%A7os.">
-            Fale
-            Conosco<q-img class="q-ml-sm"
-              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
-        </div>
+      </div>
+      <div class="center mt">
+        <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold text-shadow" color="positive" type="a"
+          target="_blank" rel="noopener" glossy
+          href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20realizar%20um%20or%C3%A7amento.">
+          Fale Conosco<q-img class="q-ml-sm"
+            src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
+            alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
       </div>
     </section>
     <!-- HORÁRIOS / MAPA -->
@@ -327,8 +425,8 @@
           <a class="cursor-pointer" @click.prevent="scrollTo('#como-chegar')">Como chegar</a>
         </div>
         <div class="column">
-          <q-btn unelevated color="positive" class="text-shadow btn whats q-ml-xs shadow-1" glossy type="a" target="_blank"
-            rel="noopener"
+          <q-btn unelevated color="positive" class="text-shadow btn whats q-ml-xs shadow-1" glossy type="a"
+            target="_blank" rel="noopener"
             href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
             WhatsApp
             <q-img

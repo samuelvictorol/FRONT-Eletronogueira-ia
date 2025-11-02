@@ -20,7 +20,7 @@
         <!-- Ações desktop -->
         <div class="nav-actions gt-sm">
           <q-btn flat class="nav-link" to="/">Início</q-btn>
-          <q-btn flat class="nav-link q-ml-xs" to="/catalogo">Catálogo</q-btn>
+          <q-btn flat class="nav-link q-ml-xs" to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=relevance">Catálogo</q-btn>
           <q-btn flat class="nav-link q-mx-xs" to="/localizacao">Localização</q-btn>
           <q-btn color="secondary" unelevated class="btn primary text-bold text-shadow" href="tel:+556136290040">
             (61) 3629-0040

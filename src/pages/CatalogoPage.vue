@@ -1,5 +1,11 @@
 <template>
   <q-page class="q-pa-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
+    <div class="q-mb-md">
+      <q-breadcrumbs class="text-grey-7">
+        <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
+        <q-breadcrumbs-el label="Catálogo" to="/catalogo" />
+      </q-breadcrumbs>
+    </div>
     <!-- Filtros -->
     <!-- 🔎 FILTROS -->
     <div class="q-pa-md bg-white rounded-borders q-mb-md shadow-1">
@@ -83,8 +89,8 @@
                 <q-badge v-if="p.marca" color="primary" class="text-bold q-pa-xs" text-color="blue-10"
                   :label="p.marca" />
               </div>
-              <div class="text-subtitle1 text-weight-medium ellipsis-2">{{ p.descricao }}</div>
             </div>
+            <div class="text-subtitle1 text-weight-medium ellipsis-2"><br></br>{{ p.descricao }}</div>
 
             <div class="q-mt-sm">
               <div v-if="p.precoPromocao && p.precoPromocao > 0" class="column">
@@ -182,7 +188,7 @@
           <q-img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
             alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" /></q-btn></div>
-      <div class="copy q-mt-md">© {{ year }} Eletro Nogueira — 26.931.014/0001-12.</div>
+      <div class="copy q-mt-md">© Eletro Nogueira — 26.931.014/0001-12.</div>
     </footer>
   </q-page>
 </template>
@@ -191,9 +197,11 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useQuasar, date } from 'quasar'
 import { api } from 'boot/axios'
+import { useRouter } from 'vue-router'
 
 const isMobile = useQuasar().screen.lt.md
 const $q = useQuasar()
+const router = useRouter()
 
 /** ---------------- State base ---------------- */
 const loading = ref(false)
@@ -368,6 +376,7 @@ function resetFilters() {
 }
 
 async function applyFilters(updateURL = true) {
+
   loading.value = true
   try {
     // Normaliza preços vindos dos inputs mascarados
@@ -403,6 +412,7 @@ async function applyFilters(updateURL = true) {
     items.value = arr.map(p => ({
       id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
       descricao: p.DESCRICAO ?? p.descricao,
+      codOriginal: p.CODORIGINAL,
       marca: p.MARCA ?? p.marca,
       preco: p.PRECO ?? p.preco,
       precoPromocao: p.PRECOPROMOCAO ?? p.precoPromocao,
@@ -437,10 +447,43 @@ async function applyFilters(updateURL = true) {
 /** ---------------- Detalhes ---------------- */
 const showDetails = ref(false)
 const detailItem = ref(null)
+
 function openDetails(p) {
-  detailItem.value = p
-  showDetails.value = true
+  const slugify = (s = '') =>
+    String(s)
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .toLowerCase()
+
+  const desc = (p.DESCRICAO ?? p.descricao) || ''
+  const brand = (p.MARCA ?? p.marca) || ''
+  const id = p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id ?? ''
+
+  const sku = p.codOriginal
+
+  const prod = {
+    id,
+    descricao: desc,
+    marca: brand,
+    sku, // <<<<<<<<<<<<<<<<<<<<<< passa o SKU aqui
+    preco: p.preco,
+    precoPromocao: p.precoPromocao,
+    precoEfetivo: p.precoEfetivo,
+    imagemUrl: p.img_url ?? null,
+    updatedAt: p.DATAATUALIZACAO ?? null,
+    inativoFlag: p.INATIVO ?? null
+  }
+  console.log('openDetails prod:', prod)
+  const slug = p.slug || `${slugify(`${desc} ${brand}`)}-${id}`
+  sessionStorage.setItem(`prod:${id}`, JSON.stringify(prod))
+  router.push({
+    path: `/catalogo/produto/${slug}`,
+    state: { product: prod }
+  })
 }
+
+
 
 /** ---------------- Lifecycle ---------------- */
 onMounted(async () => {

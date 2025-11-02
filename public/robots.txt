@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Sitemap: https://eletronogueira.com.br/sitemap.xml
+Sitemap: https://eletronogueira.com.br/sitemap-products.xml
+
