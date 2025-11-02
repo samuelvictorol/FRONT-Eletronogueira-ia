@@ -41,7 +41,7 @@
 
             <div class="text-body2 text-grey-8">
               <div class="q-mb-xs"><strong>Descrição:</strong></div>
-              <div>{{ shortDesc }} <br>Marca:{{ product.marca }}</div>
+              <div>{{ shortDesc }} <br>Marca: {{ product.marca }}</div>
             </div>
             <div class="q-mt-lg row q-col-gutter-sm">
               <div class="col-12 col-sm-6">
