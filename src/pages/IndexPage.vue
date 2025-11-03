@@ -223,34 +223,42 @@
       <div class="container rounded-borders q-pa-sm">
         <div class="cards">
           <article class="product glass" @click="goTo('/catalogo?q=furadeira&limit=12&page=1&orderBy=relevance')">
+            <q-img width="100%" class="rounded-borders" src="https://www.parafusoscenterfix.com.br/blog/wp-content/uploads/2024/01/distribuidor-de-ferramentas-eletricas-1.jpg"></q-img>
             <h4>Ferramentas Elétricas</h4>
             <p>Furadeira, Parafusadeira, Martelete, Esmerilhadeira.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=bomba&limit=12&page=1&orderBy=relevance')">
+            <q-img width="100%" class="rounded-borders" src="https://cdn.sindiconet.com.br/Conteudos/9753/bombadagua.jpg"></q-img>
             <h4>Hidráulica & Bombas</h4>
             <p>Bombas palito, Anauger, incêndio, poço artesiano.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=válvulas&limit=12&page=1&orderBy=relevance')">
+            <q-img width="100%" class="rounded-borders" src="https://www.felapblog.com.br/wp-content/uploads/2019/12/Ferramentas-pneum%C3%A1ticas.jpg"></q-img>
             <h4>Automação & Pneumática</h4>
             <p>Conexões PU, válvulas, mangueiras, ferramentas pneumáticas.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=motor&limit=12&page=1&orderBy=relevance')">
+            <q-img width="100%" class="rounded-borders" src="https://tokenengenharia.com.br/wp-content/uploads/2024/01/Escolher-Gerador-de-Energia-1024x576.jpg"></q-img>
             <h4>Elétrica Industrial</h4>
             <p>Motores elétricos, inversoras, geradores, quadros.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=jardim&limit=12&page=1&orderBy=relevance')">
+            <q-img width="100%" class="rounded-borders" src="https://blog.neteletrica.com.br/wp-content/uploads/2019/07/shutterstock_475483222.jpg"></q-img>
             <h4>Agro & Jardim</h4>
             <p>Cortador de grama, pulverizador, motosserra, forrageira.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=compressor&limit=12&page=1&orderBy=relevance')">
+            <q-img width="100%" class="rounded-borders" src="https://arquivos.sistemaeso.com.br/blog/imagens/seguranca-no-trabalho/o-que-e-um-epi-equipamento-de-protecao-individual.jpg"></q-img>
             <h4>Solda & Oficina</h4>
             <p>Máquinas de solda, EPI, compressores, acessórios.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=ímetro&limit=12&page=1&orderBy=relevance')">
+            <q-img width="100%" class="rounded-borders" src="https://down-br.img.susercontent.com/file/7a39c242d5c572ae4179541e2b71a53d"></q-img>
             <h4>Medição & Precisão</h4>
             <p>Paquímetro, multímetro, trena a laser, esquadro.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=polia&limit=12&page=1&orderBy=relevance')">
+            <q-img width="100%" class="rounded-borders" src="https://rexon.com.br/wp-content/uploads/2023/03/Correias-de-borracha-scaled.jpg"></q-img>
             <h4>Acessórios & Transmissão</h4>
             <p>Correias, polias, Topfusion, mangueiras.</p>
           </article>
