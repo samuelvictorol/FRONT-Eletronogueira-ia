@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "https://www.eletronogueira.com.br/*"
+  to   = "https://eletronogueira.com.br/:splat"
+  status = 301
+  force  = true
