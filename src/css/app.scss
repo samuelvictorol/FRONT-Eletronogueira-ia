@@ -367,3 +367,24 @@ a {
     grid-template-columns: 1fr
   }
 }
+/* <style scoped> */
+.card { border-radius: 16px; }
+.service-item { border-radius: 12px; background: rgba(255,255,255,0.6); }
+.service-item .q-item__section--avatar { align-self: flex-start; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* pills enxutas */
+.pill-list {
+  display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0;
+  list-style: none;
+}
+.pill-list li {
+  padding: 6px 10px; border-radius: 999px;
+  background: #eef2f7; color: #334155; font-size: 12px; font-weight: 600;
+}
+
+/* empacotamento desktop/mobile */
+@media (min-width: 1024px) {
+  #servicos .card { min-height: 100%; }
+}
+/* </style> */

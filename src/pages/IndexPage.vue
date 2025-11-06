@@ -64,113 +64,177 @@
         </div>
       </div>
     </section>
-    <section id="servicos">
-      <div class=" text-secondary">
-        <div class="bg-secondary text-white center text-h2 q-py-xl">Serviços</div>
+    <section id="servicos" class="section q-py-md">
+      <div class="container">
+        <div class="row q-col-gutter-xl">
+          <!-- Coluna: Serviços -->
+          <div class="col-12 col-md-6">
+            <div class="glass card q-pa-md">
+              <h2 class="text-secondary q-mb-xs">Serviços</h2>
+              <p class="text-grey-7 q-mb-md">
+                Guindaste Munck, torno mecânico, solda TIG/MIG e rebobinagem de motores — equipe técnica para projetos e
+                emergências.
+              </p>
+
+              <div class="q-gutter-md">
+                <q-item class="service-item">
+                  <q-item-section avatar>
+                    <q-avatar size="80px" rounded class="avatar">
+                      <img
+                        src="https://armac.com.br/wordpress/wp-content/uploads/2023/01/armac-guindaste-e-munck-blog.jpg"
+                        alt="Munck (Guindaste articulado)">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Munck</q-item-label>
+                    <q-item-label caption>Guindaste articulado para içamento e movimentação com segurança e
+                      agilidade.</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item class="service-item">
+                  <q-item-section avatar>
+                    <q-avatar size="80px" rounded class="avatar">
+                      <img
+                        src="https://blog.ferramentaskennedy.com.br/wp-content/uploads/2024/05/o-que-um-torno-mecnico8695f1a75961409e918edbcd14fc128b.jpg"
+                        alt="Torno mecânico">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Torno</q-item-label>
+                    <q-item-label caption>Usinagem precisa para peças sob medida e recuperação.</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item class="service-item">
+                  <q-item-section avatar>
+                    <q-avatar size="80px" rounded class="avatar">
+                      <img src="https://oximig.com.br/wp-content/uploads/2023/10/Quando-devo-usar-Solda-TIG.jpg"
+                        alt="Solda TIG/MIG">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Solda</q-item-label>
+                    <q-item-label caption>Processos TIG/MIG para reparos e fabricações com acabamento
+                      limpo.</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item class="service-item">
+                  <q-item-section avatar>
+                    <q-avatar size="80px" rounded class="avatar">
+                      <img src="https://www.agbrasil360.com.br/agreletrotecnica/imgs_eventos/53ec6-rebobinamento-6.jpg"
+                        alt="Rebobinagem de motores elétricos">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Rebobinagem de Motores</q-item-label>
+                    <q-item-label caption>Substituição de enrolamentos com teste e garantia de
+                      desempenho.</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </div>
+
+              <div class="q-mt-md">
+                <q-btn class="btn whats q-py-sm shadow-1 text-bold text-shadow w100" color="positive" type="a"
+                  target="_blank" rel="noopener" glossy
+                  href="https://wa.me/556136296858?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20um%20or%C3%A7amento%20dos%20servi%C3%A7os.">
+                  Pedir orçamento no WhatsApp
+                </q-btn>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coluna: Manutenção -->
+          <div class="col-12 col-md-6">
+            <div class="glass card q-pa-md">
+              <h3 class="text-secondary q-mb-xs">Manutenção</h3>
+              <p class="text-grey-7 q-mb-md">
+                Manutenção preventiva e corretiva com diagnóstico rápido e peças de qualidade.
+              </p>
+
+              <!-- Lista “pill” enxuta -->
+              <ul class="pill-list q-mb-md">
+                <li>Bombas d’água</li>
+                <li>Mangueiras & lavadoras</li>
+                <li>Compressores</li>
+                <li>Automação industrial</li>
+              </ul>
+
+              <!-- Itens com avatar padronizado -->
+              <div class="q-gutter-md">
+                <q-item class="service-item">
+                  <q-item-section avatar>
+                    <q-avatar size="80px" rounded class="avatar">
+                      <img
+                        src="https://blog.meritocomercial.com.br/wp-content/uploads/2023/11/manutencao-preventiva-bomba-de-agua-1024x683.jpg.webp"
+                        alt="Manutenção de bombas d'água">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Bombas d’água</q-item-label>
+                    <q-item-label caption>Troca de selo e rolamentos, limpeza de rotor e alinhamento.</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item class="service-item">
+                  <q-item-section avatar>
+                    <q-avatar size="80px" rounded class="avatar">
+                      <img
+                        src="https://s1.kaercher-media.com/media/image/file/9734/d3/assistencia-tecnica-kaercher.webp"
+                        alt="Mangueiras hidráulicas e lavadoras">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Mangueiras & Lavadoras</q-item-label>
+                    <q-item-label caption>Crimpagem, troca de conexões e testes de pressão.</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item class="service-item">
+                  <q-item-section avatar>
+                    <q-avatar size="80px" rounded class="avatar">
+                      <img
+                        src="https://locadoraequiloc.com.br/wp-content/uploads/2022/07/manutencao-de-compressores-servico.jpg"
+                        alt="Manutenção de compressores">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Compressores</q-item-label>
+                    <q-item-label caption>Troca de óleo/filtros, revisão de válvulas e correias.</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item class="service-item">
+                  <q-item-section avatar>
+                    <q-avatar size="80px" rounded class="avatar">
+                      <img src="https://blog.safetycontrol.ind.br/wp-content/uploads/2023/05/Manutencao-001.png"
+                        alt="Automação industrial">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Automação industrial</q-item-label>
+                    <q-item-label caption>Diagnóstico de CLP/inversores, sensores e painéis.</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </div>
+
+              <div class="q-mt-md">
+                <q-btn class="btn whats q-py-sm shadow-1 text-bold text-shadow w100" color="positive" type="a"
+                  target="_blank" rel="noopener" glossy
+                  href="https://wa.me/556136296858?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Preciso%20de%20assist%C3%AAncia%20t%C3%A9cnica.">
+                  Solicitar assistência técnica
+                </q-btn>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
-    <section class="section q-pb-lg">
-      <div class="container rounded-borders q-pa-sm">
-        <div class="cards text-secondary">
-          <article class="product glass">
-            <q-img src="https://armac.com.br/wordpress/wp-content/uploads/2023/01/armac-guindaste-e-munck-blog.jpg"
-              class="rounded-borders q-mb-sm"></q-img>
-            <h4>Munck</h4>
-            <p>É um sistema hidráulico com um braço articulado que possui um gancho na extremidade, montado na parte
-              traseira ou intermediária do caminhão.</p>
-          </article>
-          <article class="product glass">
-            <q-img
-              src="https://blog.ferramentaskennedy.com.br/wp-content/uploads/2024/05/o-que-um-torno-mecnico8695f1a75961409e918edbcd14fc128b.jpg"
-              class="rounded-borders q-mb-sm"></q-img>
-            <h4>Torno</h4>
-            <p>O torno é uma máquina-ferramenta utilizada para modelar e cortar materiais, enquanto a solda é o processo
-              de
-              união de metais através da fusão e solidificação.</p>
-          </article>
-          <article class="product glass">
-            <q-img src="https://oximig.com.br/wp-content/uploads/2023/10/Quando-devo-usar-Solda-TIG.jpg"
-              class="rounded-borders q-mb-sm"></q-img>
-            <h4>Solda</h4>
-            <p>A solda é o processo de união de metais através da fusão e solidificação.</p>
-          </article>
-          <article class="product glass">
-            <q-img src="https://www.agbrasil360.com.br/agreletrotecnica/imgs_eventos/53ec6-rebobinamento-6.jpg"
-              class="rounded-borders q-mb-sm"></q-img>
-            <h4>Rebobinagem de Motores Elétricos</h4>
-            <p>O processo de rebobinagem envolve a remoção do enrolamento danificado do motor e a substituição por novos
-              fios de cobre ou alumínio, garantindo que o motor volte a funcionar como novo</p>
-          </article>
-        </div>
-        <div class="center mt">
-          <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold text-shadow" color="positive" type="a"
-            target="_blank" rel="noopener" glossy
-            href="https://wa.me/556136296858?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20e%20servi%C3%A7os.">
-            Pedir Orçamento no whatsapp<q-img class="q-ml-sm"
-              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
-        </div>
-      </div>
-    </section>
-    <section id="manutencao">
-      <div class=" text-secondary">
-        <div class="bg-secondary text-white center text-h3 q-py-xl">Manutenção</div>
-      </div>
-    </section>
-    <section class="section q-pb-lg">
-      <div class="container rounded-borders q-pa-sm">
-        <div class="cards text-secondary">
-          <article class="product glass">
-            <q-img
-              src="https://blog.meritocomercial.com.br/wp-content/uploads/2023/11/manutencao-preventiva-bomba-de-agua-1024x683.jpg.webp"
-              class="rounded-borders q-mb-sm"></q-img>
-            <h4>Bombas D'água</h4>
-            <p>Manutenção preventiva/corretiva: troca de selo mecânico e rolamentos, limpeza de rotor e alinhamento.
-              Problemas comuns: vazamentos, cavitação e perda de pressão.</p>
-          </article>
 
-          <article class="product glass">
-            <q-img src="https://s1.kaercher-media.com/media/image/file/4413/d3/dicas_cuidado_equipamentos_karcher.webp"
-              class="rounded-borders q-mb-sm"></q-img>
-            <h4>Mangueira Hidráulicas e Lavadoras</h4>
-            <p>Reparo e substituição de mangueiras, conexões e crimpagem com teste de pressão. Problemas comuns:
-              fissuras,
-              vazamentos, baixa vazão e bicos obstruídos.</p>
-          </article>
-
-          <article class="product glass">
-            <q-img
-              src="https://locadoraequiloc.com.br/wp-content/uploads/2022/07/manutencao-de-compressores-servico.jpg"
-              class="rounded-borders q-mb-sm"></q-img>
-            <h4>Compressores</h4>
-            <p>Troca de óleo e filtros, revisão de válvulas/correias e drenagem de condensado. Problemas comuns: queda
-              de
-              pressão, aquecimento excessivo e água na linha.</p>
-          </article>
-
-          <article class="product glass">
-            <q-img src="https://blog.safetycontrol.ind.br/wp-content/uploads/2023/05/Manutencao-001.png"
-              class="rounded-borders q-mb-sm"></q-img>
-            <h4>Automação Industrial</h4>
-            <p>Diagnóstico de CLP/inversores, sensores e painéis, com atualização e reprogramação segura. Problemas
-              comuns:
-              paradas intermitentes, alarmes e leituras incorretas.</p>
-          </article>
-        </div>
-
-        <div class="center mt">
-          <q-btn id="horarios" class="btn whats q-py-sm shadow-1 text-bold text-shadow" color="positive" type="a"
-            target="_blank" rel="noopener" glossy
-            href="https://wa.me/556136296858?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20e%20servi%C3%A7os.">
-            Solicitar Assitência Técnica<q-img class="q-ml-sm"
-              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
-        </div>
-      </div>
-    </section>
     <section id="produtos">
       <div class=" bg-secondary text-white q-pt-sm">
-        <h2 class="center">Catálogo de Produtos</h2>
+        <h2 class="center">Produtos e Marcas</h2>
         <q-carousel v-model="slide" v-model:fullscreen="fs" transition-prev="slide-right" transition-next="slide-left"
           animated control-color="secondary" navigation padding arrows swipeable height="400px" infinite
           class="bg-grey-3">
@@ -223,42 +287,50 @@
       <div class="container rounded-borders q-pa-sm">
         <div class="cards">
           <article class="product glass" @click="goTo('/catalogo?q=furadeira&limit=12&page=1&orderBy=relevance')">
-            <q-img width="100%" class="rounded-borders" src="https://www.parafusoscenterfix.com.br/blog/wp-content/uploads/2024/01/distribuidor-de-ferramentas-eletricas-1.jpg"></q-img>
+            <q-img width="100%" class="rounded-borders"
+              src="https://www.parafusoscenterfix.com.br/blog/wp-content/uploads/2024/01/distribuidor-de-ferramentas-eletricas-1.jpg"></q-img>
             <h4>Ferramentas Elétricas</h4>
             <p>Furadeira, Parafusadeira, Martelete, Esmerilhadeira.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=bomba&limit=12&page=1&orderBy=relevance')">
-            <q-img width="100%" class="rounded-borders" src="https://cdn.sindiconet.com.br/Conteudos/9753/bombadagua.jpg"></q-img>
+            <q-img width="100%" class="rounded-borders"
+              src="https://cdn.sindiconet.com.br/Conteudos/9753/bombadagua.jpg"></q-img>
             <h4>Hidráulica & Bombas</h4>
             <p>Bombas palito, Anauger, incêndio, poço artesiano.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=válvulas&limit=12&page=1&orderBy=relevance')">
-            <q-img width="100%" class="rounded-borders" src="https://www.felapblog.com.br/wp-content/uploads/2019/12/Ferramentas-pneum%C3%A1ticas.jpg"></q-img>
+            <q-img width="100%" class="rounded-borders"
+              src="https://www.felapblog.com.br/wp-content/uploads/2019/12/Ferramentas-pneum%C3%A1ticas.jpg"></q-img>
             <h4>Automação & Pneumática</h4>
             <p>Conexões PU, válvulas, mangueiras, ferramentas pneumáticas.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=motor&limit=12&page=1&orderBy=relevance')">
-            <q-img width="100%" class="rounded-borders" src="https://tokenengenharia.com.br/wp-content/uploads/2024/01/Escolher-Gerador-de-Energia-1024x576.jpg"></q-img>
+            <q-img width="100%" class="rounded-borders"
+              src="https://tokenengenharia.com.br/wp-content/uploads/2024/01/Escolher-Gerador-de-Energia-1024x576.jpg"></q-img>
             <h4>Elétrica Industrial</h4>
             <p>Motores elétricos, inversoras, geradores, quadros.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=jardim&limit=12&page=1&orderBy=relevance')">
-            <q-img width="100%" class="rounded-borders" src="https://blog.neteletrica.com.br/wp-content/uploads/2019/07/shutterstock_475483222.jpg"></q-img>
+            <q-img width="100%" class="rounded-borders"
+              src="https://blog.neteletrica.com.br/wp-content/uploads/2019/07/shutterstock_475483222.jpg"></q-img>
             <h4>Agro & Jardim</h4>
             <p>Cortador de grama, pulverizador, motosserra, forrageira.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=compressor&limit=12&page=1&orderBy=relevance')">
-            <q-img width="100%" class="rounded-borders" src="https://arquivos.sistemaeso.com.br/blog/imagens/seguranca-no-trabalho/o-que-e-um-epi-equipamento-de-protecao-individual.jpg"></q-img>
+            <q-img width="100%" class="rounded-borders"
+              src="https://arquivos.sistemaeso.com.br/blog/imagens/seguranca-no-trabalho/o-que-e-um-epi-equipamento-de-protecao-individual.jpg"></q-img>
             <h4>Solda & Oficina</h4>
             <p>Máquinas de solda, EPI, compressores, acessórios.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=ímetro&limit=12&page=1&orderBy=relevance')">
-            <q-img width="100%" class="rounded-borders" src="https://down-br.img.susercontent.com/file/7a39c242d5c572ae4179541e2b71a53d"></q-img>
+            <q-img width="100%" class="rounded-borders"
+              src="https://down-br.img.susercontent.com/file/7a39c242d5c572ae4179541e2b71a53d"></q-img>
             <h4>Medição & Precisão</h4>
             <p>Paquímetro, multímetro, trena a laser, esquadro.</p>
           </article>
           <article class="product glass" @click="goTo('/catalogo?q=polia&limit=12&page=1&orderBy=relevance')">
-            <q-img width="100%" class="rounded-borders" src="https://rexon.com.br/wp-content/uploads/2023/03/Correias-de-borracha-scaled.jpg"></q-img>
+            <q-img width="100%" class="rounded-borders"
+              src="https://rexon.com.br/wp-content/uploads/2023/03/Correias-de-borracha-scaled.jpg"></q-img>
             <h4>Acessórios & Transmissão</h4>
             <p>Correias, polias, Topfusion, mangueiras.</p>
           </article>
@@ -270,7 +342,7 @@
       <div class=" text-secondary">
         <div class="" v-if="!isMobile">
           <q-carousel v-model="slide" v-model:fullscreen="fs" transition-prev="slide-right" transition-next="slide-left"
-            animated control-color="secondary" navigation padding arrows swipeable height="300px" infinite
+            animated control-color="secondary" navigation padding arrows swipeable height="375px" infinite
             class="bg-grey-3">
             <template #control>
               <q-btn flat dense color="secondary" round :icon="fs ? 'fullscreen_exit' : 'fullscreen'" @click="fs = !fs"
@@ -315,13 +387,14 @@
     <!-- PRODUTOS -->
     <section class="section q-pb-lg">
       <div class="w100 row justify-center no-wrap">
-        <q-btn color="secondary" class=" text-bold q-pa-md q-mt-md"
+        <q-btn class="text-secondary bg-primary text-bold q-pa-md q-mt-md"
           to="/catalogo?min=799.9&max=999.9&limit=12&page=1&orderBy=relevance" label="Buscar por Marcas"
           icon-right="search" />
       </div>
       <div class="container rounded-borders q-pa-sm">
         <div class="cards text-secondary">
-          <article class=" bg-primary product glass" @click="goTo('/catalogo?marca=makita&limit=12&page=1&orderBy=relevance')">
+          <article class=" bg-primary product glass"
+            @click="goTo('/catalogo?marca=makita&limit=12&page=1&orderBy=relevance')">
             <h4 class="text-bold">Makita</h4>
             <p class="text-secondary">Motossera, broca, disco diamantado, disco de corte etc.</p>
           </article>
@@ -330,7 +403,8 @@
             <h4 class="text-bold">Black & Decker</h4>
             <p class="text-secondary">Parafusadeira, jogo de brocas, esmerilhadeira, soprador térmico etc.</p>
           </article>
-          <article class=" bg-primary product glass" @click="goTo('/catalogo?marca=Stanley&limit=12&page=1&orderBy=relevance')">
+          <article class=" bg-primary product glass"
+            @click="goTo('/catalogo?marca=Stanley&limit=12&page=1&orderBy=relevance')">
             <h4 class="text-bold">Stanley</h4>
             <p class="text-secondary">Cabo, chave ingles, soquetes, chave de grife, jogo de saca-pino etc.</p>
           </article>
