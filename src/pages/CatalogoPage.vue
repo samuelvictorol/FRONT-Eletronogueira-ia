@@ -113,7 +113,7 @@
       </template>
     </div>
     <div class="w100 row justify-between items-center q-mt-md">
-      <span v-if="!loading">{{ total - 1 }} resultado(s)</span>
+      <span v-if="!loading">{{ total }} resultado(s)</span>
       <span v-else>Carregando…</span>
       <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links
         dense @update:model-value="onPageChange" />
@@ -208,14 +208,14 @@ const loading = ref(false)
 const items = ref([])
 const total = ref(0)
 
-const page = ref(0)
+const page = ref(1)
 const limit = ref(12)
 const orderBy = ref('relevance') // 'relevance' | 'price_asc' | 'price_desc' | 'updated_desc'
 
 const filters = ref({
   descricaoProduto: '',
   descricaoMarca: '',
-  precoMin: 'null',
+  precoMin: null,
   precoMax: null
 })
 
@@ -407,7 +407,6 @@ async function applyFilters(updateURL = true) {
 
     const hasNext = raw.length > L
     const arr = hasNext ? raw.slice(0, L) : raw
-
     // Mapeia para o shape do front
     items.value = arr.map(p => ({
       id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
@@ -422,12 +421,13 @@ async function applyFilters(updateURL = true) {
     }))
 
     // Usa total do backend se existir; caso contrário, estima só para liberar paginação
-    const apiTotal = Number(data?.total ?? data?.count ?? data?.totalCount)
+    const apiTotal = Number(data?.totalCount ?? data?.total ?? data?.count)
     if (Number.isFinite(apiTotal) && apiTotal >= 0) {
       total.value = apiTotal
     } else {
+      // fallback estimado apenas se a API não mandar total
       total.value = hasNext
-        ? (Number(page.value) * L) + 1
+        ? (Number(page.value) * L) + 1 
         : ((Number(page.value) - 1) * L) + items.value.length
     }
 
