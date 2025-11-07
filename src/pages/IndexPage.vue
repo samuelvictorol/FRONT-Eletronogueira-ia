@@ -322,7 +322,7 @@
             <h4>Solda & Oficina</h4>
             <p>Máquinas de solda, EPI, compressores, acessórios.</p>
           </article>
-          <article class="product glass" @click="goTo('/catalogo?q=ímetro&limit=12&page=1&orderBy=relevance')">
+          <article class="product glass" @click="goTo('/catalogo?q=trena+multimetro&limit=12&page=1&orderBy=relevance')">
             <q-img width="100%" class="rounded-borders"
               src="https://down-br.img.susercontent.com/file/7a39c242d5c572ae4179541e2b71a53d"></q-img>
             <h4>Medição & Precisão</h4>
