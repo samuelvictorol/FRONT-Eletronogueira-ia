@@ -1,8 +1,8 @@
 <template>
-  <q-page class="q-pa-md bg-grey-3 animate__animated animate__fadeInLeft animate__slower"
+  <q-page class="q-px-md bg-grey-3 animate__animated animate__fadeInLeft animate__slower"
     :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
-    <div class="q-mb-md">
-      <q-btn flat color="secondary" icon="arrow_back" @click="$router.back()" label="Voltar" />
+    <div class="q-mb-md bg-secondary animate__animated animate__fadeInDown animate__delay-3s animate__slower" style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
+      <q-btn flat color="white" icon="arrow_back" @click="$router.back()" label="Voltar" />
     </div>
 
     <q-card flat bordered class="bg-white rounded-borders shadow-1 animate__animated animate__fadeInLeft animate__slower">
@@ -10,8 +10,10 @@
         <div class="row q-col-gutter-xl">
           <div class="col-12 col-md-6">
             <q-skeleton v-if="loading" type="rect" style="height: 360px; border-radius: 14px" />
-            <q-img v-else :src="product?.imagemUrl || fallbackImage" ratio="16/9" spinner-color="primary"
-              :alt="product?.descricao" style="border-radius: 14px" />
+            <div class="w100 row justify-center" v-else>
+              <q-img :src="product?.imagemUrl || fallbackImage" :alt="product?.descricao || 'Imagem do produto'"
+                style="max-width: 240px; max-height: 240px; border-radius: 14px" />
+            </div>
           </div>
 
           <div class="col-12 col-md-6">
@@ -45,7 +47,7 @@
             </div>
             <div class="q-mt-lg row q-col-gutter-sm">
               <div class="col-12 col-sm-6">
-                <q-btn unelevated color="positive" icon-right="whatsapp" class="w100"
+                <q-btn unelevated color="green-14" icon-right="whatsapp" class="w100" 
                   :href="product ? whatsLink(product) : '#'" target="_blank" label="Pedir orçamento" />
               </div>
               <div class="col-12 col-sm-6">
@@ -113,7 +115,7 @@ const isMobile = $q.screen.lt.md
 const route = useRoute()
 const router = useRouter()
 
-const fallbackImage = 'https://images.unsplash.com/photo-1581090700227-1e37b190418e?q=80&w=1200&auto=format&fit=crop'
+const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
 
 const loading = ref(true)
 const product = ref(null)

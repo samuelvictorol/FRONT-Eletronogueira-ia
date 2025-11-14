@@ -1,6 +1,11 @@
 <template>
   <q-page class="text-black">
-    <div class="open-now text-white text-shadow q-py-sm bg-secondary text-center">{{ openNowText }}</div>
+    <div class="bg-secondary">
+      <div
+        class="open-now text-white text-shadow q-py-sm text-center animate__animated animate__fadeInDown animate__delay-3s animate__slower">
+        {{ openNowText }}</div>
+
+    </div>
     <!-- HERO -->
     <section class="hero">
       <img class="hero-bg" :src="heroImg" alt="Fachada Eletro Nogueira" />
@@ -322,7 +327,8 @@
             <h4>Solda & Oficina</h4>
             <p>Máquinas de solda, EPI, compressores, acessórios.</p>
           </article>
-          <article class="product glass" @click="goTo('/catalogo?q=trena+multimetro&limit=12&page=1&orderBy=relevance')">
+          <article class="product glass"
+            @click="goTo('/catalogo?q=trena+multimetro&limit=12&page=1&orderBy=relevance')">
             <q-img width="100%" class="rounded-borders"
               src="https://down-br.img.susercontent.com/file/7a39c242d5c572ae4179541e2b71a53d"></q-img>
             <h4>Medição & Precisão</h4>

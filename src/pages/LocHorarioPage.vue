@@ -1,9 +1,9 @@
 <template>
-  <q-page class="q-pa-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
-    <div class="q-mb-md">
-      <q-breadcrumbs class="text-grey-7">
-        <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
-        <q-breadcrumbs-el label="Localização" to="/catalogo" />
+  <q-page class="q-px-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
+    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-secondary q-pa-md" style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
+      <q-breadcrumbs class="text-grey-3">
+        <q-breadcrumbs-el class="text-primary" icon="home" label="Início" to="/" />
+        <q-breadcrumbs-el label="Localização" to="/localizacao" />
       </q-breadcrumbs>
     </div>
     <section class="section alt q-py-md">
