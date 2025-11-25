@@ -566,7 +566,7 @@ const openNowText = computed(() => {
   const pad = n => String(n).padStart(2, '0')
   const hhmm = `${pad(now.getHours())}:${pad(now.getMinutes())}`
   const range = schedule[day]
-  if (!range) return 'Fechado hoje • Domingo'
+  if (!range) return '🟡 Fechado hoje • Domingo'
   const [start, end] = range
   return (hhmm >= start && hhmm <= end)
     ? `🟢 Aberto agora • ${start} - ${end}`

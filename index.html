@@ -1,80 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
-  <title>
-    Eletro Nogueira
-  </title>
+  <meta charset="utf-8" />
 
-  <meta charset="utf-8">
-  <meta name="description" content="Manutenções, Serviços Especializados e venda de ampla linha de ferramentas elétricas, hidráulica, automação industrial, elétrica, agropecuária, bombas d’agua e entre outros produtos. Dentre os produtos, temos a pronta entrega: Furadeira, martelo, compressor, Parafusadeira, martelete, bomba palito, bomba anauger, bombas de incêndio, bombas de poço artesiano, correia, polia, topfusion, conexões pu, ferramenta pneumatica, máquina de cortar grama, desintegrador, forrageira, motosserra, pulverizador, motor elétrico, motor a gasolina, gerador, compactador, cortador de piso, paquímetro, alicate amperímetro, multímetro, trena a laser, fresa, lima rotativa, esquadro, máquina de solda, Inversora, lavadora, makita">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="msapplication-tap-highlight" content="no">
-  <meta name="viewport"
-    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
+  <title>Eletro Nogueira | Ferramentas, bombas e automação em Valparaíso de Goiás</title>
+
+  <!-- DESCRIÇÃO ÚNICA -->
   <meta name="description"
-    content="Somos uma loja física em Valparaíso de Goiás com ampla linha de ferramentas elétricas e hidráulicas, automação industrial, agropecuária e bombas d’água. Pronta entrega: Furadeira, Parafusadeira, Martelete, Bomba Palito/Anauger, Martelete, Motosserra, Lavadora, Makita, e muito mais." />
+    content="Somos uma loja física em Valparaíso de Goiás com ampla linha de ferramentas elétricas e hidráulicas, automação industrial, agropecuária e bombas d’água. Pronta entrega: furadeira, parafusadeira, martelete, bombas palito/Anauger, lavadora, Makita e muito mais." />
+
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+  <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>" />
+
+  <!-- Robots -->
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+
+  <!-- Canonical -->
   <link rel="canonical" href="https://eletronogueira.com.br/" />
-  <link rel="icon" type="image/png" sizes="128x128"
-    href="/logo.png">
-  <link rel="icon" type="image/png" sizes="96x96"
-    href="/logo.png">
-  <link rel="icon" type="image/png" sizes="32x32"
-    href="/logo.png">
-  <link rel="icon" type="image/png" sizes="16x16"
-    href="/logo.png">
-  <link rel="icon" type="image/png"
-    href="/logo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- FAVICON / LOGO (usado como miniatura no Google) -->
+  <!-- garante ícone quadrado >= 48x48 em /logo.png -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/logo.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/logo.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/logo.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/logo.png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
+
+  <!-- Open Graph (Facebook / WhatsApp / Discover) -->
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Eletro Nogueira" />
+  <meta property="og:url" content="https://eletronogueira.com.br/" />
+  <meta property="og:title" content="Eletro Nogueira - Ferramentas, bombas e automação em Valparaíso de Goiás" />
+  <meta property="og:description"
+    content="Ferramentas elétricas, hidráulica, automação, agro e bombas d’água com pronta entrega em Valparaíso de Goiás." />
+  <!-- imagem grande de destaque (pode ser a fachada ou banner) -->
+  <meta property="og:image" content="https://eletronogueira.com.br/assets/store2.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Eletro Nogueira - Ferramentas, bombas e automação em Valparaíso de Goiás" />
+  <meta name="twitter:description"
+    content="Loja física com ampla linha de ferramentas, hidráulica, automação e agro." />
+  <meta name="twitter:image" content="https://eletronogueira.com.br/assets/store2.png" />
+
+  <!-- Fonts / CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <meta name="robots" content="max-image-preview:large">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "url": "https://eletronogueira.com.br/",
-  "name": "Eletro Nogueira",
-  "alternateName": "Eletro Nogueira Valparaíso"
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "HardwareStore",
-  "name": "Eletro Nogueira",
-  "url": "https://eletronogueira.com.br/",
-  "image": [
-    "https://lh3.googleusercontent.com/p/AF1QipPr30aIimlcjBUSfG_krYbJBoEQGhd3DY8bum1P=s680-w680-h510-rw",
-    "https://lh3.googleusercontent.com/p/AF1QipMWMECy5bNxLivNHsFpcDdfRjHPjZTp2zpEVvPG=s680-w680-h510-rw"
-  ],
-  "telephone": "+55-61-3629-0040",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Av. Marginal, 01 - Esplanada I",
-    "addressLocality": "Valparaíso de Goiás",
-    "addressRegion": "GO",
-    "postalCode": "72878-603",
-    "addressCountry": "BR"
-  },
-  "geo": { "@type": "GeoCoordinates", "latitude": -16.074, "longitude": -47.979 },
-  "openingHours": "Mo-Fr 08:00-18:00",
-  "sameAs": [
-    "https://www.instagram.com/nogueiravalparaiso"
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Eletro Nogueira",
-  "url": "https://eletronogueira.com.br/",
-  "logo": "/logo.png"
-}
-</script>
 
+  <!-- JSON-LD: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://eletronogueira.com.br/",
+    "name": "Eletro Nogueira",
+    "alternateName": "Eletro Nogueira Valparaíso"
+  }
+  </script>
 
+  <!-- JSON-LD: Loja física -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HardwareStore",
+    "name": "Eletro Nogueira",
+    "url": "https://eletronogueira.com.br/",
+    "image": [
+      "https://lh3.googleusercontent.com/p/AF1QipPr30aIimlcjBUSfG_krYbJBoEQGhd3DY8bum1P=s680-w680-h510-rw",
+      "https://lh3.googleusercontent.com/p/AF1QipMWMECy5bNxLivNHsFpcDdfRjHPjZTp2zpEVvPG=s680-w680-h510-rw"
+    ],
+    "telephone": "+55-61-3629-0040",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Av. Marginal, 01 - Esplanada I",
+      "addressLocality": "Valparaíso de Goiás",
+      "addressRegion": "GO",
+      "postalCode": "72878-603",
+      "addressCountry": "BR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": -16.074,
+      "longitude": -47.979
+    },
+    "openingHours": "Mo-Fr 08:00-18:00",
+    "sameAs": [
+      "https://www.instagram.com/nogueiravalparaiso"
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD: Organização (logo absoluto) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Eletro Nogueira",
+    "url": "https://eletronogueira.com.br/",
+    "logo": "https://eletronogueira.com.br/logo.png"
+  }
+  </script>
 </head>
 
 <body>

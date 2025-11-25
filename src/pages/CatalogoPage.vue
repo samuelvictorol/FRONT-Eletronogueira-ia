@@ -1,12 +1,13 @@
 <template>
   <q-page class="q-px-md q-mt-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
-    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-secondary q-pa-md" style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
+    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-secondary q-pa-md"
+      style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
       <q-breadcrumbs class="text-grey-3">
         <q-breadcrumbs-el class="text-primary" icon="home" label="Início" to="/" />
         <q-breadcrumbs-el label="Catálogo" to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=relevance" />
       </q-breadcrumbs>
     </div>
-    <!-- Filtros -->
+
     <!-- 🔎 FILTROS -->
     <div class="q-pa-md bg-white rounded-borders q-mb-md shadow-1">
       <div class="row q-col-gutter-md items-end">
@@ -26,7 +27,6 @@
               <q-icon name="sell" />
             </template>
           </q-input>
-
         </div>
 
         <div class="col-6 col-md-2">
@@ -64,7 +64,6 @@
             label="Limite" @update:model-value="onLimitChange" />
         </div>
       </div>
-
     </div>
 
     <!-- Grid de produtos -->
@@ -82,7 +81,9 @@
 
       <template v-else>
         <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="product-card">
-          <q-img :src="p.imagemUrl || fallbackImage" ratio="16/9" spinner-color="primary" :alt="p.descricao" />
+          <!-- 👇 sempre usa imagemUrl normalizado -->
+          <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="primary" fit="contain" class="product-img" />
+
           <q-card-section class="q-pt-sm">
             <div class="row items-center q-mt-xs q-col-gutter-sm">
               <div class="col-auto">
@@ -90,7 +91,10 @@
                   :label="p.marca" />
               </div>
             </div>
-            <div class="text-subtitle1 text-weight-medium ellipsis-2"><br></br>{{ p.descricao }}</div>
+            <div class="text-subtitle1 text-weight-medium ellipsis-2">
+              <br />
+              {{ p.descricao }}
+            </div>
 
             <div class="q-mt-sm">
               <div v-if="p.precoPromocao && p.precoPromocao > 0" class="column">
@@ -99,19 +103,19 @@
                 </div>
                 <div class="text-h6 text-positive">{{ money(p.precoPromocao) }}</div>
               </div>
-              <div v-else class="text-h6">{{ money(p.precoEfetivo ?? p.preco) }}</div>
+              <div v-else class="text-h6">
+                {{ money(p.precoEfetivo ?? p.preco) }}
+              </div>
             </div>
           </q-card-section>
           <q-separator />
           <q-card-actions>
-            <!-- <q-btn class="w100" flat color="green-14" icon-right="add_shopping_cart" label="Orçar" :href="whatsLink(p)"
-              target="_blank" /> -->
-            <q-btn class="w100" color="secondary" icon-right="visibility" @click="openDetails(p)"
-              label="Detalhes" />
+            <q-btn class="w100" color="secondary" icon-right="visibility" @click="openDetails(p)" label="Detalhes" />
           </q-card-actions>
         </q-card>
       </template>
     </div>
+
     <div class="w100 row justify-between items-center q-mt-md">
       <span v-if="!loading">{{ total }} resultado(s)</span>
       <span v-else>Carregando…</span>
@@ -130,11 +134,13 @@
         <q-card-section>
           <div class="row q-col-gutter-md">
             <div class="col-12 col-md-6">
-              <q-img :src="detailItem?.imagemUrl || fallbackImage" ratio="16/9" />
+              <q-img :src="resolveImage(detailItem)" :alt="detailItem?.descricao" fit="contain" class="product-img" />
             </div>
             <div class="col-12 col-md-6">
               <div class="text-subtitle1 q-mb-xs">{{ detailItem?.descricao }}</div>
-              <div class="text-caption text-grey-7 q-mb-sm">Marca: {{ detailItem?.marca || '—' }}</div>
+              <div class="text-caption text-grey-7 q-mb-sm">
+                Marca: {{ detailItem?.marca || '—' }}
+              </div>
               <div class="text-h6 q-mb-xs">
                 {{ detailItem ? priceBlock(detailItem) : '' }}
               </div>
@@ -150,21 +156,25 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <div class="w100 q-py-xl"></div>
     <footer class="footer q-pt-xl">
       <div class="container footer-grid q-pb-md">
         <div>
           <div class="brand">
-            <div class="logo"><q-img style="border-radius: 20%;"
+            <div class="logo">
+              <q-img style="border-radius: 20%;"
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-                alt="Eletro Nogueira Logo" /></div>
+                alt="Eletro Nogueira Logo" />
+            </div>
             <div class="brand-text">
               <strong class="text-secondary">Eletro Nogueira</strong>
               <small>Em frente à BR-040 • Valparaíso de Goiás</small>
             </div>
           </div>
-          <p class="foot-copy q-pt-sm">Soluções em elétrica, hidráulica, automação e agro.<br>Pronta-entrega e
-            suporte técnico.<br><br>CNPJ • <strong>26.931.014/0001-12.</strong>
+          <p class="foot-copy q-pt-sm">
+            Soluções em elétrica, hidráulica, automação e agro.<br />Pronta-entrega e
+            suporte técnico.<br /><br />CNPJ • <strong>26.931.014/0001-12.</strong>
           </p>
         </div>
         <div class="column">
@@ -174,20 +184,25 @@
             WhatsApp
             <q-img
               src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
+              alt="EN" style="border-radius:100%; width:30px; height:30px" />
+          </q-btn>
           <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040"
             label="(61) 3629-0040" />
           <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
             label="(61) 3629-6858" />
         </div>
       </div>
-      <div class="w100 column justify-center items-center text-center">Siga-nos no Instagram!! <br></br><br><q-btn
-          unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
+      <div class="w100 column justify-center items-center text-center">
+        Siga-nos no Instagram!!
+        <br /><br />
+        <q-btn unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
           rel="noopener" href="https://www.instagram.com/nogueiravalparaiso/">
           @nogueiravalparaiso
           <q-img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-            alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" /></q-btn></div>
+            alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" />
+        </q-btn>
+      </div>
       <div class="copy q-mt-md">© Eletro Nogueira — 26.931.014/0001-12.</div>
     </footer>
   </q-page>
@@ -195,7 +210,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
-import { useQuasar, date } from 'quasar'
+import { useQuasar } from 'quasar'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 
@@ -232,13 +247,20 @@ const orderOptions = [
 ]
 
 /** ---------------- Helpers ---------------- */
-const fallbackImage = 'https://images.unsplash.com/photo-1581090700227-1e37b190418e?q=80&w=1200&auto=format&fit=crop'
+const fallbackImage =
+  'https://cdn-icons-png.flaticon.com/512/971/971904.png'
+
+// 🔍 função ÚNICA pra decidir qual imagem usar
+function resolveImage(p) {
+  if (!p) return fallbackImage
+  // front sempre usa imagemUrl (normalizada no applyFilters)
+  return p.imagemUrl || p.IMAGEM_URL || p.img_url || fallbackImage
+}
+
 const maxPage = computed(() => Math.max(1, Math.ceil(total.value / limit.value)))
 const offset = computed(() => (page.value - 1) * limit.value)
-const totalHint = computed(() => total.value ? `${total.value} resultado(s)` : '')
 
 function brToNumber(s) {
-  // "1.234,56" -> 1234.56
   if (!s) return null
   const t = String(s).replace(/\./g, '').replace(',', '.')
   const n = Number.parseFloat(t)
@@ -248,22 +270,18 @@ function numberToBR(n) {
   if (n == null) return ''
   try {
     return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-  } catch { return String(n) }
+  } catch {
+    return String(n)
+  }
 }
 function money(n) {
   if (n == null) return '—'
   try {
     return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-  } catch { return `R$ ${numberToBR(n)}` }
+  } catch {
+    return `R$ ${numberToBR(n)}`
+  }
 }
-const priceChip = computed(() => {
-  const a = filters.value.precoMin
-  const b = filters.value.precoMax
-  if (a != null && b != null) return `R$ ${numberToBR(a)} — R$ ${numberToBR(b)}`
-  if (a != null) return `≥ R$ ${numberToBR(a)}`
-  if (b != null) return `≤ R$ ${numberToBR(b)}`
-  return ''
-})
 
 function priceBlock(p) {
   if (p.precoPromocao && p.precoPromocao > 0) {
@@ -273,7 +291,10 @@ function priceBlock(p) {
 }
 function whatsLink(p) {
   const base = 'https://wa.me/556136290040'
-  const text = encodeURIComponent(`Olá! Pode me enviar o preço e disponibilidade deste item?\n\n${p.descricao} (${p.marca ?? '—'})\nCód.: ${p.codProduto ?? p.id ?? p._id}`)
+  const text = encodeURIComponent(
+    `Olá! Pode me enviar o preço e disponibilidade deste item?\n\n${p.descricao} (${p.marca ?? '—'})\nCód.: ${p.codProduto ?? p.id ?? p._id
+    }`
+  )
   return `${base}?text=${text}`
 }
 
@@ -281,16 +302,8 @@ function whatsLink(p) {
 const brandOptions = ref([])
 
 async function fetchBrandSuggestions(term) {
-  // Ajuste aqui se tiver um endpoint real (ex.: /marcas/sugerir?term=...)
-  // Fallback: tenta deduzir a partir dos itens atuais
   try {
     const q = term?.trim()
-    // SE tiver endpoint:
-    // const { data } = await api.get('/marcas/sugerir', { params: { term: q || '' } })
-    // brandOptions.value = (data?.items || data || []).map(m => m.nome ?? m)
-    // return
-
-    // fallback simples
     const set = new Set(items.value.map(i => (i.marca || '').trim()).filter(Boolean))
     const all = Array.from(set).sort()
     brandOptions.value = q ? all.filter(x => x.toLowerCase().includes(q.toLowerCase())) : all
@@ -309,11 +322,11 @@ function normalizePrice(which) {
   if (which === 'min') {
     const n = brToNumber(priceMinStr.value)
     filters.value.precoMin = n
-    priceMinStr.value = (n != null) ? numberToBR(n) : ''
+    priceMinStr.value = n != null ? numberToBR(n) : ''
   } else {
     const n = brToNumber(priceMaxStr.value)
     filters.value.precoMax = n
-    priceMaxStr.value = (n != null) ? numberToBR(n) : ''
+    priceMaxStr.value = n != null ? numberToBR(n) : ''
   }
 }
 
@@ -322,7 +335,8 @@ function readFromURL() {
   const qs = new URLSearchParams(window.location.search)
   filters.value.descricaoProduto = qs.get('q') || ''
   filters.value.descricaoMarca = qs.get('marca') || ''
-  const m1 = qs.get('min'); const m2 = qs.get('max')
+  const m1 = qs.get('min')
+  const m2 = qs.get('max')
   filters.value.precoMin = m1 ? Number(m1) : null
   filters.value.precoMax = m2 ? Number(m2) : null
   if (filters.value.precoMin != null) priceMinStr.value = numberToBR(filters.value.precoMin)
@@ -347,11 +361,9 @@ function writeToURL() {
 /** ---------------- Busca no backend ---------------- */
 let debounceId = null
 function onFiltersChanged() {
-  // normaliza os preços quando usuário muda qualquer coisa
-  normalizePrice('min'); normalizePrice('max')
-  // reinicia página
+  normalizePrice('min')
+  normalizePrice('max')
   page.value = 1
-  // debounce
   clearTimeout(debounceId)
   debounceId = setTimeout(() => applyFilters(true), 300)
 }
@@ -376,29 +388,24 @@ function resetFilters() {
 }
 
 async function applyFilters(updateURL = true) {
-
   loading.value = true
   try {
-    // Normaliza preços vindos dos inputs mascarados
     normalizePrice('min')
     normalizePrice('max')
 
-    // Overfetch: pede +1 para detectar se existe próxima página
     const L = Number(limit.value) || 12
     const body = {
       descricaoProduto: filters.value.descricaoProduto || null,
       descricaoMarca: filters.value.descricaoMarca || null,
       precoMin: filters.value.precoMin,
       precoMax: filters.value.precoMax,
-      limit: L + 1,                 // 👈 overfetch +1
+      limit: L + 1, // overfetch +1
       offset: offset.value,
-      // Envie a ordenação se o backend aceitar
       orderBy: orderBy.value || 'relevance'
     }
 
     const { data } = await api.post('/catalogo/produtos/buscar', body)
 
-    // Normaliza a coleção vinda do backend
     const raw =
       (Array.isArray(data?.data) && data.data) ||
       (Array.isArray(data?.items) && data.items) ||
@@ -407,28 +414,43 @@ async function applyFilters(updateURL = true) {
 
     const hasNext = raw.length > L
     const arr = hasNext ? raw.slice(0, L) : raw
-    // Mapeia para o shape do front
-    items.value = arr.map(p => ({
-      id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
-      descricao: p.DESCRICAO ?? p.descricao,
-      codOriginal: p.CODORIGINAL,
-      marca: p.MARCA ?? p.marca,
-      preco: p.PRECO ?? p.preco,
-      precoPromocao: p.PRECOPROMOCAO ?? p.precoPromocao,
-      precoEfetivo: p.PRECO_EFETIVO ?? p.precoEfetivo ?? (p.PRECOPROMOCAO > 0 ? p.PRECOPROMOCAO : p.PRECO),
-      imagemUrl: p.IMAGEM_URL ?? p.imagemUrl ?? null,
-      dataAtualizacao: p.DATAATUALIZACAO ?? p.dataAtualizacao ?? null
-    }))
 
-    // Usa total do backend se existir; caso contrário, estima só para liberar paginação
+    items.value = arr.map(p => {
+      // 🔥 AQUI é onde a mágica acontece:
+      // pegamos IMG.link (quando existe) e achatamos em imagemUrl
+      const imagemUrl =
+        (p.IMG && (p.IMG.link || p.IMG.url)) ||
+        p.IMAGEM_URL ||
+        p.imagemUrl ||
+        p.img_url ||
+        null
+
+      return {
+        id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
+        descricao: p.DESCRICAO ?? p.descricao,
+        codOriginal: p.CODORIGINAL,
+        marca: p.MARCA ?? p.marca,
+        preco: p.PRECO ?? p.preco,
+        precoPromocao: p.PRECOPROMOCAO ?? p.precoPromocao,
+        precoEfetivo:
+          p.PRECO_EFETIVO ??
+          p.precoEfetivo ??
+          (p.PRECOPROMOCAO > 0 ? p.PRECOPROMOCAO : p.PRECO),
+
+        imagemUrl,
+        hasImg: p.HAS_IMG ?? p.hasImg ?? (imagemUrl ? 1 : 0),
+
+        dataAtualizacao: p.DATAATUALIZACAO ?? p.dataAtualizacao ?? null
+      }
+    })
+
     const apiTotal = Number(data?.totalCount ?? data?.total ?? data?.count)
     if (Number.isFinite(apiTotal) && apiTotal >= 0) {
       total.value = apiTotal
     } else {
-      // fallback estimado apenas se a API não mandar total
       total.value = hasNext
-        ? (Number(page.value) * L) + 1 
-        : ((Number(page.value) - 1) * L) + items.value.length
+        ? Number(page.value) * L + 1
+        : (Number(page.value) - 1) * L + items.value.length
     }
 
     if (updateURL) writeToURL()
@@ -443,7 +465,6 @@ async function applyFilters(updateURL = true) {
   }
 }
 
-
 /** ---------------- Detalhes ---------------- */
 const showDetails = ref(false)
 const detailItem = ref(null)
@@ -451,30 +472,31 @@ const detailItem = ref(null)
 function openDetails(p) {
   const slugify = (s = '') =>
     String(s)
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-zA-Z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
       .toLowerCase()
 
-  const desc = (p.DESCRICAO ?? p.descricao) || ''
-  const brand = (p.MARCA ?? p.marca) || ''
-  const id = p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id ?? ''
-
-  const sku = p.codOriginal
+  const desc = p.descricao || p.DESCRICAO || ''
+  const brand = p.marca || p.MARCA || ''
+  const id = p.id ?? p.CODPRODUTO ?? p.codProduto ?? p._id ?? ''
+  const sku = p.codOriginal ?? p.CODORIGINAL ?? null
 
   const prod = {
     id,
     descricao: desc,
     marca: brand,
-    sku, // <<<<<<<<<<<<<<<<<<<<<< passa o SKU aqui
+    sku,
     preco: p.preco,
     precoPromocao: p.precoPromocao,
     precoEfetivo: p.precoEfetivo,
-    imagemUrl: p.img_url ?? null,
-    updatedAt: p.DATAATUALIZACAO ?? null,
-    inativoFlag: p.INATIVO ?? null
+    // 👇 leva a mesma imagem normalizada para a ProductPage
+    imagemUrl: p.imagemUrl || p.IMAGEM_URL || p.img_url || null,
+    updatedAt: p.dataAtualizacao ?? p.DATAATUALIZACAO ?? null,
+    inativoFlag: p.INATIVO ?? p.inativoFlag ?? null
   }
-  console.log('openDetails prod:', prod)
+
   const slug = p.slug || `${slugify(`${desc} ${brand}`)}-${id}`
   sessionStorage.setItem(`prod:${id}`, JSON.stringify(prod))
   router.push({
@@ -482,8 +504,6 @@ function openDetails(p) {
     state: { product: prod }
   })
 }
-
-
 
 /** ---------------- Lifecycle ---------------- */
 onMounted(async () => {
@@ -493,7 +513,6 @@ onMounted(async () => {
 
 /** ---------------- Watchers úteis ---------------- */
 watch([page, limit], () => {
-  // paginação já chama applyFilters; aqui só reflete URL
   writeToURL()
 })
 </script>
@@ -507,31 +526,31 @@ watch([page, limit], () => {
 
 @media (max-width: 1400px) {
   .catalog-grid {
-    grid-template-columns: repeat(5, 1fr)
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
 @media (max-width: 1200px) {
   .catalog-grid {
-    grid-template-columns: repeat(4, 1fr)
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 900px) {
   .catalog-grid {
-    grid-template-columns: repeat(3, 1fr)
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 680px) {
   .catalog-grid {
-    grid-template-columns: repeat(2, 1fr)
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 420px) {
   .catalog-grid {
-    grid-template-columns: 1fr
+    grid-template-columns: 1fr;
   }
 }
 
@@ -550,5 +569,17 @@ watch([page, limit], () => {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.product-img {
+  height: 220px;
+  /* altura fixa pra todos os cards */
+}
+
+/* garante que a imagem fique centralizada dentro do q-img */
+.product-img :deep(img),
+.product-img :deep(.q-img__image) {
+  object-fit: contain;
+  object-position: center;
 }
 </style>
