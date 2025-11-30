@@ -13,7 +13,7 @@
       <div class="row q-col-gutter-md items-end">
         <div class="col-12 col-md-4">
           <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoProduto"
-            label="Buscar por produto" dense outlined clearable hint="Ex.: furadeira, bomba, martelo">
+            label="Buscar por produto" dense outlined clearable hint="Furadeira, Bomba, Martelo">
             <template #prepend>
               <q-icon name="search" />
             </template>

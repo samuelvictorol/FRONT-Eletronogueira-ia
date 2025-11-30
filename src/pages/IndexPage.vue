@@ -52,7 +52,8 @@
           </p>
           <p>Atendimento rápido, estoque para pronta-entrega e equipe que entende do que faz.</p>
         </div>
-
+        <q-img class="rounded-borders" src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwIofohVNrrBfO8C6RNoq7Eg62I2ZMBiPMBSrmq028tTLJhqaE2I3kwD3JWXsEfkzfR1sMkZ9hNeIWQKymxiwf0MHiNr-1313V3jXWqj1mnnKt3oTqCwthL9ghFHAyOoOv7iA7h=s680-w680-h510-rw"></q-img>
+        <q-img class="rounded-borders" src="https://lh3.googleusercontent.com/p/AF1QipNhIW6oj7NJ-q-XEswjLy3vBhR9gxqb6y7SXPub=s680-w680-h510-rw"></q-img>
         <div class="glass card">
           <h3>Destaques em pronta-entrega</h3>
           <ul class="pill-list">
@@ -76,7 +77,7 @@
           <div class="col-12 col-md-6">
             <div class="glass card q-pa-md">
               <h2 class="text-secondary q-mb-xs">Serviços</h2>
-              <p class="text-grey-7 q-mb-md">
+              <p class="text-grey-7 q-mb-md q-py-md">
                 Guindaste Munck, torno mecânico, solda TIG/MIG e rebobinagem de motores — equipe técnica para projetos e
                 emergências.
               </p>
@@ -114,7 +115,7 @@
                 <q-item class="service-item">
                   <q-item-section avatar>
                     <q-avatar size="80px" rounded class="avatar">
-                      <img src="https://oximig.com.br/wp-content/uploads/2023/10/Quando-devo-usar-Solda-TIG.jpg"
+                      <img src="https://www.g20brasil.com.br/wp-content/uploads/2016/08/ferro-de-solda-dicas-cuidados.jpg"
                         alt="Solda TIG/MIG">
                     </q-avatar>
                   </q-item-section>
@@ -154,20 +155,10 @@
           <div class="col-12 col-md-6">
             <div class="glass card q-pa-md">
               <h3 class="text-secondary q-mb-xs">Manutenção</h3>
-              <p class="text-grey-7 q-mb-md">
+              <p class="text-grey-7 q-py-md">
                 Manutenção preventiva e corretiva com diagnóstico rápido e peças de qualidade.
               </p>
-
-              <!-- Lista “pill” enxuta -->
-              <ul class="pill-list q-mb-md">
-                <li>Bombas d’água</li>
-                <li>Mangueiras & lavadoras</li>
-                <li>Compressores</li>
-                <li>Automação industrial</li>
-              </ul>
-
-              <!-- Itens com avatar padronizado -->
-              <div class="q-gutter-md">
+              <div class="q-gutter-md q-pt-md">
                 <q-item class="service-item">
                   <q-item-section avatar>
                     <q-avatar size="80px" rounded class="avatar">
@@ -252,15 +243,15 @@
               <q-img class="rounded-borders col-6 full-height"
                 src="https://lh3.googleusercontent.com/p/AF1QipNu9WuJF2DhEH0KdB7Qtl9uCiecop1aUaciuSx2=s680-w680-h510-rw" />
               <q-img class="rounded-borders col-6 full-height"
-                src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxQ5ryS1tpHhdI2779-8TuNGST8BqID2yx46lRYEOfh35jSIJb9ctsjZe4P80oaPBQWmLVCZra8fwiyJ4d7IY5iZ8uPzjlvLdCV-GJc6gBPxB5o86vMd_PJDri9q3R1FWhTKYP5=s680-w680-h510-rw" />
+                src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyyL-Kk279BKDzmn_3subT3KJw-8V938yYI6FAc340DZG2U1cfFqvG_hZc558ODjH__lyYrJKy6G_j3CmnQciLvDNvQGpHYim0gDFj8wujbnHPo-q7vGtn-PWgI-ScvBz6ZCWgaDw=s680-w680-h510-rw" />
             </div>
           </q-carousel-slide>
           <q-carousel-slide :name="2" class="column no-wrap">
             <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
               <q-img class="rounded-borders col-6 full-height"
-                src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzZBzEFOf3nhbpu82xl4XLquokjRWj6h1OMmp0ZJwKrSVjTQCbD79NB3N5Wqe_dKCb5Cz9YzK1U0czuWSnwInOVR8prGbb-G3blw812pIw5Wyoe2-FQUqB3YhVi-SJSt3TmtGPa_g=s680-w680-h510-rw" />
+                src="https://lh3.googleusercontent.com/p/AF1QipPQf6F4n63OrwWlYr5hpOwPuz3ZlahG18SFf46C=s680-w680-h510-rw" />
               <q-img class="rounded-borders col-6 full-height"
-                src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyagXSk9RxAoFfbktDFmHkXfBM65tJlcZjN1_R3pjYH3XNAusscYbSw5Nu-1U0tVubxB9psqmRMn7-IcnL-llcs0Q-TnCdj45pQqOUo6PguO6WpaIgV_bTcdXNp8nqBR-mdw-RKsQ=s680-w680-h510-rw" />
+                src="https://lh3.googleusercontent.com/p/AF1QipNzBolmkMWUxxWTtU2Um6Zf10wADfGgw-bQ7sWk=s680-w680-h510-rw" />
             </div>
           </q-carousel-slide>
           <q-carousel-slide :name="3" class="column no-wrap">
@@ -268,7 +259,7 @@
               <q-img class="rounded-borders col-6 full-height"
                 src="https://lh3.googleusercontent.com/p/AF1QipN-mmS6_z1lg5Irtn_XpIHLte5Tt_R2CLqpv2F2=s680-w680-h510-rw" />
               <q-img class="rounded-borders col-6 full-height"
-                src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwZkbDh93brg_iTpOSVN73R0WWeZiUyRO_2KHmW9y8Di4_BQQeCRN-T1F2_4vxN5lxhUvs80cnzderCjt_9ERohbzt6TB_yYo-XXxD8M9OCdkJeKupTnvBykHZNARwXrSK9GYrZNA=s680-w680-h510-rw" />
+                src="https://lh3.googleusercontent.com/p/AF1QipPJtgTGljJFiCifpdvcsloJ_0JpfO0ff24kFEKR=s680-w680-h510-rw" />
             </div>
           </q-carousel-slide>
           <q-carousel-slide :name="4" class="column no-wrap">

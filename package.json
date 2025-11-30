@@ -1,8 +1,8 @@
 {
-  "name": "app",
+  "name": "EletroNogueira",
   "version": "0.0.1",
   "description": "Manutenções, Serviços Especializados e venda ampla linha de ferramentas elétricas, hidráulica, automação industrial, elétrica, agropecuária, bombas d’agua e entre outros produtos. Dentre os produtos, temos a pronta entrega: Furadeira, martelo, compressor, Parafusadeira, martelete, bomba palito, bomba anauger, bombas de incêndio, bombas de poço artesiano, correia, polia, topfusion, conexões pu, ferramenta pneumatica, máquina de cortar grama, desintegrador, forrageira, motosserra, pulverizador, motor elétrico, motor a gasolina, gerador, compactador, cortador de piso, paquímetro, alicate amperímetro, multímetro, trena a laser, fresa, lima rotativa, esquadro, máquina de solda, Inversora, lavadora, makita",
-  "productName": "app",
+  "productName": "EletroNogueira",
   "author": "samuelvictorol",
   "type": "module",
   "private": true,
