@@ -404,7 +404,7 @@ async function applyFilters(updateURL = true) {
       orderBy: orderBy.value || 'relevance'
     }
 
-    const { data } = await api.post('/catalogo/produtos/buscar', body)
+    const { data } = await api.post('/catalogo/produtos/buscar-web', body)
 
     const raw =
       (Array.isArray(data?.data) && data.data) ||
