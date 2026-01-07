@@ -1,16 +1,16 @@
 <template>
   <q-page class="q-px-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
-    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-secondary q-pa-md" style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
-      <q-breadcrumbs class="text-grey-3">
-        <q-breadcrumbs-el class="text-primary" icon="home" label="Início" to="/" />
-        <q-breadcrumbs-el label="Localização" to="/localizacao" />
+    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-primary q-pa-md" style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
+      <q-breadcrumbs class="text-secondary">
+        <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
+        <q-breadcrumbs-el class="text-bold" label="Localização" to="/localizacao" />
       </q-breadcrumbs>
     </div>
     <section class="section alt q-py-md">
       <div class="container grid-2">
-        <div id="como-chegar" class="glass card">
-          <div class="text-h2">Endereço</div>
-          <p class="text-secondary q-pt-sm"><strong>Q D, LOTE, Av. Marginal, 01 - Esplanada I, Valparaíso de
+        <div id="como-chegar" class="card">
+          <div class="text-h2 text-secondary">Endereço</div>
+          <p class=" q-pt-sm"><strong>Q D, LOTE, Av. Marginal, 01 - Esplanada I, Valparaíso de
               Goiás -
               GO, 72878-603</strong></p>
           <div class="cta-row">
@@ -24,8 +24,8 @@
               src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed"></iframe>
           </div>
         </div>
-        <div class="glass card">
-          <div class="text-h2 q-pt-xs q-mb-md">Horários</div>
+        <div class="card">
+          <div class="text-h2 text-secondary q-pt-xs q-mb-md">Horários</div>
           <table class="hours">
             <tbody>
               <tr>

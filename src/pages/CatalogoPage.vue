@@ -1,10 +1,10 @@
 <template>
   <q-page class="q-px-md q-mt-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
-    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-secondary q-pa-md"
+    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-primary q-pa-md"
       style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
-      <q-breadcrumbs class="text-grey-3">
-        <q-breadcrumbs-el class="text-primary" icon="home" label="Início" to="/" />
-        <q-breadcrumbs-el label="Catálogo" to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=relevance" />
+      <q-breadcrumbs class="text-secondary">
+        <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
+        <q-breadcrumbs-el class="text-bold" label="Catálogo" to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=relevance" />
       </q-breadcrumbs>
     </div>
 

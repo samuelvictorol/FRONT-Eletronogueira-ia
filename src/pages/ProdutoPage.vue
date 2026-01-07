@@ -4,12 +4,12 @@
     :class="!isMobile ? 'q-pb-xl q-px-xl' : ''"
   >
     <div
-      class="q-mb-md bg-secondary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
+      class="q-mb-md bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
       style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;"
     >
       <q-btn
         flat
-        color="white"
+        color="secondary"
         icon="arrow_back"
         @click="goBackToCatalog"
         label="Voltar"

@@ -92,8 +92,8 @@ a {
 }
 
 .glass {
-  background: var(--glass-bg);
-  background-color: var(--glass-bg);
+  background:#F7D102;
+  background-color:#F7D102;
   backdrop-filter: saturate(150%) blur(12px);
   -webkit-backdrop-filter: saturate(150%) blur(12px);
   border: 1px solid var(--glass-brd);
@@ -101,11 +101,6 @@ a {
   box-shadow: var(--shadow);
   transition: background 0.3s ease;
   cursor: pointer;
-}
-
-.glass:hover {
-  background: #F7D102;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
 }
 
 .card {
@@ -198,7 +193,6 @@ a {
   position: relative;
   padding: 28px;
   max-width: 860px;
-  background: rgba(255, 255, 255, .6)
 }
 
 .hero h1 {
@@ -391,4 +385,10 @@ a {
 
 .w90 {
   width: 90%!important;
+}
+
+.bg-grad-secondary {
+  background: #012060;
+  background: -webkit-linear-gradient(to left, #012060, #04122c);
+  background: linear-gradient(to left, #012060, #04122c);
 }

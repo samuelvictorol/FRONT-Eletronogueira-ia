@@ -1,8 +1,8 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-secondary relative q-pt-md">
+  <q-layout view="hHh lpR fFf" class="bg-primary relative q-pt-md">
     <!-- HEADER -->
     <q-header
-      class="text-dark glass navbar bg-primary w90 animate__animated animate__fadeInDown animate__delay-1s animate__slower"
+      class="text-dark glass navbar bg-primary  animate__animated animate__fadeInDown animate__delay-1s animate__slower"
       style="position: sticky; top: 6px;">
       <q-toolbar class="q-py-sm">
         <q-btn flat dense round class="lt-md q-mr-sm" icon="menu" aria-label="Abrir menu"
@@ -13,7 +13,7 @@
               alt="EN" style="border-radius:100%; width:44px; height:44px" />
           </div>
           <div class="brand-text animate__animated animate__fadeInLeft animate__delay-3s animate__slower">
-            <strong class="text-negative">ELETRO</strong><strong class="text-secondary"> NOGUEIRA</strong>
+            <strong class="text-negative">ELETRO</strong><strong class="text-secondary">NOGUEIRA</strong>
             <small>Valparaíso de Goiás • BR-040</small>
           </div>
         </div>
@@ -24,9 +24,6 @@
           <q-btn flat class="nav-link q-ml-xs"
             to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=relevance">Catálogo</q-btn>
           <q-btn flat class="nav-link q-mx-xs" to="/localizacao">Localização</q-btn>
-          <q-btn color="secondary" unelevated class="btn primary text-bold text-shadow" href="tel:+556136290040">
-            (61) 3629-0040
-          </q-btn>
           <q-btn unelevated color="positive" class="btn whats q-ml-xs text-bold text-shadow" glossy type="a"
             target="_blank" rel="noopener"
             href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
@@ -39,7 +36,7 @@
     </q-header>
 
     <!-- DRAWER MOBILE -->
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay bordered class="glass relative" :width="290">
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay bordered class=" relative" :width="290">
       <div class="q-pa-md column q-gutter-sm">
         <q-btn flat align="left" class="nav-link" to="/">Início</q-btn>
         <q-btn flat align="left" class="nav-link"
