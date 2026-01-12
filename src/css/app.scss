@@ -311,7 +311,6 @@ a {
 
 .mini-map {
   margin-top: 12px;
-  border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow)
 }
@@ -389,6 +388,11 @@ a {
 
 .bg-grad-secondary {
   background: #012060;
-  background: -webkit-linear-gradient(to left, #012060, #04122c);
-  background: linear-gradient(to left, #012060, #04122c);
+  background: -webkit-linear-gradient(to bottom, #012060, #04122c);
+  background: linear-gradient(to bottom, #012060, #04122c);
+  z-index: 3;
+}
+
+.w50{
+  width: 50%;
 }

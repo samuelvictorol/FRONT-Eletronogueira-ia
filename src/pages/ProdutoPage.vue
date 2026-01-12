@@ -122,13 +122,6 @@
                   @click="shareOrCopy"
                   label="Compartilhar"
                 />
-                <q-btn
-                  flat
-                  color="primary"
-                  icon="dashboard"
-                  class="w100 q-mt-sm"
-                  @click="openEditDialog"
-                />
               </div>
             </div>
           </div>
@@ -145,86 +138,6 @@
         label="Voltar"
       />
     </div>
-
-    <!-- Dialog de edição de imagem (link + upload) -->
-    <q-dialog v-model="editDialog" persistent>
-      <q-card style="min-width: 340px; max-width: 90vw;">
-        <q-card-section>
-          <div class="text-h6">Editar imagem do produto</div>
-          <div class="text-caption text-grey-7 q-mt-xs" v-if="product">
-            {{ product.CODPRODUTO || product.id || '—' }} — {{ product.descricao }}
-          </div>
-        </q-card-section>
-
-        <q-card-section class="q-gutter-md">
-          <q-input
-            v-model="imgLink"
-            label="URL da imagem (opcional)"
-            dense
-            type="url"
-            outlined
-            clearable
-          />
-
-          <q-file
-            v-model="file"
-            dense
-            outlined
-            clearable
-            label="Upload de imagem (opcional)"
-            accept="image/*"
-            use-chips
-          >
-            <template #prepend>
-              <q-icon name="upload" />
-            </template>
-          </q-file>
-
-          <div class="q-mt-sm">
-            <div class="text-caption text-grey-6 q-mb-xs">
-              Pré-visualização
-            </div>
-            <div
-              class="flex flex-center bg-grey-2 q-pa-md"
-              style="min-height: 150px;"
-            >
-              <q-img
-                v-if="previewSrc && !previewError"
-                :src="previewSrc"
-                alt="Preview"
-                fit="contain"
-                class="preview-img"
-                @error="onPreviewError"
-              />
-              <div v-else-if="previewSrc && previewError" class="text-negative">
-                Não foi possível carregar a imagem. Verifique a URL / arquivo.
-              </div>
-              <div v-else class="text-grey-6">
-                Informe uma URL ou selecione uma imagem para visualizar
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn
-            flat
-            label="Cancelar"
-            color="grey"
-            :disable="saving"
-            v-close-popup
-          />
-          <q-btn
-            unelevated
-            label="Salvar"
-            color="green"
-            :loading="saving"
-            :disable="!(imgLink || file) || saving"
-            @click="saveImage"
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
 
     <div class="w100 q-py-xl"></div>
 
