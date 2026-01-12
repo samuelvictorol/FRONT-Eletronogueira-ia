@@ -490,7 +490,7 @@ onMounted(() => {
 
 @media (max-width: 600px) {
   .img-parallax {
-    background-size: cover;
+    background-size: fill;
   }
 }
 </style>
