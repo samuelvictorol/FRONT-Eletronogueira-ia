@@ -240,8 +240,8 @@
 
           <q-separator />
 
-          <q-card-actions class="q-pa-sm">
-            <q-btn class="w100 q-pa-md" color="secondary" icon-right="visibility" @click="openDetails(p)" label="Detalhes" />
+          <q-card-actions class="">
+            <q-btn class="w100 " color="secondary" icon-right="visibility" @click="openDetails(p)" label="Detalhes" />
           </q-card-actions>
         </q-card>
       </template>
@@ -263,46 +263,6 @@
       />
     </div>
 
-    <!-- Details -->
-    <q-dialog v-model="showDetails">
-      <q-card style="min-width: 360px; max-width: 720px" class="q-pa-sm">
-        <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">Detalhes do produto</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
-        </q-card-section>
-
-        <q-card-section>
-          <div class="row q-col-gutter-md">
-            <div class="col-12 col-md-6">
-              <q-img :src="resolveImage(detailItem)" :alt="detailItem?.descricao" fit="contain" class="product-img" />
-            </div>
-            <div class="col-12 col-md-6">
-              <div class="text-subtitle1 q-mb-xs">{{ detailItem?.descricao }}</div>
-              <div class="text-caption text-grey-7 q-mb-sm">
-                Marca: {{ detailItem?.marca || '—' }}
-              </div>
-              <div class="text-h6 q-mb-xs">
-                {{ detailItem ? priceBlock(detailItem) : '' }}
-              </div>
-              <div class="text-caption text-grey-7">
-                Cód.: {{ detailItem?.codProduto ?? detailItem?.id ?? detailItem?._id }}
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn
-            color="secondary"
-            icon="attach_money"
-            :href="detailItem ? whatsLink(detailItem) : '#'"
-            target="_blank"
-            label="Pedir orçamento"
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
 
     <div class="w100 q-py-xl"></div>
 
