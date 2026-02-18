@@ -1,10 +1,10 @@
 <template>
   <q-page
-    class="q-px-md bg-grey-3 animate__animated animate__fadeInLeft animate__slower"
+    class="q-px-md q-mt-xl q-pt-xs bg-grey-3 animate__animated animate__fadeInLeft animate__slower"
     :class="!isMobile ? 'q-pb-xl q-px-xl' : ''"
   >
     <div
-      class="q-mb-md bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
+      class="q-mb-lg bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
       style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;"
     >
       <q-btn

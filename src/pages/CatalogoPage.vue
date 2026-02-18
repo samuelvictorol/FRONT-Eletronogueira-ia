@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-px-md q-mt-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
+  <q-page class="q-px-md q-mt-xl bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
     <div
       class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-primary q-pa-md header-bar"
     >
@@ -395,7 +395,7 @@ const total = ref(0)
 
 const page = ref(1)
 const limit = ref(12)
-const orderBy = ref('relevance')
+const orderBy = ref('updated_desc')
 
 const filters = ref({
   descricaoProduto: '',
@@ -408,10 +408,10 @@ const priceMinStr = ref('')
 const priceMaxStr = ref('')
 
 const orderOptions = [
-  { label: 'Mais relevantes', value: 'relevance' },
+  { label: 'Mais recentes', value: 'updated_desc' },
   { label: 'Menor preço', value: 'price_asc' },
   { label: 'Maior preço', value: 'price_desc' },
-  { label: 'Mais recentes', value: 'updated_desc' }
+  { label: 'Mais relevante', value: 'created_desc' },
 ]
 
 /** ---------------- Helpers ---------------- */
@@ -500,7 +500,7 @@ function readFromURL() {
 
   limit.value = Number(qs.get('limit')) || 12
   page.value = Number(qs.get('page')) || 1
-  orderBy.value = qs.get('orderBy') || 'relevance'
+  orderBy.value = qs.get('orderBy') || 'updated_desc'
 }
 
 function writeToURL() {
@@ -569,7 +569,7 @@ async function applyFilters(updateURL = true) {
       descricaoMarca: filters.value.descricaoMarca || null,
       precoMin: filters.value.precoMin,
       precoMax: filters.value.precoMax,
-      // orderBy: orderBy.value || 'relevance'
+      orderBy: orderBy.value || 'updated_desc'
     }
 
     const { data } = await api.get('/produtos/', { params })

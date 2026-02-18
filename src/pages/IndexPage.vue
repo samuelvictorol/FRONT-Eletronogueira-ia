@@ -5,8 +5,9 @@
     <section class="hero">
       <div class="hero-overlay"></div>
 
-      <div class="hero-content glass q-mx-sm animate__animated animate__zoomIn animate__delay-5s animate__slower">
-        <!-- <p class="text-bold text-secondary q-mt-sm">Ferramentas & Soluções</p> -->
+      <div
+        class="hero-content glass rounded-borders bg-primary q-mx-sm animate__animated animate__zoomIn animate__delay-5s animate__slower q-mb-md q-mt-md">
+        <!-- <p class="text-bold text-primary q-mt-sm">Ferramentas & Soluções</p>  -->
         <div v-if="!isMobile" class="w100 row justify-center text-center bg-primary">
           <div class="text-h5 text-secondary text-bold">
             <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
@@ -14,15 +15,18 @@
               class="text-negative">ELETRO</strong>NOGUEIRA<br>
           </div>
         </div>
-        <div class="cta-row">
-          <q-btn class="btn ghost" color="secondary" icon-right="pin_drop" @click="scrollTo('#como-chegar')"
-            label="Como chegar" />
-          <q-btn color="secondary" unelevated class="btn bg-green-14 text-shadow" @click="scrollTo('#produtos')"
-            label="Ver produtos" />
-          <q-btn color="negative" unelevated class="btn primary text-shadow" @click="scrollTo('#servicos')"
-            label="Serviços e Manutenção" />
+        <div v-if="isMobile" class="w100 row justify-center no-wrap items-center text-center bg-primary">
+          <q-input outlined color="secondary" class="w100 rounded-borders bg-grey-2" label="O que você precisa?"></q-input>
+          <q-btn color="secondary" unelevated class="btn q-ml-sm text-shadow" icon="search"></q-btn>
         </div>
-        <div class="hero-badges">
+        <div class="cta-row">
+          <q-btn color="secondary" unelevated class="btn  text-shadow" @click="scrollTo('#produtos')"
+            label="produtos" />
+          <q-btn color="secondary" unelevated class="btn text-shadow" @click="scrollTo('#servicos')"
+            label="Serviços e Manutenção" />
+          <q-btn class="btn text-shadow" color="secondary" @click="scrollTo('#como-chegar')" label="Como chegar" />
+        </div>
+        <div class="hero-badges flex flex-center">
           <div class="badge bg-grey-2 text-dark">Elétrica</div>
           <div class="badge bg-grey-2 text-dark">Hidráulica</div>
           <div class="badge bg-grey-2 text-dark">Automação</div>
@@ -35,97 +39,56 @@
           {{ openNowText }}</div>
       </div>
     </section>
-    <!-- SOBRE -->
-    <section id="sobre"
-      class="section bg-secondary animate__animated animate__slideInUp animate__delay-2s animate__slower">
-      <div class="container grid-2" id="como-chegar">
-        <div v-if="isMobile" class="w100 row justify-center text-center bg-primary"
-          style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
-          <div class="text-h5 text-secondary text-bold">
-            <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-              alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
-              class="text-negative">ELETRO</strong>NOGUEIRA<br>
-          </div>
-        </div>
-        <p :class="isMobile ? 'q-mt-md' : 'q-mt-xl'" class=" q-pa-md text-secondary bg-grey-3"
-          style="font-size: 1rem;border-radius: 4px;">
-          Somos uma <strong class="text-secondary text-bold">loja física em Valparaíso de Goiás</strong>, em frente à
-          <strong class="text-secondary">BR-040</strong>, próximo
-          da divisa com o DF.<br><br>
-          Aqui você encontra uma linha completa de <em class="text-secondary text-bold">ferramentas elétricas</em>, <em
-            class="text-secondary text-bold">hidráulica</em>, <em class="text-secondary text-bold">automação
-            industrial</em>,
-          <em class="text-secondary text-bold">materiais elétricos</em>, <em
-            class="text-secondary text-bold">agropecuária</em>, <em class="text-secondary text-bold">bombas d’água</em>,
-          <em class="text-orange-14 text-bold">manutenção de equipamentos</em> e <em
-            class="text-bold text-green">serviços
-            especializados</em> para seu projeto.<br><br>
-        <div class="bg-primary text-secondary rounded-borders q-pa-sm q-mt-sm text-bold" style="font-size: 0.9rem;">
-          🟢 Segunda a Sexta: 8h às 18h<br>
-          🟢 Sábado: 8h às 12h<br>
-          🔴 Domingo: Fechado
-        </div>
-        </p>
-        <div class="mini-map" :class="isMobile ? '' : 'q-pt-xl'">
-          <iframe title="Mapa" loading="lazy" class="q-mb-md" referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed"></iframe>
-          <a href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" target="_blank" class="text-primary"><q-icon
-              name="pin_drop" size="sm"></q-icon> Eletro Nogueira, Q D, LOTE, Av. Marginal, 01 - Esplanada I, Valparaíso
-            de Goiás - GO, 72878-603</a>
-        </div>
-      </div>
-    </section>
-    <section id="produtos">
-      <div class=" bg-grey-3 text-white q-pt-md">
+    <section id="produtos" class="animate__animated animate__fadeInUp animate__delay-5s animate__slower">
+      <!-- <div class="bg-grey-3 text-white q-pt-xl">
         <div class="text-h2 center text-secondary q-py-md">Produtos e Marcas</div>
-      </div>
+      </div> -->
     </section>
     <!-- PRODUTOS -->
-    <section class="section bg-grey-3">
+    <section class="section bg-grey-4 q-pt-lg animate__animated animate__fadeInUp animate__delay-3s animate__slower">
       <div class=" text-secondary">
         <div class="brand-tabs">
-          <!-- Linha 1 (6 logos) -->
-          <q-tabs v-model="tab1" dense no-caps align="center" outside-arrows mobile-arrows indicator-color="transparent"
-            class="bg-grey-3 rounded-borders q-pa-xs">
-            <q-tab v-for="b in brandsRow1" :key="b.name" :name="b.name" :icon="`img:${b.src}`" class="brand-badge" />
-          </q-tabs>
-          <div class="w100 row justify-center no-wrap">
-            <q-btn color="secondary" class=" text-white  text-bold q-pa-md q-my-md"
-              to="/catalogo?min=199.9&max=599.9&limit=12&page=1&orderBy=relevance" label="Ver Catálogo Completo"
-              icon-right="search" />
-          </div>
           <div class="container rounded-borders q-pa-sm">
             <div class="cards text-secondary">
               <article class=" bg-primary product glass"
-                @click="goTo('/catalogo?q=furadeira&limit=12&page=1&orderBy=relevance')">
+                @click="goTo('/catalogo?q=furadeira&limit=12&page=1&orderBy=updated_desc')">
                 <h4 class="text-bold">Furadeiras e Periféricos</h4>
               </article>
               <article class=" bg-primary product glass"
-                @click="goTo('/catalogo?q=motor&limit=12&page=1&orderBy=relevance')">
+                @click="goTo('/catalogo?q=motor&limit=12&page=1&orderBy=updated_desc')">
                 <h4 class="text-bold">Motores e Bombas</h4>
               </article>
               <article class=" bg-primary product glass"
-                @click="goTo('/catalogo?q=cabo&limit=12&page=1&orderBy=relevance')">
+                @click="goTo('/catalogo?q=cabo&limit=12&page=1&orderBy=updated_desc')">
                 <h4 class="text-bold">Cabos e Conexões</h4>
               </article>
               <article class=" bg-secondary  product glass"
-                @click="goTo('/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=relevance')">
+                @click="goTo('/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=updated_desc')">
                 <h4 class="text-primary text-bold">E muito mais!</h4>
               </article>
             </div>
           </div>
+          <q-tabs v-model="tab1" dense no-caps align="center" outside-arrows mobile-arrows indicator-color="transparent"
+            class=" rounded-borders q-pa-xs q-pt-lg">
+            <q-tab v-for="b in brandsRow1" :key="b.name" :name="b.name" :icon="`img:${b.src}`" class="brand-badge" />
+          </q-tabs>
+          <div class="w100 row justify-center no-wrap">
+            <q-btn color="secondary" class=" text-white  text-bold q-pa-md q-my-md"
+              to="/catalogo?min=199.9&max=599.9&limit=12&page=1&orderBy=updated_desc" label="Ver Catálogo Completo"
+              icon-right="search" />
+          </div>
           <!-- Linha 2 (6 logos) -->
           <q-tabs v-model="tab2" dense no-caps align="center" outside-arrows mobile-arrows indicator-color="transparent"
-            class="bg-grey-3 rounded-borders q-pa-xs q-mt-sm q-pb-md">
+            class="rounded-borders q-pa-xs q-mt-sm q-pb-xl">
             <q-tab v-for="b in brandsRow2" :key="b.name" :name="b.name" :icon="b.src ? `img:${b.src}` : 'local_offer'"
               class="brand-badge" />
           </q-tabs>
         </div>
       </div>
     </section>
-    <section id="servicos" class="section">
-      <div class="container">
-        <div class="row q-mt-lg" :class="!isMobile ? 'q-gutter-x-sm no-wrap' : 'q-gutter-y-sm'">
+    <section id="servicos" class="section bg-secondary">
+      <div class="container q-py-xl">
+        <div class="row " :class="!isMobile ? 'q-gutter-x-sm no-wrap' : 'q-gutter-y-sm'">
           <!-- Coluna: Serviços -->
           <div class="col-12 col-md-6 ">
             <div class=" card q-pa-md bg-grey-3">
@@ -208,12 +171,16 @@
           <!-- Coluna: Manutenção -->
           <div class="col-12 col-md-6">
             <div class=" card q-pa-md bg-grey-3">
-              <div class="text-h4 text-secondary q-mb-xs">Manutenção</div>
-              <p class="text-black q-py-md">
+              <div class="text-h4 text-secondary text-right q-mb-xs">Manutenção</div>
+              <p class="text-black q-py-md text-right">
                 Manutenção preventiva e corretiva com diagnóstico rápido e peças de qualidade.
               </p>
               <div class="q-gutter-md">
                 <q-item class="service-item">
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Bombas d’água</q-item-label>
+                    <q-item-label caption>Troca de selo e rolamentos, limpeza de rotor e alinhamento.</q-item-label>
+                  </q-item-section>
                   <q-item-section avatar>
                     <q-avatar size="80px" rounded class="avatar">
                       <img
@@ -221,13 +188,13 @@
                         alt="Manutenção de bombas d'água">
                     </q-avatar>
                   </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">Bombas d’água</q-item-label>
-                    <q-item-label caption>Troca de selo e rolamentos, limpeza de rotor e alinhamento.</q-item-label>
-                  </q-item-section>
                 </q-item>
 
                 <q-item class="service-item">
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Mangueiras & Lavadoras</q-item-label>
+                    <q-item-label caption>Crimpagem, troca de conexões e testes de pressão.</q-item-label>
+                  </q-item-section>
                   <q-item-section avatar>
                     <q-avatar size="80px" rounded class="avatar">
                       <img
@@ -235,13 +202,13 @@
                         alt="Mangueiras hidráulicas e lavadoras">
                     </q-avatar>
                   </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">Mangueiras & Lavadoras</q-item-label>
-                    <q-item-label caption>Crimpagem, troca de conexões e testes de pressão.</q-item-label>
-                  </q-item-section>
                 </q-item>
 
                 <q-item class="service-item">
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Compressores</q-item-label>
+                    <q-item-label caption>Troca de óleo/filtros, revisão de válvulas e correias.</q-item-label>
+                  </q-item-section>
                   <q-item-section avatar>
                     <q-avatar size="80px" rounded class="avatar">
                       <img
@@ -249,22 +216,18 @@
                         alt="Manutenção de compressores">
                     </q-avatar>
                   </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">Compressores</q-item-label>
-                    <q-item-label caption>Troca de óleo/filtros, revisão de válvulas e correias.</q-item-label>
-                  </q-item-section>
                 </q-item>
 
                 <q-item class="service-item">
+                  <q-item-section>
+                    <q-item-label class="text-weight-medium">Automação industrial</q-item-label>
+                    <q-item-label caption>Diagnóstico de CLP/inversores, sensores e painéis.</q-item-label>
+                  </q-item-section>
                   <q-item-section avatar>
                     <q-avatar size="80px" rounded class="avatar">
                       <img src="https://blog.safetycontrol.ind.br/wp-content/uploads/2023/05/Manutencao-001.png"
                         alt="Automação industrial">
                     </q-avatar>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-weight-medium">Automação industrial</q-item-label>
-                    <q-item-label caption>Diagnóstico de CLP/inversores, sensores e painéis.</q-item-label>
                   </q-item-section>
                 </q-item>
               </div>
@@ -281,17 +244,57 @@
         </div>
       </div>
     </section>
-
+    <!-- SOBRE -->
+    <section id="sobre"
+      class="section q-pb-xl animate__animated animate__slideInUp animate__delay-2s animate__slower bg-primary q-py-md">
+      <div class="container grid-2" id="como-chegar">
+        <div v class="w100 row justify-center text-center q-pt-xs bg-primary"
+          style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
+          <div class="text-h5 text-secondary text-bold">
+            <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
+              alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
+              class="text-negative">Quem</strong>Somos?<br>
+          </div>
+        </div><br></br>
+        <p :class="isMobile ? 'q-mt-md' : 'q-mt-xl'" class=" q-pa-md text-dark bg-grey-3"
+          style="font-size: 1rem;border-radius: 4px;">
+          Somos uma <strong class="text-secondary text-bold">loja física em Valparaíso de Goiás</strong>, em frente à
+          <strong class="text-secondary">BR-040</strong>, próximo
+          da divisa com o DF.<br><br>
+          Aqui você encontra uma linha completa de <em class="text-secondary text-bold">ferramentas elétricas</em>, <em
+            class="text-secondary text-bold">hidráulica</em>, <em class="text-secondary text-bold">automação
+            industrial</em>,
+          <em class="text-secondary text-bold">materiais elétricos</em>, <em
+            class="text-secondary text-bold">agropecuária</em>, <em class="text-secondary text-bold">bombas d’água</em>,
+          <em class="text-red text-bold">manutenção de equipamentos</em> e <em
+            class="text-bold text-green">serviços
+            especializados</em> para seu projeto.<br><br>
+        <div class="bg-secondary text-grey-1 rounded-borders q-pa-sm q-mt-sm" style="font-size: 0.9rem;">
+          🟢 Segunda a Sexta: 8h às 18h<br>
+          🟢 Sábado: 8h às 12h<br>
+          🔴 Domingo: Fechado
+        </div>
+        </p>
+        <div class="mini-map" :class="isMobile ? '' : 'q-pt-xl'">
+          <iframe title="Mapa" loading="lazy" class="q-mb-md" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed"></iframe>
+          <a href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" target="_blank" class="text-secondary"><q-icon
+              name="pin_drop" size="sm"></q-icon> Eletro Nogueira, Q D, LOTE, Av. Marginal, 01 - Esplanada I, Valparaíso
+            de Goiás - GO, 72878-603</a>
+        </div>
+      </div>
+    </section>
+    <div class="w100 " style="height: 30vh;"></div>
     <!-- FOOTER -->
-    <footer class="footer q-pt-xl bg-grey-3 q-mt-xl">
+    <footer class="footer q-pt-xl bg-secondary text-grey-3 q-mt-xl">
       <div class="container footer-grid q-pt-sm q-pb-md">
         <div>
           <div class="brand">
             <div class="logo"><q-img style="border-radius: 20%;"
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
                 alt="Eletro Nogueira Logo" /></div>
-            <div class="brand-text">
-              <strong class="text-secondary">Eletro Nogueira</strong>
+            <div class="brand-text text-grey">
+              <strong class="text-primary">EletroNogueira</strong>
               <small>Em frente à BR-040 • Valparaíso de Goiás</small>
             </div>
           </div>
@@ -313,9 +316,7 @@
             <q-img
               src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
               alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
-          <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040"
-            label="(61) 3629-0040" />
-          <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
+          <q-btn icon-right="phone" color="primary" outline class=" btn q-mt-sm" href="tel:+556136296858"
             label="(61) 3629-6858" />
         </div>
       </div>
@@ -467,5 +468,4 @@ onMounted(() => {
     background-size: cover;
   }
 }
-
 </style>
