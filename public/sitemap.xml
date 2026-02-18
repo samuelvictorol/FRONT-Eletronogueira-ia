@@ -42,5 +42,18 @@
     </image:image>
   </url>
 
-  <!-- se tiver /contato, /sobre, etc, pode adicionar mais <url> -->
+   <!-- SERVIÇOS E MANUTENÇÃO -->
+  <url>
+    <loc>https://eletronogueira.com.br/servicos-manutencao</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+
+    <image:image>
+      <image:loc>https://lh3.googleusercontent.com/p/AF1QipMWMECy5bNxLivNHsFpcDdfRjHPjZTp2zpEVvPG=s680-w680-h510-rw</image:loc>
+      <image:title>Serviços e Manutenção - Eletro Nogueira</image:title>
+      <image:caption>Munck, torno, solda TIG/MIG, rebobinagem, bombas d’água, mangueiras, lavadoras, compressores e automação.</image:caption>
+    </image:image>
+  </url>
+
 </urlset>

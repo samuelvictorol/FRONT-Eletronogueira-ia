@@ -9,7 +9,7 @@ export default defineConfig(() => {
   return {
     boot: ['axios', 'head'],
     css: ['app.scss'],
-    extras: ['roboto-font', 'material-icons'],
+    extras: ['roboto-font', 'material-icons', 'mdi-v5'],
     build: {
       target: {
         browser: ['es2022', 'firefox115', 'chrome115', 'safari14'],

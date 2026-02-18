@@ -6,6 +6,7 @@ const routes = [
       { path: '', component: () => import('src/pages/IndexPage.vue') },
       { path: 'catalogo', component: () => import('src/pages/CatalogoPage.vue') },
       { path: 'localizacao', component: () => import('src/pages/LocHorarioPage.vue') },
+      { path: 'servicos-manutencao', component: () => import('src/pages/ServicosManutencaoPage.vue') },
       { path: 'catalogo/produto/:slug', name: 'produto', props: true, component: () => import('src/pages/ProdutoPage.vue') },
     ]
   },
@@ -16,8 +17,6 @@ const routes = [
       { path: '', component: () => import('src/pages/admin/AdminPage.vue') },
     ]
   },
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')

@@ -21,7 +21,9 @@
         <div class="nav-actions gt-sm">
           <q-btn flat class="nav-link" to="/">Início</q-btn>
           <q-btn flat class="nav-link q-ml-xs"
-            to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=updated_desc">Catálogo</q-btn>
+            to="/servicos-manutencao">Serviços e Manutenção</q-btn>
+          <q-btn flat class="nav-link q-ml-xs"
+            to="/catalogo?min=299.9&max=8299.9&limit=12&page=1&orderBy=updated_desc">Catálogo</q-btn>
           <q-btn flat class="nav-link q-mx-xs" to="/localizacao">Localização</q-btn>
           <q-btn unelevated color="positive" class="btn whats q-ml-xs text-bold text-shadow" glossy type="a"
             target="_blank" rel="noopener"
@@ -38,6 +40,7 @@
     <q-drawer v-model="leftDrawerOpen" side="left" overlay bordered class=" relative" :width="290">
       <div class="q-pa-md column q-gutter-sm">
         <q-btn flat align="left" class="nav-link" to="/">Início</q-btn>
+        <q-btn flat align="left" class="nav-link q-ml-xs" to="/servicos-manutencao">Serviços e Manutenção</q-btn>
         <q-btn flat align="left" class="nav-link"
           to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=updated_desc">Catálogo</q-btn>
         <q-btn flat align="left" class="nav-link" to="/localizacao">Localização</q-btn>
