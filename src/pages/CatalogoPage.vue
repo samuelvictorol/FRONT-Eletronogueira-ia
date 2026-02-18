@@ -1,10 +1,15 @@
 <template>
   <q-page class="q-px-md q-mt-md bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
-    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-primary q-pa-md"
-      style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
+    <div
+      class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-primary q-pa-md header-bar"
+    >
       <q-breadcrumbs class="text-secondary">
         <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
-        <q-breadcrumbs-el class="text-bold" label="Catálogo" to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=relevance" />
+        <q-breadcrumbs-el
+          class="text-bold"
+          label="Catálogo"
+          :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`"
+        />
       </q-breadcrumbs>
     </div>
 
@@ -12,17 +17,34 @@
     <div class="q-pa-md bg-white rounded-borders q-mb-md shadow-1">
       <div class="row q-col-gutter-md items-end">
         <div class="col-12 col-md-4">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoProduto"
-            label="Buscar por produto" dense outlined clearable hint="Furadeira, Bomba, Martelo">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            v-model="filters.descricaoProduto"
+            label="Buscar por produto"
+            dense
+            outlined
+            clearable
+            hint="Furadeira, Bomba, Martelo"
+          >
             <template #prepend>
               <q-icon name="search" />
             </template>
           </q-input>
         </div>
 
+        <!-- ✅ Marcas: mantém simples (sem buscar por descrição no backend) -->
         <div class="col-12 col-md-3">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoMarca"
-            label="Buscar por marca" dense outlined clearable hint="Ex.: makita, bosch, fortlev">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            v-model="filters.descricaoMarca"
+            label="Buscar por marca"
+            dense
+            outlined
+            clearable
+            hint="Ex.: makita, bosch, fortlev"
+          >
             <template #prepend>
               <q-icon name="sell" />
             </template>
@@ -30,8 +52,21 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
-            reverse-fill-mask v-model="priceMinStr" label="Preço mín." dense outlined clearable hint="Ex.: 199,90">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            maxlength="9"
+            prefix="R$"
+            mask="####,##"
+            reverse-fill-mask
+            v-model="priceMinStr"
+            label="Preço mín."
+            dense
+            outlined
+            clearable
+            hint="Ex.: 199,90"
+            @blur="normalizePrice('min')"
+          >
             <template #prepend>
               <q-icon name="payments" />
             </template>
@@ -39,29 +74,102 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
-            reverse-fill-mask v-model="priceMaxStr" label="Preço máx." dense outlined clearable hint="Ex.: 1299,00">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            maxlength="9"
+            prefix="R$"
+            mask="####,##"
+            reverse-fill-mask
+            v-model="priceMaxStr"
+            label="Preço máx."
+            dense
+            outlined
+            clearable
+            hint="Ex.: 1299,00"
+            @blur="normalizePrice('max')"
+          >
             <template #prepend>
               <q-icon name="price_check" />
             </template>
           </q-input>
         </div>
 
-        <div class="w100 row justify-center q-gutter-x-md items-center no-wrap">
-          <q-btn flat color="secondary" label="Limpar" @click="resetFilters" />
-          <q-btn color="secondary" label="Consultar" icon-right="search" :loading="loading"
-            @click="applyFilters(true)" />
+        <div class="col-12">
+          <div class="row justify-center q-gutter-x-md items-center no-wrap">
+            <q-btn flat color="secondary" label="Limpar" @click="resetFilters" />
+            <q-btn
+              color="secondary"
+              label="Consultar"
+              icon-right="search"
+              :loading="loading"
+              @click="applyFilters(true)"
+            />
+          </div>
         </div>
+      </div>
+
+      <div v-if="hasAnyFilter" class="row q-mt-sm q-gutter-sm items-center">
+        <q-chip
+          v-if="filters.descricaoProduto"
+          color="grey-2"
+          text-color="grey-9"
+          icon="search"
+          removable
+          @remove="filters.descricaoProduto = ''; applyFilters(true)"
+        >
+          {{ filters.descricaoProduto }}
+        </q-chip>
+
+        <q-chip
+          v-if="filters.descricaoMarca"
+          color="grey-2"
+          text-color="grey-9"
+          icon="sell"
+          removable
+          @remove="filters.descricaoMarca = ''; applyFilters(true)"
+        >
+          {{ filters.descricaoMarca }}
+        </q-chip>
+
+        <q-chip
+          v-if="filters.precoMin != null || filters.precoMax != null"
+          color="grey-2"
+          text-color="grey-9"
+          icon="payments"
+          removable
+          @remove="filters.precoMin=null; filters.precoMax=null; priceMinStr=''; priceMaxStr=''; applyFilters(true)"
+        >
+          {{ (filters.precoMin != null ? money(filters.precoMin) : '—') }} →
+          {{ (filters.precoMax != null ? money(filters.precoMax) : '—') }}
+        </q-chip>
       </div>
     </div>
 
     <div class="row items-center q-mb-sm q-gutter-sm">
       <div class="row justify-between w100 text-grey-8">
         <div class="w100 row justify-center q-gutter-x-sm q-gutter-y-sm q-mb-sm">
-          <q-select color="secondary" v-model="orderBy" :options="orderOptions" dense outlined style="min-width: 210px"
-            emit-value map-options @update:model-value="onOrderChange" />
-          <q-select color="secondary" v-model="limit" :options="[12, 24, 36, 50]" dense outlined style="width: 90px"
-            label="Limite" @update:model-value="onLimitChange" />
+          <q-select
+            color="secondary"
+            v-model="orderBy"
+            :options="orderOptions"
+            dense
+            outlined
+            style="min-width: 210px"
+            emit-value
+            map-options
+            @update:model-value="onOrderChange"
+          />
+          <q-select
+            color="secondary"
+            v-model="limit"
+            :options="[12, 24, 36, 50]"
+            dense
+            outlined
+            style="width: 100px"
+            label="Limite"
+            @update:model-value="onLimitChange"
+          />
         </div>
       </div>
     </div>
@@ -81,16 +189,21 @@
 
       <template v-else>
         <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="product-card">
-          <!-- 👇 sempre usa imagemUrl normalizado -->
           <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="primary" fit="contain" class="product-img" />
 
           <q-card-section class="q-pt-sm">
             <div class="row items-center q-mt-xs q-col-gutter-sm">
               <div class="col-auto">
-                <q-badge v-if="p.marca" color="primary" class="text-bold q-pa-xs" text-color="blue-10"
-                  :label="p.marca" />
+                <q-badge
+                  v-if="p.marca"
+                  color="primary"
+                  class="text-bold q-pa-xs"
+                  text-color="blue-10"
+                  :label="p.marca"
+                />
               </div>
             </div>
+
             <div class="text-subtitle1 text-weight-medium ellipsis-2">
               <br />
               {{ p.descricao }}
@@ -108,7 +221,9 @@
               </div>
             </div>
           </q-card-section>
+
           <q-separator />
+
           <q-card-actions>
             <q-btn class="w100" color="secondary" icon-right="visibility" @click="openDetails(p)" label="Detalhes" />
           </q-card-actions>
@@ -116,14 +231,24 @@
       </template>
     </div>
 
+    <!-- ✅ paginação agora correta: max vem do total da API -->
     <div class="w100 row justify-between items-center q-mt-md">
       <span v-if="!loading">{{ total }} resultado(s)</span>
       <span v-else>Carregando…</span>
-      <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links
-        dense @update:model-value="onPageChange" />
+
+      <q-pagination
+        color="secondary"
+        v-model="page"
+        :max="maxPage"
+        :max-pages="6"
+        boundary-numbers
+        direction-links
+        dense
+        @update:model-value="onPageChange"
+      />
     </div>
 
-    <!-- Detalhes (simples) -->
+    <!-- Detalhes -->
     <q-dialog v-model="showDetails">
       <q-card style="min-width: 360px; max-width: 720px" class="q-pa-sm">
         <q-card-section class="row items-center q-pb-none">
@@ -131,6 +256,7 @@
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
+
         <q-card-section>
           <div class="row q-col-gutter-md">
             <div class="col-12 col-md-6">
@@ -150,22 +276,32 @@
             </div>
           </div>
         </q-card-section>
+
         <q-card-actions align="right">
-          <q-btn color="secondary" icon="attach_money" :href="detailItem ? whatsLink(detailItem) : '#'" target="_blank"
-            label="Pedir orçamento" />
+          <q-btn
+            color="secondary"
+            icon="attach_money"
+            :href="detailItem ? whatsLink(detailItem) : '#'"
+            target="_blank"
+            label="Pedir orçamento"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <div class="w100 q-py-xl"></div>
+
+    <!-- Footer mantido -->
     <footer class="footer q-pt-xl">
       <div class="container footer-grid q-pb-md">
         <div>
           <div class="brand">
             <div class="logo">
-              <q-img style="border-radius: 20%;"
+              <q-img
+                style="border-radius: 20%;"
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-                alt="Eletro Nogueira Logo" />
+                alt="Eletro Nogueira Logo"
+              />
             </div>
             <div class="brand-text">
               <strong class="text-secondary">Eletro Nogueira</strong>
@@ -177,32 +313,66 @@
             suporte técnico.<br /><br />CNPJ • <strong>26.931.014/0001-12.</strong>
           </p>
         </div>
+
         <div class="column">
-          <q-btn unelevated color="positive" class="text-shadow btn whats q-ml-xs" glossy type="a" target="_blank"
+          <q-btn
+            unelevated
+            color="positive"
+            class="text-shadow btn whats q-ml-xs"
+            glossy
+            type="a"
+            target="_blank"
             rel="noopener"
-            href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
+            href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento."
+          >
             WhatsApp
             <q-img
               src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN" style="border-radius:100%; width:30px; height:30px" />
+              alt="EN"
+              style="border-radius:100%; width:30px; height:30px"
+            />
           </q-btn>
-          <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040"
-            label="(61) 3629-0040" />
-          <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
-            label="(61) 3629-6858" />
+
+          <q-btn
+            outline
+            icon-right="phone"
+            color="secondary"
+            class="btn outline q-mt-sm"
+            href="tel:+556136290040"
+            label="(61) 3629-0040"
+          />
+          <q-btn
+            icon-right="phone"
+            color="secondary"
+            class="btn q-mt-sm"
+            href="tel:+556136296858"
+            label="(61) 3629-6858"
+          />
         </div>
       </div>
+
       <div class="w100 column justify-center items-center text-center">
         Siga-nos no Instagram!!
         <br /><br />
-        <q-btn unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
-          rel="noopener" href="https://www.instagram.com/nogueiravalparaiso/">
+        <q-btn
+          unelevated
+          color="warning"
+          class="text-shadow btn whats q-ml-sm"
+          glossy
+          type="a"
+          target="_blank"
+          rel="noopener"
+          href="https://www.instagram.com/nogueiravalparaiso/"
+        >
           @nogueiravalparaiso
           <q-img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-            alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" />
+            alt="Logo Instagram"
+            style="border-radius:100%; width:30px; height:30px"
+          />
         </q-btn>
       </div>
+
       <div class="copy q-mt-md">© Eletro Nogueira — 26.931.014/0001-12.</div>
     </footer>
   </q-page>
@@ -214,8 +384,8 @@ import { useQuasar } from 'quasar'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 
-const isMobile = useQuasar().screen.lt.md
 const $q = useQuasar()
+const isMobile = $q.screen.lt.md
 const router = useRouter()
 
 /** ---------------- State base ---------------- */
@@ -225,7 +395,7 @@ const total = ref(0)
 
 const page = ref(1)
 const limit = ref(12)
-const orderBy = ref('relevance') // 'relevance' | 'price_asc' | 'price_desc' | 'updated_desc'
+const orderBy = ref('relevance')
 
 const filters = ref({
   descricaoProduto: '',
@@ -234,11 +404,9 @@ const filters = ref({
   precoMax: null
 })
 
-// inputs de preço em string (vírgula)
 const priceMinStr = ref('')
 const priceMaxStr = ref('')
 
-// opções de ordenação
 const orderOptions = [
   { label: 'Mais relevantes', value: 'relevance' },
   { label: 'Menor preço', value: 'price_asc' },
@@ -247,18 +415,24 @@ const orderOptions = [
 ]
 
 /** ---------------- Helpers ---------------- */
-const fallbackImage =
-  'https://cdn-icons-png.flaticon.com/512/971/971904.png'
+const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
 
-// 🔍 função ÚNICA pra decidir qual imagem usar
 function resolveImage(p) {
   if (!p) return fallbackImage
-  // front sempre usa imagemUrl (normalizada no applyFilters)
   return p.imagemUrl || p.IMAGEM_URL || p.img_url || fallbackImage
 }
 
-const maxPage = computed(() => Math.max(1, Math.ceil(total.value / limit.value)))
+const maxPage = computed(() => Math.max(1, Math.ceil((Number(total.value) || 0) / (Number(limit.value) || 12))))
 const offset = computed(() => (page.value - 1) * limit.value)
+
+const hasAnyFilter = computed(() => {
+  return Boolean(
+    (filters.value.descricaoProduto || '').trim() ||
+      (filters.value.descricaoMarca || '').trim() ||
+      filters.value.precoMin != null ||
+      filters.value.precoMax != null
+  )
+})
 
 function brToNumber(s) {
   if (!s) return null
@@ -282,39 +456,18 @@ function money(n) {
     return `R$ ${numberToBR(n)}`
   }
 }
-
 function priceBlock(p) {
-  if (p.precoPromocao && p.precoPromocao > 0) {
-    return `${money(p.precoPromocao)} (de ${money(p.preco)})`
-  }
+  if (p.precoPromocao && p.precoPromocao > 0) return `${money(p.precoPromocao)} (de ${money(p.preco)})`
   return money(p.precoEfetivo ?? p.preco)
 }
 function whatsLink(p) {
   const base = 'https://wa.me/556136290040'
   const text = encodeURIComponent(
-    `Olá! Pode me enviar o preço e disponibilidade deste item?\n\n${p.descricao} (${p.marca ?? '—'})\nCód.: ${p.codProduto ?? p.id ?? p._id
+    `Olá! Pode me enviar o preço e disponibilidade deste item?\n\n${p.descricao} (${p.marca ?? '—'})\nCód.: ${
+      p.codProduto ?? p.id ?? p._id
     }`
   )
   return `${base}?text=${text}`
-}
-
-/** ---------------- Marcas (auto-suggest) ---------------- */
-const brandOptions = ref([])
-
-async function fetchBrandSuggestions(term) {
-  try {
-    const q = term?.trim()
-    const set = new Set(items.value.map(i => (i.marca || '').trim()).filter(Boolean))
-    const all = Array.from(set).sort()
-    brandOptions.value = q ? all.filter(x => x.toLowerCase().includes(q.toLowerCase())) : all
-  } catch (e) {
-    // silencioso
-  }
-}
-function filterBrand(val, update) {
-  update(async () => {
-    await fetchBrandSuggestions(val)
-  })
 }
 
 /** ---------------- Normalização de preços ---------------- */
@@ -333,18 +486,23 @@ function normalizePrice(which) {
 /** ---------------- Persistência em URL ---------------- */
 function readFromURL() {
   const qs = new URLSearchParams(window.location.search)
+
   filters.value.descricaoProduto = qs.get('q') || ''
   filters.value.descricaoMarca = qs.get('marca') || ''
+
   const m1 = qs.get('min')
   const m2 = qs.get('max')
   filters.value.precoMin = m1 ? Number(m1) : null
   filters.value.precoMax = m2 ? Number(m2) : null
+
   if (filters.value.precoMin != null) priceMinStr.value = numberToBR(filters.value.precoMin)
   if (filters.value.precoMax != null) priceMaxStr.value = numberToBR(filters.value.precoMax)
+
   limit.value = Number(qs.get('limit')) || 12
   page.value = Number(qs.get('page')) || 1
   orderBy.value = qs.get('orderBy') || 'relevance'
 }
+
 function writeToURL() {
   const qs = new URLSearchParams()
   if (filters.value.descricaoProduto) qs.set('q', filters.value.descricaoProduto)
@@ -354,19 +512,15 @@ function writeToURL() {
   qs.set('limit', String(limit.value))
   qs.set('page', String(page.value))
   qs.set('orderBy', orderBy.value)
-  const url = `${location.pathname}?${qs.toString()}`
-  window.history.replaceState(null, '', url)
+  window.history.replaceState(null, '', `${location.pathname}?${qs.toString()}`)
 }
 
-/** ---------------- Busca no backend ---------------- */
-let debounceId = null
-function onFiltersChanged() {
-  normalizePrice('min')
-  normalizePrice('max')
-  page.value = 1
-  clearTimeout(debounceId)
-  debounceId = setTimeout(() => applyFilters(true), 300)
-}
+/** ---------------- Integração Produtos (GET /produtos) + paginação correta ----------------
+ * Regras:
+ * - Passa limit/offset como querystring.
+ * - Tenta ler total de vários formatos do backend.
+ * - Se o backend NÃO mandar total, aplica fallback mínimo (desabilita paginação correta).
+ */
 function onOrderChange() {
   page.value = 1
   applyFilters(true)
@@ -387,6 +541,19 @@ function resetFilters() {
   applyFilters(true)
 }
 
+function pickTotalFromResponse(data) {
+  const candidates = [
+    data?.totalCount,
+    data?.total,
+    data?.count,
+    data?.meta?.total,
+    data?.pagination?.total
+  ].map((x) => Number(x))
+
+  const found = candidates.find((n) => Number.isFinite(n) && n >= 0)
+  return Number.isFinite(found) ? found : null
+}
+
 async function applyFilters(updateURL = true) {
   loading.value = true
   try {
@@ -394,67 +561,67 @@ async function applyFilters(updateURL = true) {
     normalizePrice('max')
 
     const L = Number(limit.value) || 12
-    const body = {
+
+    const params = {
+      limit: L,
+      offset: offset.value,
       descricaoProduto: filters.value.descricaoProduto || null,
       descricaoMarca: filters.value.descricaoMarca || null,
       precoMin: filters.value.precoMin,
       precoMax: filters.value.precoMax,
-      limit: L + 1, // overfetch +1
-      offset: offset.value,
-      orderBy: orderBy.value || 'relevance'
+      // orderBy: orderBy.value || 'relevance'
     }
 
-    const { data } = await api.post('/catalogo/produtos/buscar-web', body)
+    const { data } = await api.get('/produtos/', { params })
 
+    // lista
     const raw =
       (Array.isArray(data?.data) && data.data) ||
       (Array.isArray(data?.items) && data.items) ||
       (Array.isArray(data?.results) && data.results) ||
       (Array.isArray(data) ? data : [])
 
-    const hasNext = raw.length > L
-    const arr = hasNext ? raw.slice(0, L) : raw
-
-    items.value = arr.map(p => {
-      // 🔥 AQUI é onde a mágica acontece:
-      // pegamos IMG.link (quando existe) e achatamos em imagemUrl
+    items.value = raw.map((p) => {
       const imagemUrl =
         (p.IMG && (p.IMG.link || p.IMG.url)) ||
         p.IMAGEM_URL ||
         p.imagemUrl ||
         p.img_url ||
+        p.IMAGEM ||
+        p.imagem ||
         null
+
+      const preco = p.PRECO ?? p.preco ?? null
+      const promo = p.PRECOPROMOCAO ?? p.precoPromocao ?? 0
+      const efetivo = p.PRECO_EFETIVO ?? p.precoEfetivo ?? (Number(promo) > 0 ? promo : preco)
 
       return {
         id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
-        descricao: p.DESCRICAO ?? p.descricao,
-        codOriginal: p.CODORIGINAL,
-        marca: p.MARCA ?? p.marca,
-        preco: p.PRECO ?? p.preco,
-        precoPromocao: p.PRECOPROMOCAO ?? p.precoPromocao,
-        precoEfetivo:
-          p.PRECO_EFETIVO ??
-          p.precoEfetivo ??
-          (p.PRECOPROMOCAO > 0 ? p.PRECOPROMOCAO : p.PRECO),
-
+        codProduto: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
+        descricao: p.DESCRICAO ?? p.descricao ?? '',
+        codOriginal: p.CODORIGINAL ?? p.codOriginal ?? null,
+        marca: p.MARCA ?? p.marca ?? '',
+        preco: preco != null ? Number(preco) : null,
+        precoPromocao: promo != null ? Number(promo) : null,
+        precoEfetivo: efetivo != null ? Number(efetivo) : null,
         imagemUrl,
-        hasImg: p.HAS_IMG ?? p.hasImg ?? (imagemUrl ? 1 : 0),
-
         dataAtualizacao: p.DATAATUALIZACAO ?? p.dataAtualizacao ?? null
       }
     })
 
-    const apiTotal = Number(data?.totalCount ?? data?.total ?? data?.count)
-    if (Number.isFinite(apiTotal) && apiTotal >= 0) {
+    // ✅ total -> paginação correta
+    const apiTotal = pickTotalFromResponse(data)
+    if (apiTotal != null) {
       total.value = apiTotal
+      // se mudou filtro e a página ficou fora do range, ajusta
+      const newMax = Math.max(1, Math.ceil(apiTotal / L))
+      if (page.value > newMax) page.value = newMax
     } else {
-      total.value = hasNext
-        ? Number(page.value) * L + 1
-        : (Number(page.value) - 1) * L + items.value.length
+      // fallback (sem total vindo da API) -> paginação vira “estimada”
+      total.value = (page.value - 1) * L + items.value.length
     }
 
     if (updateURL) writeToURL()
-    await fetchBrandSuggestions('')
   } catch (err) {
     console.error('[Catalogo] erro ao buscar:', err)
     $q.notify({ type: 'negative', message: 'Falha ao buscar produtos.' })
@@ -478,10 +645,13 @@ function openDetails(p) {
       .replace(/^-+|-+$/g, '')
       .toLowerCase()
 
-  const desc = p.descricao || p.DESCRICAO || ''
-  const brand = p.marca || p.MARCA || ''
-  const id = p.id ?? p.CODPRODUTO ?? p.codProduto ?? p._id ?? ''
-  const sku = p.codOriginal ?? p.CODORIGINAL ?? null
+  detailItem.value = p
+  showDetails.value = true
+
+  const desc = p.descricao || ''
+  const brand = p.marca || ''
+  const id = p.id ?? p.codProduto ?? ''
+  const sku = p.codOriginal ?? null
 
   const prod = {
     id,
@@ -491,13 +661,11 @@ function openDetails(p) {
     preco: p.preco,
     precoPromocao: p.precoPromocao,
     precoEfetivo: p.precoEfetivo,
-    // 👇 leva a mesma imagem normalizada para a ProductPage
-    imagemUrl: p.imagemUrl || p.IMAGEM_URL || p.img_url || null,
-    updatedAt: p.dataAtualizacao ?? p.DATAATUALIZACAO ?? null,
-    inativoFlag: p.INATIVO ?? p.inativoFlag ?? null
+    imagemUrl: p.imagemUrl || null,
+    updatedAt: p.dataAtualizacao ?? null
   }
 
-  const slug = p.slug || `${slugify(`${desc} ${brand}`)}-${id}`
+  const slug = `${slugify(`${desc} ${brand}`)}-${id}`
   sessionStorage.setItem(`prod:${id}`, JSON.stringify(prod))
   router.push({
     path: `/catalogo/produto/${slug}`,
@@ -511,13 +679,15 @@ onMounted(async () => {
   await applyFilters(false)
 })
 
-/** ---------------- Watchers úteis ---------------- */
-watch([page, limit], () => {
-  writeToURL()
-})
+watch([page, limit], () => writeToURL())
 </script>
 
 <style scoped>
+.header-bar {
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
 .catalog-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(180px, 1fr));
@@ -526,29 +696,20 @@ watch([page, limit], () => {
 
 @media (max-width: 1400px) {
   .catalog-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-@media (max-width: 1200px) {
-  .catalog-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
-
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .catalog-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
-@media (max-width: 680px) {
+@media (max-width: 900px) {
   .catalog-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-@media (max-width: 420px) {
+@media (max-width: 520px) {
   .catalog-grid {
     grid-template-columns: 1fr;
   }
@@ -557,6 +718,10 @@ watch([page, limit], () => {
 .product-card {
   overflow: hidden;
   border-radius: 14px;
+  transition: transform 0.12s ease;
+}
+.product-card:hover {
+  transform: translateY(-2px);
 }
 
 .card-skel {
@@ -573,10 +738,8 @@ watch([page, limit], () => {
 
 .product-img {
   height: 220px;
-  /* altura fixa pra todos os cards */
 }
 
-/* garante que a imagem fique centralizada dentro do q-img */
 .product-img :deep(img),
 .product-img :deep(.q-img__image) {
   object-fit: contain;

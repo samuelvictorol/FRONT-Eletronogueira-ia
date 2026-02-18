@@ -6,20 +6,13 @@
       <div class="hero-overlay"></div>
 
       <div class="hero-content glass q-mx-sm animate__animated animate__zoomIn animate__delay-5s animate__slower">
-        <div class="text-h5 text-secondary text-bold">
-          <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-            alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
-            class="text-negative">ELETRO</strong>NOGUEIRA<br>
-        </div>
-
-        <p class="text-bold text-secondary q-mt-sm">Ferramentas & Soluções</p>
-        <div class="hero-badges">
-          <div class="badge bg-grey-2 text-dark">Elétrica</div>
-          <div class="badge bg-grey-2 text-dark">Hidráulica</div>
-          <div class="badge bg-grey-2 text-dark">Automação</div>
-          <div class="badge bg-grey-2 text-dark">Agro</div>
-          <div class="badge bg-grey-2 text-dark">Industrial</div>
-          <div class="badge bg-grey-2 text-dark">Manutenção</div>
+        <!-- <p class="text-bold text-secondary q-mt-sm">Ferramentas & Soluções</p> -->
+        <div v-if="!isMobile" class="w100 row justify-center text-center bg-primary">
+          <div class="text-h5 text-secondary text-bold">
+            <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
+              alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
+              class="text-negative">ELETRO</strong>NOGUEIRA<br>
+          </div>
         </div>
         <div class="cta-row">
           <q-btn class="btn ghost" color="secondary" icon-right="pin_drop" @click="scrollTo('#como-chegar')"
@@ -28,6 +21,14 @@
             label="Ver produtos" />
           <q-btn color="negative" unelevated class="btn primary text-shadow" @click="scrollTo('#servicos')"
             label="Serviços e Manutenção" />
+        </div>
+        <div class="hero-badges">
+          <div class="badge bg-grey-2 text-dark">Elétrica</div>
+          <div class="badge bg-grey-2 text-dark">Hidráulica</div>
+          <div class="badge bg-grey-2 text-dark">Automação</div>
+          <div class="badge bg-grey-2 text-dark">Agro</div>
+          <div class="badge bg-grey-2 text-dark">Industrial</div>
+          <div class="badge bg-grey-2 text-dark">Manutenção</div>
         </div>
         <div
           class="open-now text-secondary q-pt-md text-center animate__animated animate__fadeInDown animate__delay-3s animate__slower">
@@ -38,17 +39,27 @@
     <section id="sobre"
       class="section bg-secondary animate__animated animate__slideInUp animate__delay-2s animate__slower">
       <div class="container grid-2" id="como-chegar">
-        <p :class="isMobile ? 'q-mt-md' : 'q-mt-xl'" class=" q-pa-md text-secondary bg-grey-3" style="font-size: 1rem;border-radius: 12px;">
-          "Somos uma <strong class="text-secondary text-bold">loja física em Valparaíso de Goiás</strong>, em frente à
+        <div v-if="isMobile" class="w100 row justify-center text-center bg-primary"
+          style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
+          <div class="text-h5 text-secondary text-bold">
+            <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
+              alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
+              class="text-negative">ELETRO</strong>NOGUEIRA<br>
+          </div>
+        </div>
+        <p :class="isMobile ? 'q-mt-md' : 'q-mt-xl'" class=" q-pa-md text-secondary bg-grey-3"
+          style="font-size: 1rem;border-radius: 4px;">
+          Somos uma <strong class="text-secondary text-bold">loja física em Valparaíso de Goiás</strong>, em frente à
           <strong class="text-secondary">BR-040</strong>, próximo
           da divisa com o DF.<br><br>
           Aqui você encontra uma linha completa de <em class="text-secondary text-bold">ferramentas elétricas</em>, <em
             class="text-secondary text-bold">hidráulica</em>, <em class="text-secondary text-bold">automação
             industrial</em>,
           <em class="text-secondary text-bold">materiais elétricos</em>, <em
-            class="text-secondary text-bold">agropecuária</em>, <em class="text-secondary text-bold">bombas d’água</em>, <em
-            class="text-orange-14 text-bold">manutenção de equipamentos</em> e <em class="text-bold text-green">serviços
-            especializados</em> para seu projeto."<br><br>
+            class="text-secondary text-bold">agropecuária</em>, <em class="text-secondary text-bold">bombas d’água</em>,
+          <em class="text-orange-14 text-bold">manutenção de equipamentos</em> e <em
+            class="text-bold text-green">serviços
+            especializados</em> para seu projeto.<br><br>
         <div class="bg-primary text-secondary rounded-borders q-pa-sm q-mt-sm text-bold" style="font-size: 0.9rem;">
           🟢 Segunda a Sexta: 8h às 18h<br>
           🟢 Sábado: 8h às 12h<br>
@@ -57,81 +68,12 @@
         </p>
         <div class="mini-map" :class="isMobile ? '' : 'q-pt-xl'">
           <iframe title="Mapa" loading="lazy" class="q-mb-md" referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed"></iframe>
+            src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed"></iframe>
           <a href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" target="_blank" class="text-primary"><q-icon
               name="pin_drop" size="sm"></q-icon> Eletro Nogueira, Q D, LOTE, Av. Marginal, 01 - Esplanada I, Valparaíso
             de Goiás - GO, 72878-603</a>
         </div>
       </div>
-      <q-carousel v-if="!isMobile" v-model="slide" v-model:fullscreen="fs" transition-prev="slide-right"
-        transition-next="slide-left" animated control-color="primary" navigation padding arrows swipeable height="400px" infinite
-         class="bg-grad-secondary" style="cursor: grab;">
-        <template #control>
-          <q-btn flat dense color="secondary" round :icon="fs ? 'fullscreen_exit' : 'fullscreen'" @click="fs = !fs"
-            class="q-ml-sm q-mt-sm" />
-        </template>
-        <q-carousel-slide :name="1" class="column no-wrap">
-          <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
-            <q-img class="rounded-borders col-6 full-height"
-              src="https://lh3.googleusercontent.com/p/AF1QipNu9WuJF2DhEH0KdB7Qtl9uCiecop1aUaciuSx2=s680-w680-h510-rw" />
-            <q-img class="rounded-borders col-6 full-height"
-              src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxwi9NRvuGQLYhL1wdfZOIUq0vM6ugL-MZ-F3VYqRmo01vE0CjkEyhM0xHbDu2Shx7VYmQGFv8HSmnCI8GiEOtgO--xxzAHEO9pA6e6EVj5s8meJmTPgrzZ1RJrwEE-9bRLGHjm=s1360-w1360-h1020-rw" />
-          </div>
-        </q-carousel-slide>
-        <q-carousel-slide :name="2" class="column no-wrap">
-          <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
-            <q-img class="rounded-borders col-6 full-height"
-              src="https://lh3.googleusercontent.com/p/AF1QipPQf6F4n63OrwWlYr5hpOwPuz3ZlahG18SFf46C=s680-w680-h510-rw" />
-            <q-img class="rounded-borders col-6 full-height"
-              src="https://lh3.googleusercontent.com/p/AF1QipNzBolmkMWUxxWTtU2Um6Zf10wADfGgw-bQ7sWk=s680-w680-h510-rw" />
-          </div>
-        </q-carousel-slide>
-        <q-carousel-slide :name="3" class="column no-wrap">
-          <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
-            <q-img class="rounded-borders col-6 full-height"
-              src="https://lh3.googleusercontent.com/p/AF1QipN-mmS6_z1lg5Irtn_XpIHLte5Tt_R2CLqpv2F2=s680-w680-h510-rw" />
-            <q-img class="rounded-borders col-6 full-height"
-              src="https://lh3.googleusercontent.com/p/AF1QipPJtgTGljJFiCifpdvcsloJ_0JpfO0ff24kFEKR=s680-w680-h510-rw" />
-          </div>
-        </q-carousel-slide>
-        <q-carousel-slide :name="4" class="column no-wrap">
-          <div class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap">
-            <q-img class="rounded-borders col-6 full-height"
-              src="https://lh3.googleusercontent.com/p/AF1QipPs3aLH9VNuJDuv5xUxOFwIKg_e4AIHKkSvxelo=s680-w680-h510-rw" />
-            <q-img class="rounded-borders col-6 full-height"
-              src="https://lh3.googleusercontent.com/p/AF1QipPQf6F4n63OrwWlYr5hpOwPuz3ZlahG18SFf46C=s680-w680-h510-rw" />
-          </div>
-        </q-carousel-slide>
-      </q-carousel>
-      <!-- mobile -->
-      <q-carousel v-else v-model="slide" v-model:fullscreen="fs" transition-prev="slide-right"
-        transition-next="slide-left" animated control-color="primary" navigation padding arrows swipeable height="400px" infinite
-        class="bg-grad-secondary" style="cursor: grab;">
-        <template #control>
-          <q-btn flat dense color="secondary" round :icon="fs ? 'fullscreen_exit' : 'fullscreen'" @click="fs = !fs"
-            class="q-ml-sm q-mt-sm" />
-        </template>
-        <q-carousel-slide :name="1" class="column no-wrap">
-          <q-img class="rounded-borders col-6 full-height"
-            src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxwi9NRvuGQLYhL1wdfZOIUq0vM6ugL-MZ-F3VYqRmo01vE0CjkEyhM0xHbDu2Shx7VYmQGFv8HSmnCI8GiEOtgO--xxzAHEO9pA6e6EVj5s8meJmTPgrzZ1RJrwEE-9bRLGHjm=s1360-w1360-h1020-rw" />
-        </q-carousel-slide>
-        <q-carousel-slide :name="1" class="column no-wrap">
-          <q-img class="rounded-borders col-6 full-height"
-            src="https://lh3.googleusercontent.com/p/AF1QipNu9WuJF2DhEH0KdB7Qtl9uCiecop1aUaciuSx2=s680-w680-h510-rw" />
-        </q-carousel-slide>
-        <q-carousel-slide :name="2" class="column no-wrap">
-          <q-img class="rounded-borders col-6 full-height"
-            src="https://lh3.googleusercontent.com/p/AF1QipPQf6F4n63OrwWlYr5hpOwPuz3ZlahG18SFf46C=s680-w680-h510-rw" />
-        </q-carousel-slide>
-        <q-carousel-slide :name="3" class="column no-wrap">
-          <q-img class="rounded-borders col-6 full-height"
-            src="https://lh3.googleusercontent.com/p/AF1QipPJtgTGljJFiCifpdvcsloJ_0JpfO0ff24kFEKR=s680-w680-h510-rw" />
-        </q-carousel-slide>
-        <q-carousel-slide :name="4" class="column no-wrap">
-          <q-img class="rounded-borders col-6 full-height"
-            src="https://lh3.googleusercontent.com/p/AF1QipPs3aLH9VNuJDuv5xUxOFwIKg_e4AIHKkSvxelo=s680-w680-h510-rw" />
-        </q-carousel-slide>
-      </q-carousel>
     </section>
     <section id="produtos">
       <div class=" bg-grey-3 text-white q-pt-md">
@@ -183,7 +125,7 @@
     </section>
     <section id="servicos" class="section">
       <div class="container">
-        <div class="row q-mt-lg" :class="!isMobile ? 'q-gutter-x-sm no-wrap':'q-gutter-y-sm' ">
+        <div class="row q-mt-lg" :class="!isMobile ? 'q-gutter-x-sm no-wrap' : 'q-gutter-y-sm'">
           <!-- Coluna: Serviços -->
           <div class="col-12 col-md-6 ">
             <div class=" card q-pa-md bg-grey-3">
@@ -525,4 +467,5 @@ onMounted(() => {
     background-size: cover;
   }
 }
+
 </style>

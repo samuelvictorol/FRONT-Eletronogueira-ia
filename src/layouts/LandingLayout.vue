@@ -1,9 +1,8 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-primary relative q-pt-md">
+  <q-layout view="hHh lpR fFf" class="bg-primary relative">
     <!-- HEADER -->
     <q-header
-      class="text-dark glass navbar bg-primary  animate__animated animate__fadeInDown animate__delay-1s animate__slower"
-      style="position: sticky; top: 6px; z-index: 999;">
+      class="text-dark bg-primary  animate__animated animate__fadeInDown animate__delay-1s animate__slower">
       <q-toolbar class="q-py-sm">
         <q-btn flat dense round class="lt-md q-mr-sm" icon="menu" aria-label="Abrir menu"
           @click="leftDrawerOpen = !leftDrawerOpen" />
