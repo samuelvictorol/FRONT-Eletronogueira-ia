@@ -1,8 +1,12 @@
 <template>
   <q-page class="q-px-md q-mt-xl bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
-    <div
-      class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-primary q-pa-md header-bar"
-    >
+    <!-- Loading overlay for product and brand requests -->
+    <q-inner-loading :showing="loading || brandLoading">
+      <q-spinner-gears size="42px" color="secondary" />
+      <div class="q-mt-sm text-grey-7">Carregando…</div>
+    </q-inner-loading>
+
+    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-primary q-pa-md header-bar">
       <q-breadcrumbs class="text-secondary">
         <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
         <q-breadcrumbs-el
@@ -13,7 +17,7 @@
       </q-breadcrumbs>
     </div>
 
-    <!-- 🔎 FILTROS -->
+    <!-- Filters -->
     <div class="q-pa-md bg-white rounded-borders q-mb-md shadow-1">
       <div class="row q-col-gutter-md items-end">
         <div class="col-12 col-md-4">
@@ -33,22 +37,41 @@
           </q-input>
         </div>
 
-        <!-- ✅ Marcas: mantém simples (sem buscar por descrição no backend) -->
+        <!-- Brand: remote suggestions with debounce -->
         <div class="col-12 col-md-3">
-          <q-input
-            @keyup.enter="applyFilters(true)"
+          <q-select
+            v-model="selectedBrand"
             color="secondary"
-            v-model="filters.descricaoMarca"
-            label="Buscar por marca"
+            label="Marca"
             dense
             outlined
             clearable
-            hint="Ex.: makita, bosch, fortlev"
+            use-input
+            fill-input
+            hide-selected
+            input-debounce="350"
+            :options="brandOptions"
+            :loading="brandLoading"
+            option-label="label"
+            option-value="value"
+            hint="Selecione uma marca"
+            @filter="onBrandFilter"
+            @clear="clearBrand(false)"
+            @update:model-value="onBrandModelChanged"
           >
             <template #prepend>
               <q-icon name="sell" />
             </template>
-          </q-input>
+
+            <template #no-option>
+              <q-item>
+                <q-item-section class="text-grey-7">
+                  <span v-if="(brandInput || '').length < 2">Digite para buscar.</span>
+                  <span v-else>Nenhuma marca encontrada.</span>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
         </div>
 
         <div class="col-6 col-md-2">
@@ -122,14 +145,14 @@
         </q-chip>
 
         <q-chip
-          v-if="filters.descricaoMarca"
+          v-if="selectedBrand"
           color="grey-2"
           text-color="grey-9"
           icon="sell"
           removable
-          @remove="filters.descricaoMarca = ''; applyFilters(true)"
+          @remove="clearBrand(true); applyFilters(true)"
         >
-          {{ filters.descricaoMarca }}
+          {{ selectedBrand.label }}
         </q-chip>
 
         <q-chip
@@ -174,7 +197,7 @@
       </div>
     </div>
 
-    <!-- Grid de produtos -->
+    <!-- Grid -->
     <div class="catalog-grid">
       <template v-if="loading">
         <q-skeleton v-for="i in limit" :key="'sk' + i" type="rect" class="card-skel" />
@@ -191,32 +214,25 @@
         <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="product-card">
           <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="primary" fit="contain" class="product-img" />
 
-          <q-card-section class="q-pt-sm">
+          <q-card-section class="q-pt-xs q-pb-sm">
             <div class="row items-center q-mt-xs q-col-gutter-sm">
               <div class="col-auto">
-                <q-badge
-                  v-if="p.marca"
-                  color="primary"
-                  class="text-bold q-pa-xs"
-                  text-color="blue-10"
-                  :label="p.marca"
-                />
+                <q-badge v-if="p.marca" color="primary" class="text-bold q-pa-xs" text-color="blue-10" :label="p.marca" />
               </div>
             </div>
 
-            <div class="text-subtitle1 text-weight-medium ellipsis-2">
-              <br />
+            <div class="text-subtitle2 text-weight-medium ellipsis-2 q-mt-xs">
               {{ p.descricao }}
             </div>
 
-            <div class="q-mt-sm">
+            <div class="q-mt-xs">
               <div v-if="p.precoPromocao && p.precoPromocao > 0" class="column">
                 <div class="text-caption text-negative">
                   <s>{{ money(p.preco) }}</s>
                 </div>
-                <div class="text-h6 text-positive">{{ money(p.precoPromocao) }}</div>
+                <div class="text-subtitle1 text-positive">{{ money(p.precoPromocao) }}</div>
               </div>
-              <div v-else class="text-h6">
+              <div v-else class="text-subtitle1">
                 {{ money(p.precoEfetivo ?? p.preco) }}
               </div>
             </div>
@@ -224,14 +240,13 @@
 
           <q-separator />
 
-          <q-card-actions>
-            <q-btn class="w100" color="secondary" icon-right="visibility" @click="openDetails(p)" label="Detalhes" />
+          <q-card-actions class="q-pa-sm">
+            <q-btn class="w100 q-pa-md" color="secondary" icon-right="visibility" @click="openDetails(p)" label="Detalhes" />
           </q-card-actions>
         </q-card>
       </template>
     </div>
 
-    <!-- ✅ paginação agora correta: max vem do total da API -->
     <div class="w100 row justify-between items-center q-mt-md">
       <span v-if="!loading">{{ total }} resultado(s)</span>
       <span v-else>Carregando…</span>
@@ -248,7 +263,7 @@
       />
     </div>
 
-    <!-- Detalhes -->
+    <!-- Details -->
     <q-dialog v-model="showDetails">
       <q-card style="min-width: 360px; max-width: 720px" class="q-pa-sm">
         <q-card-section class="row items-center q-pb-none">
@@ -291,7 +306,7 @@
 
     <div class="w100 q-py-xl"></div>
 
-    <!-- Footer mantido -->
+    <!-- Footer (mantido) -->
     <footer class="footer q-pt-xl">
       <div class="container footer-grid q-pb-md">
         <div>
@@ -333,21 +348,8 @@
             />
           </q-btn>
 
-          <q-btn
-            outline
-            icon-right="phone"
-            color="secondary"
-            class="btn outline q-mt-sm"
-            href="tel:+556136290040"
-            label="(61) 3629-0040"
-          />
-          <q-btn
-            icon-right="phone"
-            color="secondary"
-            class="btn q-mt-sm"
-            href="tel:+556136296858"
-            label="(61) 3629-6858"
-          />
+          <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040" label="(61) 3629-0040" />
+          <q-btn icon-right="phone" color="secondary" class="btn q-mt-sm" href="tel:+556136296858" label="(61) 3629-6858" />
         </div>
       </div>
 
@@ -388,7 +390,6 @@ const $q = useQuasar()
 const isMobile = $q.screen.lt.md
 const router = useRouter()
 
-/** ---------------- State base ---------------- */
 const loading = ref(false)
 const items = ref([])
 const total = ref(0)
@@ -399,7 +400,7 @@ const orderBy = ref('updated_desc')
 
 const filters = ref({
   descricaoProduto: '',
-  descricaoMarca: '',
+  descricaoMarca: null,
   precoMin: null,
   precoMax: null
 })
@@ -411,12 +412,10 @@ const orderOptions = [
   { label: 'Mais recentes', value: 'updated_desc' },
   { label: 'Menor preço', value: 'price_asc' },
   { label: 'Maior preço', value: 'price_desc' },
-  { label: 'Mais relevante', value: 'created_desc' },
+  { label: 'Mais relevante', value: 'created_desc' }
 ]
 
-/** ---------------- Helpers ---------------- */
 const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
-
 function resolveImage(p) {
   if (!p) return fallbackImage
   return p.imagemUrl || p.IMAGEM_URL || p.img_url || fallbackImage
@@ -428,7 +427,7 @@ const offset = computed(() => (page.value - 1) * limit.value)
 const hasAnyFilter = computed(() => {
   return Boolean(
     (filters.value.descricaoProduto || '').trim() ||
-      (filters.value.descricaoMarca || '').trim() ||
+      selectedBrand.value ||
       filters.value.precoMin != null ||
       filters.value.precoMax != null
   )
@@ -470,7 +469,6 @@ function whatsLink(p) {
   return `${base}?text=${text}`
 }
 
-/** ---------------- Normalização de preços ---------------- */
 function normalizePrice(which) {
   if (which === 'min') {
     const n = brToNumber(priceMinStr.value)
@@ -483,12 +481,9 @@ function normalizePrice(which) {
   }
 }
 
-/** ---------------- Persistência em URL ---------------- */
 function readFromURL() {
   const qs = new URLSearchParams(window.location.search)
-
   filters.value.descricaoProduto = qs.get('q') || ''
-  filters.value.descricaoMarca = qs.get('marca') || ''
 
   const m1 = qs.get('min')
   const m2 = qs.get('max')
@@ -501,12 +496,17 @@ function readFromURL() {
   limit.value = Number(qs.get('limit')) || 12
   page.value = Number(qs.get('page')) || 1
   orderBy.value = qs.get('orderBy') || 'updated_desc'
+
+  const marcaFromUrl = (qs.get('marca') || '').trim()
+  if (marcaFromUrl) {
+    filters.value.descricaoMarca = marcaFromUrl
+  }
 }
 
 function writeToURL() {
   const qs = new URLSearchParams()
   if (filters.value.descricaoProduto) qs.set('q', filters.value.descricaoProduto)
-  if (filters.value.descricaoMarca) qs.set('marca', filters.value.descricaoMarca)
+  if (selectedBrand.value?.marca) qs.set('marca', selectedBrand.value.marca)
   if (filters.value.precoMin != null) qs.set('min', String(filters.value.precoMin))
   if (filters.value.precoMax != null) qs.set('max', String(filters.value.precoMax))
   qs.set('limit', String(limit.value))
@@ -515,12 +515,83 @@ function writeToURL() {
   window.history.replaceState(null, '', `${location.pathname}?${qs.toString()}`)
 }
 
-/** ---------------- Integração Produtos (GET /produtos) + paginação correta ----------------
- * Regras:
- * - Passa limit/offset como querystring.
- * - Tenta ler total de vários formatos do backend.
- * - Se o backend NÃO mandar total, aplica fallback mínimo (desabilita paginação correta).
- */
+const brandLoading = ref(false)
+const brandOptions = ref([])
+const brandInput = ref('')
+const selectedBrand = ref(null)
+
+function normalizeBrandsResponse(data) {
+  const raw = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : []
+  return raw
+    .map((m) => {
+      const cod = m?.CODMARCA ?? m?.codMarca ?? m?.id ?? null
+      const name = (m?.MARCA ?? m?.marca ?? '').trim()
+      if (cod == null || !name) return null
+      return { label: name, value: cod, codMarca: cod, marca: name }
+    })
+    .filter(Boolean)
+}
+
+let brandReqSeq = 0
+
+function onBrandFilter(val, update) {
+  const term = (val || '').trim()
+  brandInput.value = term
+
+  if (term.length < 2) {
+    update(() => {
+      brandOptions.value = []
+    })
+    return
+  }
+
+  const mySeq = ++brandReqSeq
+  brandLoading.value = true
+
+  api
+    .get('/marcas/', { params: { limit: 4, offset: 0, descricaoMarca: term } })
+    .then(({ data }) => {
+      if (mySeq !== brandReqSeq) return
+      const opts = normalizeBrandsResponse(data).slice(0, 4)
+      update(() => {
+        brandOptions.value = opts
+      })
+    })
+    .catch(() => {
+      if (mySeq !== brandReqSeq) return
+      update(() => {
+        brandOptions.value = []
+      })
+    })
+    .finally(() => {
+      if (mySeq !== brandReqSeq) return
+      brandLoading.value = false
+    })
+}
+
+/* Updates filter value when a brand is selected or cleared */
+function onBrandModelChanged(v) {
+  if (!v) {
+    filters.value.descricaoMarca = null
+    return
+  }
+  filters.value.descricaoMarca = v.marca
+  page.value = 1
+  applyFilters(true)
+}
+
+/* Clears brand selection and allows selecting again */
+function clearBrand(runSearch = false) {
+  selectedBrand.value = null
+  brandOptions.value = []
+  brandInput.value = ''
+  filters.value.descricaoMarca = null
+  if (runSearch) {
+    page.value = 1
+    applyFilters(true)
+  }
+}
+
 function onOrderChange() {
   page.value = 1
   applyFilters(true)
@@ -534,22 +605,18 @@ function onPageChange() {
 }
 
 function resetFilters() {
-  filters.value = { descricaoProduto: '', descricaoMarca: '', precoMin: null, precoMax: null }
+  filters.value = { descricaoProduto: '', descricaoMarca: null, precoMin: null, precoMax: null }
   priceMinStr.value = ''
   priceMaxStr.value = ''
+  clearBrand(false)
   page.value = 1
   applyFilters(true)
 }
 
 function pickTotalFromResponse(data) {
-  const candidates = [
-    data?.totalCount,
-    data?.total,
-    data?.count,
-    data?.meta?.total,
-    data?.pagination?.total
-  ].map((x) => Number(x))
-
+  const candidates = [data?.totalCount, data?.total, data?.count, data?.meta?.total, data?.pagination?.total].map((x) =>
+    Number(x)
+  )
   const found = candidates.find((n) => Number.isFinite(n) && n >= 0)
   return Number.isFinite(found) ? found : null
 }
@@ -561,12 +628,11 @@ async function applyFilters(updateURL = true) {
     normalizePrice('max')
 
     const L = Number(limit.value) || 12
-
     const params = {
       limit: L,
       offset: offset.value,
-      descricaoProduto: filters.value.descricaoProduto || null,
-      descricaoMarca: filters.value.descricaoMarca || null,
+      descricaoProduto: (filters.value.descricaoProduto || '').trim() || null,
+      descricaoMarca: selectedBrand.value?.marca ?? null,
       precoMin: filters.value.precoMin,
       precoMax: filters.value.precoMax,
       orderBy: orderBy.value || 'updated_desc'
@@ -574,7 +640,6 @@ async function applyFilters(updateURL = true) {
 
     const { data } = await api.get('/produtos/', { params })
 
-    // lista
     const raw =
       (Array.isArray(data?.data) && data.data) ||
       (Array.isArray(data?.items) && data.items) ||
@@ -609,15 +674,12 @@ async function applyFilters(updateURL = true) {
       }
     })
 
-    // ✅ total -> paginação correta
     const apiTotal = pickTotalFromResponse(data)
     if (apiTotal != null) {
       total.value = apiTotal
-      // se mudou filtro e a página ficou fora do range, ajusta
       const newMax = Math.max(1, Math.ceil(apiTotal / L))
       if (page.value > newMax) page.value = newMax
     } else {
-      // fallback (sem total vindo da API) -> paginação vira “estimada”
       total.value = (page.value - 1) * L + items.value.length
     }
 
@@ -632,7 +694,6 @@ async function applyFilters(updateURL = true) {
   }
 }
 
-/** ---------------- Detalhes ---------------- */
 const showDetails = ref(false)
 const detailItem = ref(null)
 
@@ -673,7 +734,6 @@ function openDetails(p) {
   })
 }
 
-/** ---------------- Lifecycle ---------------- */
 onMounted(async () => {
   readFromURL()
   await applyFilters(false)
@@ -690,8 +750,8 @@ watch([page, limit], () => writeToURL())
 
 .catalog-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 10px;
 }
 
 @media (max-width: 1400px) {
@@ -717,7 +777,7 @@ watch([page, limit], () => writeToURL())
 
 .product-card {
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 12px;
   transition: transform 0.12s ease;
 }
 .product-card:hover {
@@ -725,8 +785,8 @@ watch([page, limit], () => writeToURL())
 }
 
 .card-skel {
-  height: 260px;
-  border-radius: 14px;
+  height: 210px;
+  border-radius: 12px;
 }
 
 .ellipsis-2 {
@@ -737,7 +797,7 @@ watch([page, limit], () => writeToURL())
 }
 
 .product-img {
-  height: 220px;
+  height: 150px;
 }
 
 .product-img :deep(img),

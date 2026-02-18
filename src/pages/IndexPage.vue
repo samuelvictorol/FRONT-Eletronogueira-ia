@@ -6,18 +6,19 @@
       <div class="hero-overlay"></div>
 
       <div
-        class="hero-content glass rounded-borders bg-primary q-mx-sm animate__animated animate__zoomIn animate__delay-5s animate__slower q-mb-md q-mt-md">
+        class="hero-content glass rounded-borders bg-primary q-mx-sm animate__animated animate__zoomIn animate__delay-3s animate__slower q-mb-md q-mt-md">
         <!-- <p class="text-bold text-primary q-mt-sm">Ferramentas & Soluções</p>  -->
         <div v-if="!isMobile" class="w100 row justify-center text-center bg-primary">
-          <div class="text-h5 text-secondary text-bold">
+          <div class="text-h5 text-secondary text-bold animate__animated animate__zoomIn animate__delay-43s animate__slower">
             <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
               alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
               class="text-negative">ELETRO</strong>NOGUEIRA<br>
           </div>
         </div>
-        <div v-if="isMobile" class="w100 row justify-center no-wrap items-center text-center bg-primary">
-          <q-input outlined color="secondary" class="w100 rounded-borders bg-grey-2" label="O que você precisa?"></q-input>
-          <q-btn color="secondary" unelevated class="btn q-ml-sm text-shadow" icon="search"></q-btn>
+        <div  class="w100 row justify-center no-wrap items-center text-center bg-primary  animate__animated animate__zoomIn animate__delay-5s animate__slower ">
+          <q-input outlined color="secondary" v-model.trim="inputBuscar" class=" w100 rounded-borders bg-grey-2" @keyup.enter="buscarCatalogo()"
+            label="O que você precisa?"></q-input>
+          <q-btn color="secondary" unelevated class="btn q-ml-sm text-shadow" icon="search" @click="buscarCatalogo()"></q-btn>
         </div>
         <div class="cta-row">
           <q-btn color="secondary" unelevated class="btn  text-shadow" @click="scrollTo('#produtos')"
@@ -245,49 +246,67 @@
       </div>
     </section>
     <!-- SOBRE -->
-    <section id="sobre"
-      class="section q-pb-xl animate__animated animate__slideInUp animate__delay-2s animate__slower bg-primary q-py-md">
-      <div class="container grid-2" id="como-chegar">
-        <div v class="w100 row justify-center text-center q-pt-xs bg-primary"
-          style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
-          <div class="text-h5 text-secondary text-bold">
-            <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-              alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
-              class="text-negative">Quem</strong>Somos?<br>
+     <div id="como-chegar"></div>
+    <section id="" class=" animate__animated animate__slideInUp animate__delay-2s animate__slower bg-blur">
+      <div class="container grid-2">
+        <div>
+          <div class=" q-pa-md text-dark bg-grey-3" style="font-size: 1rem;border-radius: 4px;">
+            <div class="w100 row justify-center text-center "
+              style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
+              <div class="text-h5 text-secondary text-bold bg-primary rounded-borders q-pa-md">
+                <q-img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
+                  alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
+                  class="text-negative">Quem</strong>Somos?<br>
+              </div>
+            </div>
+            <div class="q-mb-lg"></div>
+            Somos uma <strong class="text-secondary text-bold">loja física em Valparaíso de Goiás</strong>, em frente à
+            <strong class="text-secondary">BR-040</strong>, próximo
+            da divisa com o DF.<br><br>
+            Aqui você encontra uma linha completa de <strong class="text-secondary text-bold">ferramentas
+              elétricas</strong>, <strong class="text-secondary text-bold">hidráulica</strong>, <strong
+              class="text-secondary text-bold">automação
+              industrial</strong>,
+            <strong class="text-secondary text-bold">materiais elétricos</strong>, <strong
+              class="text-secondary text-bold">agropecuária</strong>, <strong class="text-secondary text-bold">bombas
+              d’água</strong>,
+            <strong class="text-red text-bold">manutenção de equipamentos</strong> e <strong
+              class="text-bold text-green">serviços
+              especializados</strong> para seu projeto.<br><br>
           </div>
-        </div><br></br>
-        <p :class="isMobile ? 'q-mt-md' : 'q-mt-xl'" class=" q-pa-md text-dark bg-grey-3"
-          style="font-size: 1rem;border-radius: 4px;">
-          Somos uma <strong class="text-secondary text-bold">loja física em Valparaíso de Goiás</strong>, em frente à
-          <strong class="text-secondary">BR-040</strong>, próximo
-          da divisa com o DF.<br><br>
-          Aqui você encontra uma linha completa de <em class="text-secondary text-bold">ferramentas elétricas</em>, <em
-            class="text-secondary text-bold">hidráulica</em>, <em class="text-secondary text-bold">automação
-            industrial</em>,
-          <em class="text-secondary text-bold">materiais elétricos</em>, <em
-            class="text-secondary text-bold">agropecuária</em>, <em class="text-secondary text-bold">bombas d’água</em>,
-          <em class="text-red text-bold">manutenção de equipamentos</em> e <em
-            class="text-bold text-green">serviços
-            especializados</em> para seu projeto.<br><br>
-        <div class="bg-secondary text-grey-1 rounded-borders q-pa-sm q-mt-sm" style="font-size: 0.9rem;">
-          🟢 Segunda a Sexta: 8h às 18h<br>
-          🟢 Sábado: 8h às 12h<br>
-          🔴 Domingo: Fechado
         </div>
-        </p>
-        <div class="mini-map" :class="isMobile ? '' : 'q-pt-xl'">
-          <iframe title="Mapa" loading="lazy" class="q-mb-md" referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed"></iframe>
-          <a href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" target="_blank" class="text-secondary"><q-icon
-              name="pin_drop" size="sm"></q-icon> Eletro Nogueira, Q D, LOTE, Av. Marginal, 01 - Esplanada I, Valparaíso
+        <div class="bg-secondary text-grey-1 rounded-borders q-pa-md" style="font-size: 0.9rem;">
+          <div class="w100 row justify-center text-center q-mb-xl"
+            style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
+            <div class="text-h5 text-secondary text-bold bg-primary rounded-borders q-pa-md">
+              <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
+                alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
+                class="text-negative">Nossos</strong>Horários<br>
+            </div>
+          </div>
+          <div style="font-size: 1.2rem;">
+            🟢 Segunda a Sexta: 8h às 18h<br>
+            🟢 Sábado: 8h às 12h<br>
+            🔴 Domingo: Fechado
+          </div>
+          <div class="q-pb-md"></div>
+        </div>
+      </div>
+      <div class="w100 bg-primary" :class="isMobile ? '' : ''">
+        <iframe title="Mapa" loading="lazy" height="380" class="w100" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed"></iframe>
+        <div class="bg-primary text-center q-py-md">
+          <a href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" target="_blank"
+            class="text-secondary text-bold text-center"><q-icon name="pin_drop" size="sm"></q-icon> Eletro Nogueira, Q
+            D, LOTE, Av. Marginal, 01 - Esplanada I,
+            Valparaíso
             de Goiás - GO, 72878-603</a>
         </div>
       </div>
     </section>
-    <div class="w100 " style="height: 30vh;"></div>
-    <!-- FOOTER -->
-    <footer class="footer q-pt-xl bg-secondary text-grey-3 q-mt-xl">
-      <div class="container footer-grid q-pt-sm q-pb-md">
+    <footer class="footer bg-secondary text-grey-3">
+      <div class="container footer-grid q-pt-xl q-pb-md">
         <div>
           <div class="brand">
             <div class="logo"><q-img style="border-radius: 20%;"
@@ -344,6 +363,7 @@ const year = new Date().getFullYear()
 const slide = ref(1)
 const fs = ref(false)
 const router = useRouter()
+const inputBuscar = ref('')
 
 const tab1 = ref('makita')
 const tab2 = ref('nova_motores')
@@ -390,6 +410,12 @@ const openNowText = computed(() => {
 
 function goTo(path) {
   router.push(path)
+}
+
+function buscarCatalogo() {
+  if (inputBuscar.value.trim()) {
+    router.push(`/catalogo?q=${encodeURIComponent(inputBuscar.value.trim())}&limit=12&page=1&orderBy=updated_desc`)
+  }
 }
 
 function scrollTo(selector) {
