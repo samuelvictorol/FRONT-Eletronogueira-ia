@@ -247,10 +247,10 @@
     </section>
     <!-- SOBRE -->
      <div id="como-chegar"></div>
-    <section id="" class=" animate__animated animate__slideInUp animate__delay-2s animate__slower bg-blur">
+    <section id="" class=" animate__animated animate__slideInUp animate__delay-2s animate__slower bg-secondary">
       <div class="container grid-2">
         <div>
-          <div class=" q-pa-md text-dark bg-grey-3" style="font-size: 1rem;border-radius: 4px;">
+          <div class=" q-pa-md text-dark bg-primary" style="font-size: 1rem;border-radius: 4px;">
             <div class="w100 row justify-center text-center "
               style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
               <div class="text-h5 text-secondary text-bold bg-primary rounded-borders q-pa-md">
@@ -276,7 +276,7 @@
               especializados</strong> para seu projeto.<br><br>
           </div>
         </div>
-        <div class="bg-secondary text-grey-1 rounded-borders q-pa-md" style="font-size: 0.9rem;">
+        <div class="bg-primary text-secondary rounded-borders q-pa-md" style="font-size: 0.9rem;">
           <div class="w100 row justify-center text-center q-mb-xl"
             style="border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;">
             <div class="text-h5 text-secondary text-bold bg-primary rounded-borders q-pa-md">
@@ -285,7 +285,7 @@
                 class="text-negative">Nossos</strong>Horários<br>
             </div>
           </div>
-          <div style="font-size: 1.2rem;">
+          <div style="font-size: 1.2rem;" class="">
             🟢 Segunda a Sexta: 8h às 18h<br>
             🟢 Sábado: 8h às 12h<br>
             🔴 Domingo: Fechado

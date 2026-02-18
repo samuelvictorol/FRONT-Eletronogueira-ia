@@ -212,7 +212,19 @@
 
       <template v-else>
         <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="product-card">
-          <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="primary" fit="contain" class="product-img" />
+          <q-img
+            :src="resolveImage(p)"
+            :alt="p.descricao"
+            spinner-color="primary"
+            fit="contain"
+            class="product-img"
+          >
+            <template #error>
+              <div class="absolute-full flex flex-center bg-grey-2 text-grey-8">
+                <q-img :src="fallbackImage" style="width:64px; height:64px" />
+              </div>
+            </template>
+          </q-img>
 
           <q-card-section class="q-pt-xs q-pb-sm">
             <div class="row items-center q-mt-xs q-col-gutter-sm">
@@ -262,7 +274,6 @@
         @update:model-value="onPageChange"
       />
     </div>
-
 
     <div class="w100 q-py-xl"></div>
 
@@ -376,12 +387,34 @@ const orderOptions = [
 ]
 
 const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
-function resolveImage(p) {
-  if (!p) return fallbackImage
-  return p.imagemUrl || p.IMAGEM_URL || p.img_url || fallbackImage
+
+function safeUrl(url) {
+  if (!url) return null
+  const s = String(url).trim()
+  if (!s) return null
+  // evita quebrar URL com espaços (teu S3 vem com "Produto 6762 3851.jpg")
+  return s.replace(/ /g, '%20')
 }
 
-const maxPage = computed(() => Math.max(1, Math.ceil((Number(total.value) || 0) / (Number(limit.value) || 12))))
+function resolveImage(p) {
+  if (!p) return fallbackImage
+
+  // prioriza IMG_PATH (é o que tua API realmente manda)
+  const url =
+    p.imgPath ||
+    p.IMG_PATH ||
+    p.imagemUrl ||
+    p.IMAGEM_URL ||
+    p.img_url ||
+    (p.IMG && (p.IMG.link || p.IMG.url)) ||
+    null
+
+  return safeUrl(url) || fallbackImage
+}
+
+const maxPage = computed(() =>
+  Math.max(1, Math.ceil((Number(total.value) || 0) / (Number(limit.value) || 12)))
+)
 const offset = computed(() => (page.value - 1) * limit.value)
 
 const hasAnyFilter = computed(() => {
@@ -414,19 +447,6 @@ function money(n) {
   } catch {
     return `R$ ${numberToBR(n)}`
   }
-}
-function priceBlock(p) {
-  if (p.precoPromocao && p.precoPromocao > 0) return `${money(p.precoPromocao)} (de ${money(p.preco)})`
-  return money(p.precoEfetivo ?? p.preco)
-}
-function whatsLink(p) {
-  const base = 'https://wa.me/556136290040'
-  const text = encodeURIComponent(
-    `Olá! Pode me enviar o preço e disponibilidade deste item?\n\n${p.descricao} (${p.marca ?? '—'})\nCód.: ${
-      p.codProduto ?? p.id ?? p._id
-    }`
-  )
-  return `${base}?text=${text}`
 }
 
 function normalizePrice(which) {
@@ -529,7 +549,6 @@ function onBrandFilter(val, update) {
     })
 }
 
-/* Updates filter value when a brand is selected or cleared */
 function onBrandModelChanged(v) {
   if (!v) {
     filters.value.descricaoMarca = null
@@ -540,7 +559,6 @@ function onBrandModelChanged(v) {
   applyFilters(true)
 }
 
-/* Clears brand selection and allows selecting again */
 function clearBrand(runSearch = false) {
   selectedBrand.value = null
   brandOptions.value = []
@@ -607,14 +625,8 @@ async function applyFilters(updateURL = true) {
       (Array.isArray(data) ? data : [])
 
     items.value = raw.map((p) => {
-      const imagemUrl =
-        (p.IMG && (p.IMG.link || p.IMG.url)) ||
-        p.IMAGEM_URL ||
-        p.imagemUrl ||
-        p.img_url ||
-        p.IMAGEM ||
-        p.imagem ||
-        null
+      // ✅ teu backend manda IMG_PATH + HAS_IMAGE + IMG (id) — então a URL real é IMG_PATH
+      const imgPath = p.IMG_PATH ?? p.imgPath ?? null
 
       const preco = p.PRECO ?? p.preco ?? null
       const promo = p.PRECOPROMOCAO ?? p.precoPromocao ?? 0
@@ -629,8 +641,16 @@ async function applyFilters(updateURL = true) {
         preco: preco != null ? Number(preco) : null,
         precoPromocao: promo != null ? Number(promo) : null,
         precoEfetivo: efetivo != null ? Number(efetivo) : null,
-        imagemUrl,
-        dataAtualizacao: p.DATAATUALIZACAO ?? p.dataAtualizacao ?? null
+
+        // ✅ aqui é o ponto principal
+        imgPath: safeUrl(imgPath),
+        imagemUrl: safeUrl(imgPath), // mantém compatibilidade com teu openDetails()
+
+        dataAtualizacao: p.DATAATUALIZACAO ?? p.dataAtualizacao ?? null,
+
+        // se quiser, guarda também os flags
+        hasImage: p.HAS_IMAGE ?? p.hasImage ?? null,
+        imgId: p.IMG ?? p.img ?? null
       }
     })
 
@@ -682,7 +702,8 @@ function openDetails(p) {
     preco: p.preco,
     precoPromocao: p.precoPromocao,
     precoEfetivo: p.precoEfetivo,
-    imagemUrl: p.imagemUrl || null,
+    // ✅ garante que vai com a URL correta pro detalhe
+    imagemUrl: p.imagemUrl || p.imgPath || null,
     updatedAt: p.dataAtualizacao ?? null
   }
 
