@@ -412,10 +412,74 @@ function goTo(path) {
   router.push(path)
 }
 
+function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .normalize('NFD')                     // separa acentos
+    .replace(/[\u0300-\u036f]/g, '')      // remove acentos
+    .replace(/ç/g, 'c')                   // garante ç -> c
+    .trim()
+}
+
+function corrigirErrosComuns(text) {
+  return text
+    .replace(/\bconcerto\b/g, 'conserto')
+    .replace(/\bmanutencao\b/g, 'manutencao')
+    .replace(/\bassitencia\b/g, 'assistencia')
+    .replace(/\btecnica\b/g, 'tecnica')
+}
+
 function buscarCatalogo() {
-  if (inputBuscar.value.trim()) {
-    router.push(`/catalogo?q=${encodeURIComponent(inputBuscar.value.trim())}&limit=12&page=1&orderBy=updated_desc`)
+  if (!inputBuscar.value?.trim()) return
+
+  let termoOriginal = inputBuscar.value.trim()
+  let termo = normalizeText(termoOriginal)
+  termo = corrigirErrosComuns(termo)
+
+  // Palavras relacionadas a serviços/manutenção
+  const termosServico = [
+    'manutencao',
+    'conserto',
+    'assistencia',
+    'tecnica',
+    'lavadora',
+    'bomba',
+    'compressores',
+    'mangueira',
+    'crimpagem',
+    'munck',
+    'torno',
+    'solda',
+    'rebobinagem',
+    'automacao'
+  ]
+
+  // Palavras relacionadas a localização
+  const termosLocalizacao = [
+    'horario',
+    'horarios',
+    'funcionamento',
+    'abertura',
+    'localizacao',
+    'como chegar',
+    'endereco',
+    'telefone'
+  ]
+
+  // Se encontrar qualquer termo de serviço
+  if (termosServico.some(t => termo.includes(t))) {
+    router.push('/servicos-manutencao')
+    return
   }
+
+  // Se encontrar qualquer termo de localização
+  if (termosLocalizacao.some(t => termo.includes(t))) {
+    router.push('/localizacao')
+    return
+  }
+
+  // Caso contrário, vai para catálogo
+  router.push(`/catalogo?q=${encodeURIComponent(termoOriginal)}&limit=12&page=1&orderBy=updated_desc`)
 }
 
 function scrollTo(selector) {
