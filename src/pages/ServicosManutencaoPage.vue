@@ -1,32 +1,15 @@
 <template>
-    <q-page class="q-px-md q-mt-xl bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
+    <q-page class="q-px- q-mt-xl bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
         <!-- Header -->
         <div class="q-my-md bg-primary q-pa-md header-bar ">
             <q-breadcrumbs class="text-secondary animate__animated animate__fadeInDown animate__delay-3s animate__slower ">
                 <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
                 <q-breadcrumbs-el class="text-bold" label="Serviços e Manutenção" to="/servicos-manutencao" />
             </q-breadcrumbs>
-
-            <div class="q-mt-sm">
-                <div class="text-h4 text-secondary text-bold">Serviços e Manutenção em Valparaíso de Goiás</div>
-                <div class="text-dark q-mt-xs">
-                    Munck, torno, solda TIG/MIG, rebobinagem de motores, bombas d’água, mangueiras, lavadoras,
-                    compressores e automação industrial.
-                </div>
-
-                <div class="row q-gutter-sm q-mt-md">
-                    <q-btn color="secondary" class="text-bold" icon="place" label="Ver localização e rotas"
-                        to="/localizacao" />
-                    <q-btn outline color="secondary" icon="inventory_2" label="Ver catálogo de produtos"
-                        to="/catalogo?min=299.9&max=8299.9&limit=12&page=1&orderBy=updated_desc" />
-                    <q-btn icon="mdi-whatsapp" label="WhatsApp (orçamento)" type="a" target="_blank" class="text-white bg-green-14"
-                        rel="noopener" :href="whatsServico" />
-                </div>
-            </div>
         </div>
 
         <!-- SEO intro -->
-        <div class="q-pa-md bg-white rounded-borders shadow-1 q-mb-md">
+        <div class="q-pa-md bg-primary rounded-borders shadow-1 column items-center q-mb-md">
             <div class="w100 row justify-center text-center bg-primary">
                 <div
                     class="text-h5 text-secondary text-bold animate__animated animate__zoomIn animate__delay-43s animate__slower">
@@ -37,7 +20,7 @@
                 </div>
             </div>
             <div class="text-subtitle1 text-bold text-grey-9"></div>
-            <div class="text-grey-8 q-mt-md">
+            <div class="text-primary bg-secondary q-pa-sm rounded-borders text-bold w100 text-center q-mt-md">
                 Procurando manutenção de lavadoras, mangueiras, bombas d’água, compressores ou serviços como solda,
                 torno e rebobinagem em Valparaíso de Goiás?
                 A Eletro Nogueira atende quem está próximo à BR-040 com suporte técnico especializado e peças de
@@ -45,11 +28,8 @@
                 Solicite seu orçamento pelo WhatsApp e receba atendimento rápido.
             </div>
 
-            <q-separator class="q-my-md" />
-
-            <!-- Quick search chips (não precisa buscar nada aqui; é só UX + SEO sem depender de backend) -->
-            <div class="text-caption text-grey-7">Buscas comuns:</div>
-            <div class="row q-col-gutter-sm q-mt-xs">
+            <q-separator class="q-my-md bg-se" />
+            <div class="row q-col-gutter-sm q-mt-xs flex flex-center">
                 <div class="col-auto" v-for="t in quickTerms" :key="t">
                     <q-chip clickable color="grey-2" text-color="grey-9" @click="openWhatsWithTerm(t)">
                         {{ t }}
@@ -59,7 +39,7 @@
         </div>
 
         <!-- Services / Maintenance content -->
-        <section class="section bg-secondary rounded-borders shadow-1 q-pa-md">
+        <section class="section q-pa-md">
             <div class="container q-py-md">
                 <div class="row" :class="!isMobile ? 'q-gutter-x-sm no-wrap' : 'q-gutter-y-sm'">
                     <!-- Services -->
@@ -217,18 +197,16 @@
 
                 <!-- Local SEO block -->
                 <div class="q-mt-lg q-pa-md bg-white rounded-borders shadow-1">
-                    <div class="text-subtitle1 text-bold">Atendimento para quem está por perto</div>
                     <div class="text-grey-8 q-mt-xs">
-                        Essa página é para facilitar quem procura no Google por serviços e manutenção na região.
                         Se você está em Valparaíso de Goiás, entorno do DF ou próximo à BR-040, fale com a equipe e peça
-                        o orçamento.
+                        o orçamento. Atendimento local, rápido e com suporte técnico especializado para suas necessidades de serviços e manutenção.
                     </div>
 
                     <div class="row q-gutter-sm q-mt-md">
                         <q-btn outline color="secondary" icon="place" label="Localização e horário" to="/localizacao" />
                         <q-btn outline color="secondary" icon="call" label="Ligar (61) 3629-6858" type="a"
                             href="tel:+556136296858" />
-                        <q-btn color="positive" icon="whatsapp" label="WhatsApp" type="a" target="_blank" rel="noopener"
+                        <q-btn color="green-14" icon="mdi-whatsapp" label="WhatsApp" type="a" target="_blank" rel="noopener"
                             :href="whatsAssistencia" />
                     </div>
                 </div>
@@ -248,7 +226,7 @@
                             alt="Eletro Nogueira Logo" />
                     </div>
                     <div class="brand-text">
-                        <strong class="text-secondary">Eletro Nogueira</strong>
+                        <strong class="text-secondary">EletroNogueira</strong>
                         <small>Em frente à BR-040 • Valparaíso de Goiás</small>
                     </div>
                 </div>

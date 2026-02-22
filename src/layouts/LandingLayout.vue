@@ -23,15 +23,12 @@
           <q-btn flat class="nav-link q-ml-xs"
             to="/servicos-manutencao">Serviços e Manutenção</q-btn>
           <q-btn flat class="nav-link q-ml-xs"
-            to="/catalogo?min=299.9&max=8299.9&limit=12&page=1&orderBy=updated_desc">Catálogo</q-btn>
+            to="/catalogo?min=299.9&max=8299.9&limit=15&page=1&orderBy=updated_desc">Catálogo</q-btn>
           <q-btn flat class="nav-link q-mx-xs" to="/localizacao">Localização</q-btn>
-          <q-btn unelevated color="positive" class="btn whats q-ml-xs text-bold text-shadow" glossy type="a"
-            target="_blank" rel="noopener"
+          <q-btn  color="green-14" class=" q-ml-xs text-bold text-shadow"  type="a"
+            target="_blank" rel="noopener" icon-right="mdi-whatsapp" label="WhatsApp"
             href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
-            WhatsApp
-            <q-img
-              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
+            </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -42,7 +39,7 @@
         <q-btn flat align="left" class="nav-link" to="/">Início</q-btn>
         <q-btn flat align="left" class="nav-link q-ml-xs" to="/servicos-manutencao">Serviços e Manutenção</q-btn>
         <q-btn flat align="left" class="nav-link"
-          to="/catalogo?min=599.9&max=1299.9&limit=12&page=1&orderBy=updated_desc">Catálogo</q-btn>
+          to="/catalogo?min=599.9&max=1299.9&limit=15&page=1&orderBy=updated_desc">Catálogo</q-btn>
         <q-btn flat align="left" class="nav-link" to="/localizacao">Localização</q-btn>
         <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
           label="(61) 3629-6858" />

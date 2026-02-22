@@ -186,7 +186,7 @@
           <q-select
             color="secondary"
             v-model="limit"
-            :options="[12, 24, 36, 50]"
+            :options="[15, 30, 45, 100]"
             dense
             outlined
             style="width: 100px"
@@ -275,80 +275,80 @@
       />
     </div>
 
-    <div class="w100 q-py-xl"></div>
+    <div class="w100 q-pt-md"></div>
 
-    <!-- Footer (mantido) -->
-    <footer class="footer q-pt-xl">
-      <div class="container footer-grid q-pb-md">
-        <div>
-          <div class="brand">
-            <div class="logo">
-              <q-img
-                style="border-radius: 20%;"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-                alt="Eletro Nogueira Logo"
-              />
-            </div>
-            <div class="brand-text">
-              <strong class="text-secondary">Eletro Nogueira</strong>
-              <small>Em frente à BR-040 • Valparaíso de Goiás</small>
-            </div>
-          </div>
-          <p class="foot-copy q-pt-sm">
-            Soluções em elétrica, hidráulica, automação e agro.<br />Pronta-entrega e
-            suporte técnico.<br /><br />CNPJ • <strong>26.931.014/0001-12.</strong>
-          </p>
-        </div>
-
-        <div class="column">
-          <q-btn
-            unelevated
-            color="positive"
-            class="text-shadow btn whats q-ml-xs"
-            glossy
-            type="a"
-            target="_blank"
-            rel="noopener"
-            href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento."
-          >
-            WhatsApp
+  </q-page>
+  <!-- Footer (mantido) -->
+  <footer class="footer q-pt-sm bg-primary">
+    <div class="container footer-grid q-pb-md">
+      <div>
+        <div class="brand">
+          <div class="logo">
             <q-img
-              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN"
-              style="border-radius:100%; width:30px; height:30px"
+              style="border-radius: 20%;"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
+              alt="Eletro Nogueira Logo"
             />
-          </q-btn>
-
-          <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040" label="(61) 3629-0040" />
-          <q-btn icon-right="phone" color="secondary" class="btn q-mt-sm" href="tel:+556136296858" label="(61) 3629-6858" />
+          </div>
+          <div class="brand-text">
+            <strong class="text-secondary">EletroNogueira</strong>
+            <small>Em frente à BR-040 • Valparaíso de Goiás</small>
+          </div>
         </div>
+        <p class="foot-copy q-pt-sm">
+          Soluções em elétrica, hidráulica, automação e agro.<br />Pronta-entrega e
+          suporte técnico.<br /><br />CNPJ • <strong>26.931.014/0001-12.</strong>
+        </p>
       </div>
 
-      <div class="w100 column justify-center items-center text-center">
-        Siga-nos no Instagram!!
-        <br /><br />
+      <div class="column">
         <q-btn
           unelevated
-          color="warning"
-          class="text-shadow btn whats q-ml-sm"
+          color="positive"
+          class="text-shadow btn whats q-ml-xs"
           glossy
           type="a"
           target="_blank"
           rel="noopener"
-          href="https://www.instagram.com/nogueiravalparaiso/"
+          href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento."
         >
-          @nogueiravalparaiso
+          WhatsApp
           <q-img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-            alt="Logo Instagram"
+            src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
+            alt="EN"
             style="border-radius:100%; width:30px; height:30px"
           />
         </q-btn>
-      </div>
 
-      <div class="copy q-mt-md">© Eletro Nogueira — 26.931.014/0001-12.</div>
-    </footer>
-  </q-page>
+        <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040" label="(61) 3629-0040" />
+        <q-btn icon-right="phone" color="secondary" class="btn q-mt-sm" href="tel:+556136296858" label="(61) 3629-6858" />
+      </div>
+    </div>
+
+    <div class="w100 column justify-center items-center text-center">
+      Siga-nos no Instagram!!
+      <br /><br />
+      <q-btn
+        unelevated
+        color="warning"
+        class="text-shadow btn whats q-ml-sm"
+        glossy
+        type="a"
+        target="_blank"
+        rel="noopener"
+        href="https://www.instagram.com/nogueiravalparaiso/"
+      >
+        @nogueiravalparaiso
+        <q-img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
+          alt="Logo Instagram"
+          style="border-radius:100%; width:30px; height:30px"
+        />
+      </q-btn>
+    </div>
+
+    <div class="copy q-mt-md">© Eletro Nogueira — 26.931.014/0001-12.</div>
+  </footer>
 </template>
 
 <script setup>
@@ -356,7 +356,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
-
+const isHydrating = ref(true)
 const $q = useQuasar()
 const isMobile = $q.screen.lt.md
 const router = useRouter()
@@ -463,6 +463,19 @@ function normalizePrice(which) {
 
 function readFromURL() {
   const qs = new URLSearchParams(window.location.search)
+
+  const marcaFromUrl = (qs.get('marca') || '').trim()
+  if (marcaFromUrl) {
+    const upper = marcaFromUrl.toUpperCase()
+    filters.value.descricaoMarca = upper
+
+    // ✅ preenche o select mesmo sem chamar API
+    selectedBrand.value = { label: upper, marca: upper, value: upper, codMarca: null }
+  } else {
+    filters.value.descricaoMarca = null
+    selectedBrand.value = null
+  }
+
   filters.value.descricaoProduto = qs.get('q') || ''
 
   const m1 = qs.get('min')
@@ -476,22 +489,25 @@ function readFromURL() {
   limit.value = Number(qs.get('limit')) || 12
   page.value = Number(qs.get('page')) || 1
   orderBy.value = qs.get('orderBy') || 'updated_desc'
-
-  const marcaFromUrl = (qs.get('marca') || '').trim()
-  if (marcaFromUrl) {
-    filters.value.descricaoMarca = marcaFromUrl
-  }
 }
 
 function writeToURL() {
+  if (isHydrating.value) return
+
   const qs = new URLSearchParams()
+
   if (filters.value.descricaoProduto) qs.set('q', filters.value.descricaoProduto)
-  if (selectedBrand.value?.marca) qs.set('marca', selectedBrand.value.marca)
+
+  const marca = (selectedBrand.value?.marca || filters.value.descricaoMarca || '').trim()
+  if (marca) qs.set('marca', marca.toUpperCase()) // ✅ garante uppercase
+
   if (filters.value.precoMin != null) qs.set('min', String(filters.value.precoMin))
   if (filters.value.precoMax != null) qs.set('max', String(filters.value.precoMax))
+
   qs.set('limit', String(limit.value))
   qs.set('page', String(page.value))
-  qs.set('orderBy', orderBy.value)
+  qs.set('orderBy', orderBy.value || 'updated_desc')
+
   window.history.replaceState(null, '', `${location.pathname}?${qs.toString()}`)
 }
 
@@ -610,7 +626,7 @@ async function applyFilters(updateURL = true) {
       limit: L,
       offset: offset.value,
       descricaoProduto: (filters.value.descricaoProduto || '').trim() || null,
-      descricaoMarca: selectedBrand.value?.marca ?? null,
+      descricaoMarca: (selectedBrand.value?.marca || filters.value.descricaoMarca || null),
       precoMin: filters.value.precoMin,
       precoMax: filters.value.precoMax,
       orderBy: orderBy.value || 'updated_desc'
@@ -716,8 +732,10 @@ function openDetails(p) {
 }
 
 onMounted(async () => {
+  isHydrating.value = true
   readFromURL()
   await applyFilters(false)
+  isHydrating.value = false
 })
 
 watch([page, limit], () => writeToURL())

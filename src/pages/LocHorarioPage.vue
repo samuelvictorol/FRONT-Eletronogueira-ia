@@ -76,7 +76,7 @@
               alt="Eletro Nogueira Logo" />
           </div>
           <div class="brand-text">
-            <strong class="text-secondary">Eletro Nogueira</strong>
+            <strong class="text-secondary">EletroNogueira</strong>
             <small>Em frente à BR-040 • Valparaíso de Goiás</small>
           </div>
         </div>
