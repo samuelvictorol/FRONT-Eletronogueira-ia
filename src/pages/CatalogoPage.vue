@@ -8,13 +8,17 @@
 
     <!-- HEADER -->
     <div
-      class="header-wrap bg-primary q-pa-md q-mt-xl q-mb-md animate__animated animate__fadeInDown animate__delay-2s animate__slower">
+      class="header-wrap bg-primary q-pa-md q-mt-xl q-mb-md animate__animated animate__fadeInDown animate__delay-2s animate__slower"
+    >
       <div class="row items-center justify-between">
         <div class="col">
           <q-breadcrumbs class="text-secondary">
             <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
-            <q-breadcrumbs-el class="text-bold" label="Catálogo"
-              :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`" />
+            <q-breadcrumbs-el
+              class="text-bold"
+              label="Catálogo"
+              :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`"
+            />
           </q-breadcrumbs>
 
           <div class="row items-center q-mt-md no-wrap">
@@ -28,8 +32,16 @@
     <div class="filters-card bg-white rounded-borders shadow-1 q-pa-md q-mb-md">
       <div class="row q-col-gutter-md items-end">
         <div class="col-12 col-md-4">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoProduto"
-            label="Buscar por produto" dense outlined clearable hint="Ex.: furadeira, bomba, martelo">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            v-model="filters.descricaoProduto"
+            label="Buscar por produto"
+            dense
+            outlined
+            clearable
+            hint="Ex.: furadeira, bomba, martelo"
+          >
             <template #prepend>
               <q-icon name="search" />
             </template>
@@ -37,10 +49,27 @@
         </div>
 
         <div class="col-12 col-md-3">
-          <q-select v-model="selectedBrand" color="secondary" label="Marca" dense outlined clearable use-input
-            fill-input hide-selected input-debounce="350" :options="brandOptions" :loading="brandLoading"
-            option-label="label" option-value="value" hint="Digite para sugerir" behavior="menu" @filter="onBrandFilter"
-            @clear="clearBrand(false)" @update:model-value="onBrandModelChanged">
+          <q-select
+            v-model="selectedBrand"
+            color="secondary"
+            label="Marca"
+            dense
+            outlined
+            clearable
+            use-input
+            fill-input
+            hide-selected
+            input-debounce="350"
+            :options="brandOptions"
+            :loading="brandLoading"
+            option-label="label"
+            option-value="value"
+            hint="Digite para sugerir"
+            behavior="menu"
+            @filter="onBrandFilter"
+            @clear="clearBrand(false)"
+            @update:model-value="onBrandModelChanged"
+          >
             <template #prepend>
               <q-icon name="sell" />
             </template>
@@ -57,9 +86,21 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
-            reverse-fill-mask v-model="priceMinStr" label="Preço mín." dense outlined clearable hint="Ex.: 199,90"
-            @blur="normalizePrice('min')">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            maxlength="9"
+            prefix="R$"
+            mask="####,##"
+            reverse-fill-mask
+            v-model="priceMinStr"
+            label="Preço mín."
+            dense
+            outlined
+            clearable
+            hint="Ex.: 199,90"
+            @blur="normalizePrice('min')"
+          >
             <template #prepend>
               <q-icon name="payments" />
             </template>
@@ -67,9 +108,21 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
-            reverse-fill-mask v-model="priceMaxStr" label="Preço máx." dense outlined clearable hint="Ex.: 1299,00"
-            @blur="normalizePrice('max')">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            maxlength="9"
+            prefix="R$"
+            mask="####,##"
+            reverse-fill-mask
+            v-model="priceMaxStr"
+            label="Preço máx."
+            dense
+            outlined
+            clearable
+            hint="Ex.: 1299,00"
+            @blur="normalizePrice('max')"
+          >
             <template #prepend>
               <q-icon name="price_check" />
             </template>
@@ -79,40 +132,75 @@
         <div class="col-12 q-mb-md">
           <div class="row justify-center q-gutter-sm items-center">
             <q-btn flat color="secondary" label="Limpar" @click="resetFilters" />
-            <q-btn color="secondary" label="Consultar" icon-right="search" :loading="loading"
-              @click="applyFilters(true)" />
+            <q-btn color="secondary" label="Consultar" icon-right="search" :loading="loading" @click="applyFilters(true)" />
           </div>
         </div>
       </div>
+
       <div class="row items-center justify-between q-col-gutter-sm">
         <div class="col-12 col-md-auto">
-          <q-select color="secondary" v-model="orderBy" :options="orderOptions" dense outlined emit-value map-options
-            label="Ordenar" style="min-width: 220px" @update:model-value="onOrderChange" />
+          <q-select
+            color="secondary"
+            v-model="orderBy"
+            :options="orderOptions"
+            dense
+            outlined
+            emit-value
+            map-options
+            label="Ordenar"
+            style="min-width: 220px"
+            @update:model-value="onOrderChange"
+          />
         </div>
+
         <div v-if="hasAnyFilter" class="row q-mt-sm q-gutter-sm items-center">
-          <q-chip v-if="filters.descricaoProduto" color="grey-2" text-color="grey-9" icon="search" removable
-            @remove="filters.descricaoProduto = ''; applyFilters(true)">
+          <q-chip
+            v-if="filters.descricaoProduto"
+            color="grey-2"
+            text-color="grey-9"
+            icon="search"
+            removable
+            @remove="filters.descricaoProduto = ''; applyFilters(true)"
+          >
             {{ filters.descricaoProduto }}
           </q-chip>
 
-          <q-chip v-if="selectedBrand" color="grey-2" text-color="grey-9" icon="sell" removable
-            @remove="clearBrand(true); applyFilters(true)">
+          <q-chip
+            v-if="selectedBrand"
+            color="grey-2"
+            text-color="grey-9"
+            icon="sell"
+            removable
+            @remove="clearBrand(true); applyFilters(true)"
+          >
             {{ selectedBrand.label }}
           </q-chip>
 
-          <q-chip v-if="filters.precoMin != null || filters.precoMax != null" color="grey-2" text-color="grey-9"
-            icon="payments" removable
-            @remove="filters.precoMin = null; filters.precoMax = null; priceMinStr = ''; priceMaxStr = ''; applyFilters(true)">
+          <q-chip
+            v-if="filters.precoMin != null || filters.precoMax != null"
+            color="grey-2"
+            text-color="grey-9"
+            icon="payments"
+            removable
+            @remove="filters.precoMin = null; filters.precoMax = null; priceMinStr = ''; priceMaxStr = ''; applyFilters(true)"
+          >
             {{ (filters.precoMin != null ? money(filters.precoMin) : '—') }} →
             {{ (filters.precoMax != null ? money(filters.precoMax) : '—') }}
           </q-chip>
         </div>
+
         <div class="col-12 col-md-auto">
-          <q-select color="secondary" v-model="limit" :options="[15, 30, 45, 100]" dense outlined
-            label="Itens por página" style="min-width: 180px" @update:model-value="onLimitChange" />
+          <q-select
+            color="secondary"
+            v-model="limit"
+            :options="[10, 15, 30, 45, 100]"
+            dense
+            outlined
+            label="Itens por página"
+            style="min-width: 180px"
+            @update:model-value="onLimitChange"
+          />
         </div>
-
-
       </div>
     </div>
 
@@ -130,8 +218,15 @@
       </template>
 
       <template v-else>
-        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="bg-secondary text-white relative" flat bordered
-          @click="openDetails(p)" style="cursor: pointer;">
+        <q-card
+          v-for="p in items"
+          :key="p.codProduto ?? p.id ?? p._id"
+          class="bg-secondary text-white relative product-card"
+          flat
+          bordered
+          @click="openDetails(p)"
+          style="cursor: pointer;"
+        >
           <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="secondary" fit="contain" class="product-img">
             <template #error>
               <div class="absolute-full flex flex-center bg-grey-2 text-grey-8">
@@ -152,17 +247,21 @@
 
           <q-separator />
 
-          <div class="w100 row no-wrap justify-between items-center  q-px-sm q-pt-sm q-pb-md">
-
+          <div class="w100 row no-wrap justify-between items-center q-px-sm q-pt-sm q-pb-md">
             <div class="w100 text-subtitle2 text-weight-medium">
               {{ p.descricao }}
             </div>
-            <div class=" text-weight-bold text-white q-px-sm q-py-sm rounded-borders absolute-top-left bg-green-14" style="font-size: 1.1rem;">
+
+            <div
+              class="text-weight-bold text-white q-px-sm q-py-sm rounded-borders absolute-top-left bg-green-14"
+              style="font-size: 1rem;"
+            >
               {{ money(p.precoEfetivo ?? p.preco) }}
             </div>
           </div>
-          <q-card-actions class="q-pa-sm absolute-top-right">
-            <q-btn color="secondary" unelevated size="sm" icon-right="visibility" @click="openDetails(p)" />
+
+          <q-card-actions class="q-pa-sm absolute-top-right" style="top: 130px; opacity: .6;">
+            <q-btn color="secondary" unelevated size="sm" icon-right="visibility" @click.stop="openDetails(p)" />
           </q-card-actions>
         </q-card>
       </template>
@@ -173,10 +272,59 @@
       <div class="text-grey-7">
         <span v-if="!loading">{{ total }} produto(s)</span>
         <span v-else>Carregando…</span>
+
+        <span v-if="!loading && total > 0" class="q-ml-sm">
+          • Página {{ page }} de {{ maxPage }}
+        </span>
       </div>
 
-      <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links
-        dense @update:model-value="onPageChange" />
+      <div class="row items-center q-gutter-xs">
+        <q-btn
+          dense
+          flat
+          color="secondary"
+          icon="first_page"
+          :disable="isFirstPage || loading"
+          @click="goFirst"
+        />
+        <q-btn
+          dense
+          flat
+          color="secondary"
+          icon="chevron_left"
+          :disable="isFirstPage || loading"
+          @click="goPrev"
+        />
+
+        <q-pagination
+          color="secondary"
+          v-model="page"
+          :max="maxPage"
+          :max-pages="6"
+          boundary-numbers
+          direction-links
+          dense
+          :disable="loading"
+          @update:model-value="onPageChange"
+        />
+
+        <q-btn
+          dense
+          flat
+          color="secondary"
+          icon="chevron_right"
+          :disable="isLastPage || loading"
+          @click="goNext"
+        />
+        <q-btn
+          dense
+          flat
+          color="secondary"
+          icon="last_page"
+          :disable="isLastPage || loading"
+          @click="goLast"
+        />
+      </div>
     </div>
 
     <!-- “floating actions” no mobile (opcional) -->
@@ -191,6 +339,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
+
 const isHydrating = ref(true)
 const $q = useQuasar()
 const isMobile = $q.screen.lt.md
@@ -200,8 +349,14 @@ const loading = ref(false)
 const items = ref([])
 const total = ref(0)
 
+// paginação
 const page = ref(1)
-const limit = ref(12)
+const limit = ref(10)
+
+// backend já devolve isso (mas eu recalculo também pra garantir)
+const apiOffset = ref(0)
+const apiIsLastPage = ref(false)
+
 const orderBy = ref('updated_desc')
 
 const filters = ref({
@@ -231,14 +386,12 @@ function safeUrl(url) {
   if (!url) return null
   const s = String(url).trim()
   if (!s) return null
-  // evita quebrar URL com espaços (teu S3 vem com "Produto 6762 3851.jpg")
   return s.replace(/ /g, '%20')
 }
 
 function resolveImage(p) {
   if (!p) return fallbackImage
 
-  // prioriza IMG_PATH (é o que tua API realmente manda)
   const url =
     p.imgPath ||
     p.IMG_PATH ||
@@ -251,17 +404,37 @@ function resolveImage(p) {
   return safeUrl(url) || fallbackImage
 }
 
-const maxPage = computed(() =>
-  Math.max(1, Math.ceil((Number(total.value) || 0) / (Number(limit.value) || 12)))
-)
-const offset = computed(() => (page.value - 1) * limit.value)
+const maxPage = computed(() => {
+  const t = Number(total.value) || 0
+  const L = Number(limit.value) || 10
+  return Math.max(1, Math.ceil(t / L))
+})
+
+// offset do request (sempre derivado de page/limit)
+const offset = computed(() => {
+  const L = Number(limit.value) || 10
+  return Math.max(0, (Number(page.value) - 1) * L)
+})
+
+// flags calculados (e também respeitam o retorno do backend)
+const isFirstPage = computed(() => Number(page.value) <= 1 || offset.value <= 0)
+
+const isLastPage = computed(() => {
+  // prioridade: backend
+  if (typeof apiIsLastPage.value === 'boolean') return apiIsLastPage.value
+  // fallback: quando tiver total
+  return Number(page.value) >= maxPage.value
+})
+
+const nextOffset = computed(() => offset.value + (Number(limit.value) || 10))
+const prevOffset = computed(() => Math.max(0, offset.value - (Number(limit.value) || 10)))
 
 const hasAnyFilter = computed(() => {
   return Boolean(
     (filters.value.descricaoProduto || '').trim() ||
-    selectedBrand.value ||
-    filters.value.precoMin != null ||
-    filters.value.precoMax != null
+      selectedBrand.value ||
+      filters.value.precoMin != null ||
+      filters.value.precoMax != null
   )
 })
 
@@ -271,6 +444,7 @@ function brToNumber(s) {
   const n = Number.parseFloat(t)
   return Number.isNaN(n) ? null : n
 }
+
 function numberToBR(n) {
   if (n == null) return ''
   try {
@@ -279,6 +453,7 @@ function numberToBR(n) {
     return String(n)
   }
 }
+
 function money(n) {
   if (n == null) return '—'
   try {
@@ -300,6 +475,7 @@ function normalizePrice(which) {
   }
 }
 
+/** URL sync */
 function readFromURL() {
   const qs = new URLSearchParams(window.location.search)
 
@@ -307,8 +483,6 @@ function readFromURL() {
   if (marcaFromUrl) {
     const upper = marcaFromUrl.toUpperCase()
     filters.value.descricaoMarca = upper
-
-    // ✅ preenche o select mesmo sem chamar API
     selectedBrand.value = { label: upper, marca: upper, value: upper, codMarca: null }
   } else {
     filters.value.descricaoMarca = null
@@ -325,7 +499,7 @@ function readFromURL() {
   if (filters.value.precoMin != null) priceMinStr.value = numberToBR(filters.value.precoMin)
   if (filters.value.precoMax != null) priceMaxStr.value = numberToBR(filters.value.precoMax)
 
-  limit.value = Number(qs.get('limit')) || 12
+  limit.value = Number(qs.get('limit')) || 10
   page.value = Number(qs.get('page')) || 1
   orderBy.value = qs.get('orderBy') || 'updated_desc'
 }
@@ -338,7 +512,7 @@ function writeToURL() {
   if (filters.value.descricaoProduto) qs.set('q', filters.value.descricaoProduto)
 
   const marca = (selectedBrand.value?.marca || filters.value.descricaoMarca || '').trim()
-  if (marca) qs.set('marca', marca.toUpperCase()) // ✅ garante uppercase
+  if (marca) qs.set('marca', marca.toUpperCase())
 
   if (filters.value.precoMin != null) qs.set('min', String(filters.value.precoMin))
   if (filters.value.precoMax != null) qs.set('max', String(filters.value.precoMax))
@@ -350,6 +524,7 @@ function writeToURL() {
   window.history.replaceState(null, '', `${location.pathname}?${qs.toString()}`)
 }
 
+/** Marcas (autocomplete) */
 const brandLoading = ref(false)
 const brandOptions = ref([])
 const brandInput = ref('')
@@ -368,15 +543,12 @@ function normalizeBrandsResponse(data) {
 }
 
 let brandReqSeq = 0
-
 function onBrandFilter(val, update) {
   const term = (val || '').trim()
   brandInput.value = term
 
   if (term.length < 2) {
-    update(() => {
-      brandOptions.value = []
-    })
+    update(() => (brandOptions.value = []))
     return
   }
 
@@ -384,19 +556,15 @@ function onBrandFilter(val, update) {
   brandLoading.value = true
 
   api
-    .get('/marcas/', { params: { limit: 4, offset: 0, descricaoMarca: term } })
+    .get('/marcas/', { params: { limit: 6, offset: 0, descricaoMarca: term } })
     .then(({ data }) => {
       if (mySeq !== brandReqSeq) return
-      const opts = normalizeBrandsResponse(data).slice(0, 4)
-      update(() => {
-        brandOptions.value = opts
-      })
+      const opts = normalizeBrandsResponse(data).slice(0, 6)
+      update(() => (brandOptions.value = opts))
     })
     .catch(() => {
       if (mySeq !== brandReqSeq) return
-      update(() => {
-        brandOptions.value = []
-      })
+      update(() => (brandOptions.value = []))
     })
     .finally(() => {
       if (mySeq !== brandReqSeq) return
@@ -425,16 +593,39 @@ function clearBrand(runSearch = false) {
   }
 }
 
+/** eventos */
 function onOrderChange() {
   page.value = 1
   applyFilters(true)
 }
+
 function onLimitChange() {
   page.value = 1
   applyFilters(true)
 }
+
 function onPageChange() {
   applyFilters(false)
+}
+
+function goFirst() {
+  if (isFirstPage.value) return
+  page.value = 1
+}
+
+function goPrev() {
+  if (isFirstPage.value) return
+  page.value = Math.max(1, Number(page.value) - 1)
+}
+
+function goNext() {
+  if (isLastPage.value) return
+  page.value = Math.min(maxPage.value, Number(page.value) + 1)
+}
+
+function goLast() {
+  if (isLastPage.value) return
+  page.value = maxPage.value
 }
 
 function resetFilters() {
@@ -454,13 +645,54 @@ function pickTotalFromResponse(data) {
   return Number.isFinite(found) ? found : null
 }
 
+function normalizeProdutos(data) {
+  const raw =
+    (Array.isArray(data?.data) && data.data) ||
+    (Array.isArray(data?.items) && data.items) ||
+    (Array.isArray(data?.results) && data.results) ||
+    (Array.isArray(data) ? data : [])
+
+  return raw.map((p) => {
+    const imgPath = p.IMG_PATH ?? p.imgPath ?? null
+
+    const preco = p.PRECO ?? p.preco ?? null
+    const promo = p.PRECOPROMOCAO ?? p.precoPromocao ?? 0
+    const efetivo = p.PRECO_EFETIVO ?? p.precoEfetivo ?? (Number(promo) > 0 ? promo : preco)
+
+    return {
+      id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
+      codProduto: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
+      descricao: p.DESCRICAO ?? p.descricao ?? '',
+      codOriginal: p.CODORIGINAL ?? p.codOriginal ?? null,
+      marca: p.MARCA ?? p.marca ?? '',
+      preco: preco != null ? Number(preco) : null,
+      precoPromocao: promo != null ? Number(promo) : null,
+      precoEfetivo: efetivo != null ? Number(efetivo) : null,
+
+      imgPath: safeUrl(imgPath),
+      imagemUrl: safeUrl(imgPath),
+
+      dataAtualizacao: p.DATAATUALIZACAO ?? p.dataAtualizacao ?? null,
+      hasImage: p.HAS_IMAGE ?? p.hasImage ?? null,
+      imgId: p.IMG ?? p.img ?? null
+    }
+  })
+}
+
+/**
+ * ✅ Busca paginada integrada ao backend:
+ * - envia limit/offset
+ * - usa total/limit/offset do response
+ * - calcula is_first_page e is_last_page (com prioridade pro backend)
+ * - calcula next page automaticamente via page/limit
+ */
 async function applyFilters(updateURL = true) {
   loading.value = true
   try {
     normalizePrice('min')
     normalizePrice('max')
 
-    const L = Number(limit.value) || 12
+    const L = Number(limit.value) || 10
     const params = {
       limit: L,
       offset: offset.value,
@@ -473,50 +705,25 @@ async function applyFilters(updateURL = true) {
 
     const { data } = await api.get('/produtos/', { params })
 
-    const raw =
-      (Array.isArray(data?.data) && data.data) ||
-      (Array.isArray(data?.items) && data.items) ||
-      (Array.isArray(data?.results) && data.results) ||
-      (Array.isArray(data) ? data : [])
+    items.value = normalizeProdutos(data)
 
-    items.value = raw.map((p) => {
-      // ✅ teu backend manda IMG_PATH + HAS_IMAGE + IMG (id) — então a URL real é IMG_PATH
-      const imgPath = p.IMG_PATH ?? p.imgPath ?? null
-
-      const preco = p.PRECO ?? p.preco ?? null
-      const promo = p.PRECOPROMOCAO ?? p.precoPromocao ?? 0
-      const efetivo = p.PRECO_EFETIVO ?? p.precoEfetivo ?? (Number(promo) > 0 ? promo : preco)
-
-      return {
-        id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
-        codProduto: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
-        descricao: p.DESCRICAO ?? p.descricao ?? '',
-        codOriginal: p.CODORIGINAL ?? p.codOriginal ?? null,
-        marca: p.MARCA ?? p.marca ?? '',
-        preco: preco != null ? Number(preco) : null,
-        precoPromocao: promo != null ? Number(promo) : null,
-        precoEfetivo: efetivo != null ? Number(efetivo) : null,
-
-        // ✅ aqui é o ponto principal
-        imgPath: safeUrl(imgPath),
-        imagemUrl: safeUrl(imgPath), // mantém compatibilidade com teu openDetails()
-
-        dataAtualizacao: p.DATAATUALIZACAO ?? p.dataAtualizacao ?? null,
-
-        // se quiser, guarda também os flags
-        hasImage: p.HAS_IMAGE ?? p.hasImage ?? null,
-        imgId: p.IMG ?? p.img ?? null
-      }
-    })
+    // paginação do backend
+    apiOffset.value = Number(data?.offset ?? offset.value) || 0
 
     const apiTotal = pickTotalFromResponse(data)
-    if (apiTotal != null) {
-      total.value = apiTotal
-      const newMax = Math.max(1, Math.ceil(apiTotal / L))
-      if (page.value > newMax) page.value = newMax
+    if (apiTotal != null) total.value = apiTotal
+    else total.value = (page.value - 1) * L + items.value.length
+
+    // prioridade: is_last_page do backend; fallback: cálculo por total
+    if (typeof data?.is_last_page === 'boolean') {
+      apiIsLastPage.value = data.is_last_page
     } else {
-      total.value = (page.value - 1) * L + items.value.length
+      apiIsLastPage.value = nextOffset.value >= (Number(total.value) || 0)
     }
+
+    // se o usuário caiu numa página acima do máximo, corrige
+    const newMax = Math.max(1, Math.ceil((Number(total.value) || 0) / L))
+    if (page.value > newMax) page.value = newMax
 
     if (updateURL) writeToURL()
   } catch (err) {
@@ -524,11 +731,13 @@ async function applyFilters(updateURL = true) {
     $q.notify({ type: 'negative', message: 'Falha ao buscar produtos.' })
     items.value = []
     total.value = 0
+    apiIsLastPage.value = true
   } finally {
     loading.value = false
   }
 }
 
+/** detalhe */
 const showDetails = ref(false)
 const detailItem = ref(null)
 
@@ -557,7 +766,6 @@ function openDetails(p) {
     preco: p.preco,
     precoPromocao: p.precoPromocao,
     precoEfetivo: p.precoEfetivo,
-    // ✅ garante que vai com a URL correta pro detalhe
     imagemUrl: p.imagemUrl || p.imgPath || null,
     updatedAt: p.dataAtualizacao ?? null
   }
@@ -577,8 +785,18 @@ onMounted(async () => {
   isHydrating.value = false
 })
 
-watch([page, limit], () => writeToURL())
+/**
+ * ✅ controla URL e busca:
+ * - page/limit mudaram => refaz consulta
+ * - filtros já chamam applyFilters(true) diretamente
+ */
+watch([page, limit], async () => {
+  if (isHydrating.value) return
+  writeToURL()
+  await applyFilters(false)
+})
 </script>
+
 <style scoped>
 .catalog-page {
   min-height: 100vh;
@@ -587,7 +805,7 @@ watch([page, limit], () => writeToURL())
 .header-wrap {
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
 .filters-card,
@@ -634,12 +852,12 @@ watch([page, limit], () => writeToURL())
 .product-card {
   border-radius: 16px;
   overflow: hidden;
-  transition: transform .12s ease, box-shadow .12s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .product-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, .10);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
 }
 
 .card-skel {
@@ -656,13 +874,6 @@ watch([page, limit], () => writeToURL())
 .product-img :deep(.q-img__image) {
   object-fit: contain;
   object-position: center;
-}
-
-.ellipsis-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 /* ações flutuantes no mobile */
