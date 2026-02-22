@@ -130,7 +130,7 @@
       </template>
 
       <template v-else>
-        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="bg-secondary text-white" flat bordered
+        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="bg-secondary text-white relative" flat bordered
           @click="openDetails(p)" style="cursor: pointer;">
           <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="secondary" fit="contain" class="product-img">
             <template #error>
@@ -157,7 +157,7 @@
             <div class="w100 text-subtitle2 text-weight-medium">
               {{ p.descricao }}
             </div>
-            <div v-if="p.precoPromocao && p.precoPromocao > 0" >
+            <div v-if="p.precoPromocao && p.precoPromocao > 0" class="absolute-top-right">
 
               <div class="text-caption text-grey-6">
                 <s>{{ money(p.preco) }}</s>
@@ -166,7 +166,7 @@
                 {{ money(p.precoPromocao) }}
               </div>
             </div>
-            <div v-else class=" text-weight-bold text-green-14 q-py-sm" style="font-size: 1.2rem;">
+            <div v-else class=" text-weight-bold text-white q-px-sm q-py-sm absolute-top-right bg-green-14" style="font-size: 1.2rem;">
               {{ money(p.precoEfetivo ?? p.preco) }}
             </div>
           </div>
