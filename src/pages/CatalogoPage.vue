@@ -130,7 +130,8 @@
       </template>
 
       <template v-else>
-        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="product-card bg-white" flat bordered>
+        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="bg-secondary text-white" flat bordered
+          @click="openDetails(p)" style="cursor: pointer;">
           <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="secondary" fit="contain" class="product-img">
             <template #error>
               <div class="absolute-full flex flex-center bg-grey-2 text-grey-8">
@@ -145,33 +146,32 @@
                 <q-badge v-if="p.marca" color="primary" text-color="secondary" class="text-bold q-mb-xs">
                   {{ p.marca }}
                 </q-badge>
-
-                <div class="text-subtitle2 text-weight-medium ellipsis-2">
-                  {{ p.descricao }}
-                </div>
-              </div>
-
-              <div class="col-auto text-right">
-                <div v-if="p.precoPromocao && p.precoPromocao > 0">
-                  <div class="text-caption text-grey-6">
-                    <s>{{ money(p.preco) }}</s>
-                  </div>
-                  <div class="text-subtitle1 text-positive text-weight-bold">
-                    {{ money(p.precoPromocao) }}
-                  </div>
-                </div>
-                <div v-else class="text-subtitle1 text-weight-bold text-grey-9">
-                  {{ money(p.precoEfetivo ?? p.preco) }}
-                </div>
               </div>
             </div>
           </q-card-section>
 
           <q-separator />
 
-          <q-card-actions class="q-pa-sm">
-            <q-btn class="w100" color="secondary" unelevated icon-right="visibility" label="Detalhes"
-              @click="openDetails(p)" />
+          <div class="w100 row no-wrap justify-between items-center q-gutter-x-xs q-px-sm q-pt-sm q-pb-md">
+
+            <div class="w100 text-subtitle2 text-weight-medium">
+              {{ p.descricao }}
+            </div>
+            <div v-if="p.precoPromocao && p.precoPromocao > 0" >
+
+              <div class="text-caption text-grey-6">
+                <s>{{ money(p.preco) }}</s>
+              </div>
+              <div class="text-subtitle1 text-positive text-weight-bold">
+                {{ money(p.precoPromocao) }}
+              </div>
+            </div>
+            <div v-else class=" text-weight-bold text-green-14 q-py-sm" style="font-size: 1.2rem;">
+              {{ money(p.precoEfetivo ?? p.preco) }}
+            </div>
+          </div>
+          <q-card-actions class="q-pa-sm absolute-top">
+            <q-btn color="secondary" unelevated icon-right="visibility" @click="openDetails(p)" />
           </q-card-actions>
         </q-card>
       </template>
