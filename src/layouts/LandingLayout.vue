@@ -34,28 +34,24 @@
     </q-header>
 
     <!-- DRAWER MOBILE -->
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay bordered class=" relative" :width="290">
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay class="bg-primary relative" :width="290">
       <div class="q-pa-md column q-gutter-sm">
-        <q-btn flat align="left" class="nav-link" to="/">Início</q-btn>
-        <q-btn flat align="left" class="nav-link q-ml-xs" to="/servicos-manutencao">Serviços e Manutenção</q-btn>
-        <q-btn flat align="left" class="nav-link"
+        <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/">Início</q-btn>
+        <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/servicos-manutencao">Serviços e Manutenção</q-btn>
+        <q-btn flat align="left" class="bg-secondary text-white nav-link"
           to="/catalogo?min=599.9&max=1299.9&limit=15&page=1&orderBy=updated_desc">Catálogo</q-btn>
-        <q-btn flat align="left" class="nav-link" to="/localizacao">Localização</q-btn>
-        <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
-          label="(61) 3629-6858" />
-        <q-btn unelevated color="positive" class="text-bold text-shadow btn whats" glossy type="a" target="_blank"
+        <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/localizacao">Localização</q-btn>
+        <!-- <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
+          label="(61) 3629-6858" /> -->
+        <!-- <q-btn unelevated color="positive" class="text-bold text-shadow btn whats" glossy type="a" target="_blank"
           rel="noopener"
           href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20realizar%20um%20or%C3%A7amento.">
           WhatsApp
           <q-img
             src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-            alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
-        <q-btn unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
-          rel="noopener" href="https://www.instagram.com/nogueiravalparaiso/">
-          @nogueiravalparaiso
-          <q-img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-            alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" /></q-btn>
+            alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn> -->
+        <q-btn unelevated class="bg-primary text-secondary rounded-borders" icon="mdi-instagram" type="a" target="_blank" style="position:absolute; bottom:85px;"
+          rel="noopener" href="https://www.instagram.com/nogueiravalparaiso/" label="@nogueiravalparaiso"></q-btn>
       </div>
       <div class="absolute-bottom w100 row justify-center q-pb-md">
         <div class="brand">
@@ -64,7 +60,7 @@
               alt="EN" style="border-radius:100%; width:44px; height:44px" />
           </div>
           <div class="brand-text">
-            <strong class="text-secondary">ELETRO NOGUEIRA</strong>
+            <strong class="text-secondary"><strong class="text-negative">ELETRO</strong><strong>NOGUEIRA</strong></strong>
             <small>Valparaíso de Goiás • BR-040</small>
             <small class="text-negative text-bold">26.931.014/0001-12</small>
           </div>
@@ -128,6 +124,12 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.nav-link {
+  color: #012060;
+  font-weight: 600;
+  position: relative;
+}
+
 :root {
   --white: #ffffff;
   --yellow: #FFD200;

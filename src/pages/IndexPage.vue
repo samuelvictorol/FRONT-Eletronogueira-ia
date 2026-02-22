@@ -86,7 +86,9 @@
           <div class="q-mt-md">
             <!--  MOBILE: carrossel swipe -->
             <q-carousel v-if="isMobile" v-model="destaqueSlide" swipeable animated arrows control-color="primary"
-              padding height="100%" class="rounded-borders bg-transparent">
+              padding height="100%" class="rounded-borders bg-transparent" :autoplay="autoPlay" infinite
+              @mousedown="autoPlay = false" @touchstart="autoPlay = false" @mouseup="resumeAutoplay"
+              @touchend="resumeAutoplay" @mouseleave="resumeAutoplay">
               <q-carousel-slide v-for="(group, index) in destaqueChunks" :key="index" :name="index"
                 class="row justify-center q-gutter-sm items-start">
                 <q-card v-for="(p, i) in group" :key="p.name + i" class="product-card bg-blur glass cursor-pointer"
@@ -163,7 +165,7 @@
                     </div>
                   </div>
 
-                  <q-avatar v-if="!isMobile" rounded size="48px" class="svc-icon bg-secondary text-primary">
+                  <q-avatar v-if="!isMobile" rounded size="48px" class="svc-icon bg-secondary text-white">
                     <q-icon name="handyman" size="24px" />
                   </q-avatar>
                 </div>
@@ -231,7 +233,7 @@
                   </div>
                 </div>
 
-                <q-btn class="q-mt-md w100 svc-cta" unelevated color="secondary" text-color="primary" icon="chat"
+                <q-btn class="q-mt-md w100 svc-cta" unelevated color="secondary" text-color="white" icon="chat"
                   label="Pedir orçamento no WhatsApp" type="a" target="_blank" rel="noopener"
                   href="https://wa.me/556136296858?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Gostaria%20de%20um%20or%C3%A7amento%20dos%20servi%C3%A7os." />
               </q-card-section>
@@ -250,7 +252,7 @@
                     </div>
                   </div>
 
-                  <q-avatar v-if="!isMobile" rounded size="48px" class="svc-icon bg-secondary text-primary">
+                  <q-avatar v-if="!isMobile" rounded size="48px" class="svc-icon bg-secondary text-white">
                     <q-icon name="build_circle" size="24px" />
                   </q-avatar>
                 </div>
@@ -318,8 +320,8 @@
                   </div>
                 </div>
 
-                <q-btn class="q-mt-md w100 svc-cta" unelevated color="secondary" text-color="primary"
-                  icon="support_agent" label="Solicitar assistência técnica" type="a" target="_blank" rel="noopener"
+                <q-btn class="q-mt-md w100 svc-cta" unelevated color="secondary" text-color="white" icon="support_agent"
+                  label="Solicitar assistência técnica" type="a" target="_blank" rel="noopener"
                   href="https://wa.me/556136296858?text=Ol%C3%A1%20Eletro%20Nogueira%21%20Preciso%20de%20assist%C3%AAncia%20t%C3%A9cnica." />
               </q-card-section>
             </q-card>
@@ -445,17 +447,19 @@
         <!-- Mapa -->
         <q-card class="map-card bg-primary q-mt-lg">
           <div class="map-wrap">
-            <iframe title="Mapa" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-iframe w100" height="250px"
+            <iframe title="Mapa" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-iframe w100"
+              height="250px"
               src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed" />
-            <div class="map-overlay row q-py-md w100 justify-center items-center bg-secondary text-primary"> 
+            <div class="map-overlay row q-py-md w100 justify-center items-center bg-secondary text-primary">
               <div class="row items-center q-gutter-sm">
                 <div class="text-primary text-center q-px-xs">
-                <q-icon name="pin_drop" class="q-pb-xs text-primary" />
+                  <q-icon name="pin_drop" class="q-pb-xs text-primary" />
                   Eletro Nogueira — Av. Marginal, QD, Lote 01 • Esplanada I • Valparaíso de Goiás
                 </div>
               </div>
-              <q-btn dense unelevated color="primary" text-color="secondary" icon="directions" label="Ver no Maps" class="q-mt-md text-bold w100 q-mx-lg"
-              type="a" target="_blank" rel="noopener" href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" />
+              <q-btn dense unelevated color="primary" text-color="secondary" icon="directions" label="Ver no Maps"
+                class="q-mt-md text-bold w100 q-mx-lg" type="a" target="_blank" rel="noopener"
+                href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" />
             </div>
           </div>
         </q-card>
@@ -517,7 +521,11 @@ const $q = useQuasar()
 const leftDrawerOpen = ref(false)
 const year = new Date().getFullYear()
 const destaqueSlide = ref(0)
+const autoPlay = ref(3500)
 
+function resumeAutoplay () {
+  setTimeout(() => (autoPlay.value = 3500), 1200)
+}
 const destaqueChunks = computed(() => {
   const chunkSize = 2
   const arr = []
@@ -553,12 +561,12 @@ const brandsRow2 = [
 ]
 
 const destaqueProducts = [
-  { name: 'FURADEIRA DE IMPACTO 1/2" 13MM', src: 'https://eletronogueira-produtos.s3.us-east-2.amazonaws.com/Produto%2014907%207297.jpg', price: 320.00, brand: 'WESCO' },
   { name: 'FURADEIRA MARTELETE SDS PLUS', src: 'https://eletronogueira-produtos.s3.us-east-2.amazonaws.com/Produto%2020880%2013743.jpg', price: 1240.00, brand: 'MAKITA' },
   { name: 'ASPIRADOR NT 585 15L 1300W', src: 'https://eletronogueira-produtos.s3.us-east-2.amazonaws.com/Produto%2016121%208972.jpg', price: 549.00, brand: 'KARCHER' },
   { name: 'LAVADORA ALTA PRESSAO K3.30 MOD', src: 'https://eletronogueira-produtos.s3.us-east-2.amazonaws.com/Produto%2016233%209096.jpg', price: 1450.9, brand: 'KARCHER' },
   { name: 'FITA VEDA ROSCA', src: '	https://eletronogueira-produtos.s3.us-east-2.amazonaws.com/Produto%206761%203873.jpg', price: 25.9, brand: 'TIGRE' },
-  { name: 'COMPRESSOR PARAFUSO PLATINUM ', src: 'https://eletronogueira-produtos.s3.us-east-2.amazonaws.com/Produto%2014859%207230.jpg', price: 622000.00, brand: 'TECHTO' }
+  { name: 'DISCO SERRA 7 1/4"', src: 'https://eletronogueira-produtos.s3.us-east-2.amazonaws.com/Produto%2020812%2013678.jpg', price: 70.00, brand: 'STANLEY' },
+  { name: 'FURADEIRA DE IMPACTO 1/2" 13MM', src: 'https://eletronogueira-produtos.s3.us-east-2.amazonaws.com/Produto%2014907%207297.jpg', price: 320.00, brand: 'WESCO' },
 ]
 
 const schedule = {

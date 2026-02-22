@@ -1,64 +1,46 @@
 <template>
-  <q-page class="q-px-md q-mt-xl bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : ''">
-    <!-- Loading overlay for product and brand requests -->
+  <q-page class="catalog-page bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : 'q-pb-lg q-px-md'">
+    <!-- Loading overlay -->
     <q-inner-loading :showing="loading || brandLoading">
       <q-spinner-gears size="42px" color="secondary" />
       <div class="q-mt-sm text-grey-7">Carregando…</div>
     </q-inner-loading>
 
-    <div class="animate__animated animate__fadeInDown animate__delay-3s animate__slower q-my-md bg-primary q-pa-md header-bar">
-      <q-breadcrumbs class="text-secondary">
-        <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
-        <q-breadcrumbs-el
-          class="text-bold"
-          label="Catálogo"
-          :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`"
-        />
-      </q-breadcrumbs>
+    <!-- HEADER -->
+    <div
+      class="header-wrap bg-primary q-pa-md q-mt-xl q-mb-md animate__animated animate__fadeInDown animate__delay-2s animate__slower">
+      <div class="row items-center justify-between">
+        <div class="col">
+          <q-breadcrumbs class="text-secondary">
+            <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
+            <q-breadcrumbs-el class="text-bold" label="Catálogo"
+              :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`" />
+          </q-breadcrumbs>
+
+          <div class="row items-center q-mt-md no-wrap">
+            <div class="text-h5 text-secondary text-weight-bolder">Catálogo</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Filters -->
-    <div class="q-pa-md bg-white rounded-borders q-mb-md shadow-1">
+    <!-- FILTERS PANEL -->
+    <div class="filters-card bg-white rounded-borders shadow-1 q-pa-md q-mb-md">
       <div class="row q-col-gutter-md items-end">
         <div class="col-12 col-md-4">
-          <q-input
-            @keyup.enter="applyFilters(true)"
-            color="secondary"
-            v-model="filters.descricaoProduto"
-            label="Buscar por produto"
-            dense
-            outlined
-            clearable
-            hint="Furadeira, Bomba, Martelo"
-          >
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoProduto"
+            label="Buscar por produto" dense outlined clearable hint="Ex.: furadeira, bomba, martelo">
             <template #prepend>
               <q-icon name="search" />
             </template>
           </q-input>
         </div>
 
-        <!-- Brand: remote suggestions with debounce -->
         <div class="col-12 col-md-3">
-          <q-select
-            v-model="selectedBrand"
-            color="secondary"
-            label="Marca"
-            dense
-            outlined
-            clearable
-            use-input
-            fill-input
-            hide-selected
-            input-debounce="350"
-            :options="brandOptions"
-            :loading="brandLoading"
-            option-label="label"
-            option-value="value"
-            hint="Selecione uma marca"
-            @filter="onBrandFilter"
-            @clear="clearBrand(false)"
-            @update:model-value="onBrandModelChanged"
-          >
+          <q-select v-model="selectedBrand" color="secondary" label="Marca" dense outlined clearable use-input
+            fill-input hide-selected input-debounce="350" :options="brandOptions" :loading="brandLoading"
+            option-label="label" option-value="value" hint="Digite para sugerir" behavior="menu" @filter="onBrandFilter"
+            @clear="clearBrand(false)" @update:model-value="onBrandModelChanged">
             <template #prepend>
               <q-icon name="sell" />
             </template>
@@ -66,7 +48,7 @@
             <template #no-option>
               <q-item>
                 <q-item-section class="text-grey-7">
-                  <span v-if="(brandInput || '').length < 2">Digite para buscar.</span>
+                  <span v-if="(brandInput || '').length < 2">Digite pelo menos 2 letras.</span>
                   <span v-else>Nenhuma marca encontrada.</span>
                 </q-item-section>
               </q-item>
@@ -75,21 +57,9 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input
-            @keyup.enter="applyFilters(true)"
-            color="secondary"
-            maxlength="9"
-            prefix="R$"
-            mask="####,##"
-            reverse-fill-mask
-            v-model="priceMinStr"
-            label="Preço mín."
-            dense
-            outlined
-            clearable
-            hint="Ex.: 199,90"
-            @blur="normalizePrice('min')"
-          >
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
+            reverse-fill-mask v-model="priceMinStr" label="Preço mín." dense outlined clearable hint="Ex.: 199,90"
+            @blur="normalizePrice('min')">
             <template #prepend>
               <q-icon name="payments" />
             </template>
@@ -97,107 +67,56 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input
-            @keyup.enter="applyFilters(true)"
-            color="secondary"
-            maxlength="9"
-            prefix="R$"
-            mask="####,##"
-            reverse-fill-mask
-            v-model="priceMaxStr"
-            label="Preço máx."
-            dense
-            outlined
-            clearable
-            hint="Ex.: 1299,00"
-            @blur="normalizePrice('max')"
-          >
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
+            reverse-fill-mask v-model="priceMaxStr" label="Preço máx." dense outlined clearable hint="Ex.: 1299,00"
+            @blur="normalizePrice('max')">
             <template #prepend>
               <q-icon name="price_check" />
             </template>
           </q-input>
         </div>
 
-        <div class="col-12">
-          <div class="row justify-center q-gutter-x-md items-center no-wrap">
+        <div class="col-12 q-mb-md">
+          <div class="row justify-center q-gutter-sm items-center">
             <q-btn flat color="secondary" label="Limpar" @click="resetFilters" />
-            <q-btn
-              color="secondary"
-              label="Consultar"
-              icon-right="search"
-              :loading="loading"
-              @click="applyFilters(true)"
-            />
+            <q-btn color="secondary" label="Consultar" icon-right="search" :loading="loading"
+              @click="applyFilters(true)" />
           </div>
         </div>
       </div>
-
-      <div v-if="hasAnyFilter" class="row q-mt-sm q-gutter-sm items-center">
-        <q-chip
-          v-if="filters.descricaoProduto"
-          color="grey-2"
-          text-color="grey-9"
-          icon="search"
-          removable
-          @remove="filters.descricaoProduto = ''; applyFilters(true)"
-        >
-          {{ filters.descricaoProduto }}
-        </q-chip>
-
-        <q-chip
-          v-if="selectedBrand"
-          color="grey-2"
-          text-color="grey-9"
-          icon="sell"
-          removable
-          @remove="clearBrand(true); applyFilters(true)"
-        >
-          {{ selectedBrand.label }}
-        </q-chip>
-
-        <q-chip
-          v-if="filters.precoMin != null || filters.precoMax != null"
-          color="grey-2"
-          text-color="grey-9"
-          icon="payments"
-          removable
-          @remove="filters.precoMin=null; filters.precoMax=null; priceMinStr=''; priceMaxStr=''; applyFilters(true)"
-        >
-          {{ (filters.precoMin != null ? money(filters.precoMin) : '—') }} →
-          {{ (filters.precoMax != null ? money(filters.precoMax) : '—') }}
-        </q-chip>
-      </div>
-    </div>
-
-    <div class="row items-center q-mb-sm q-gutter-sm">
-      <div class="row justify-between w100 text-grey-8">
-        <div class="w100 row justify-center q-gutter-x-sm q-gutter-y-sm q-mb-sm">
-          <q-select
-            color="secondary"
-            v-model="orderBy"
-            :options="orderOptions"
-            dense
-            outlined
-            style="min-width: 210px"
-            emit-value
-            map-options
-            @update:model-value="onOrderChange"
-          />
-          <q-select
-            color="secondary"
-            v-model="limit"
-            :options="[15, 30, 45, 100]"
-            dense
-            outlined
-            style="width: 100px"
-            label="Limite"
-            @update:model-value="onLimitChange"
-          />
+      <div class="row items-center justify-between q-col-gutter-sm">
+        <div class="col-12 col-md-auto">
+          <q-select color="secondary" v-model="orderBy" :options="orderOptions" dense outlined emit-value map-options
+            label="Ordenar" style="min-width: 220px" @update:model-value="onOrderChange" />
         </div>
+        <div v-if="hasAnyFilter" class="row q-mt-sm q-gutter-sm items-center">
+          <q-chip v-if="filters.descricaoProduto" color="grey-2" text-color="grey-9" icon="search" removable
+            @remove="filters.descricaoProduto = ''; applyFilters(true)">
+            {{ filters.descricaoProduto }}
+          </q-chip>
+
+          <q-chip v-if="selectedBrand" color="grey-2" text-color="grey-9" icon="sell" removable
+            @remove="clearBrand(true); applyFilters(true)">
+            {{ selectedBrand.label }}
+          </q-chip>
+
+          <q-chip v-if="filters.precoMin != null || filters.precoMax != null" color="grey-2" text-color="grey-9"
+            icon="payments" removable
+            @remove="filters.precoMin = null; filters.precoMax = null; priceMinStr = ''; priceMaxStr = ''; applyFilters(true)">
+            {{ (filters.precoMin != null ? money(filters.precoMin) : '—') }} →
+            {{ (filters.precoMax != null ? money(filters.precoMax) : '—') }}
+          </q-chip>
+        </div>
+        <div class="col-12 col-md-auto">
+          <q-select color="secondary" v-model="limit" :options="[15, 30, 45, 100]" dense outlined
+            label="Itens por página" style="min-width: 180px" @update:model-value="onLimitChange" />
+        </div>
+
+
       </div>
     </div>
 
-    <!-- Grid -->
+    <!-- GRID -->
     <div class="catalog-grid">
       <template v-if="loading">
         <q-skeleton v-for="i in limit" :key="'sk' + i" type="rect" class="card-skel" />
@@ -211,14 +130,8 @@
       </template>
 
       <template v-else>
-        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="product-card">
-          <q-img
-            :src="resolveImage(p)"
-            :alt="p.descricao"
-            spinner-color="primary"
-            fit="contain"
-            class="product-img"
-          >
+        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id" class="product-card bg-white" flat bordered>
+          <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="secondary" fit="contain" class="product-img">
             <template #error>
               <div class="absolute-full flex flex-center bg-grey-2 text-grey-8">
                 <q-img :src="fallbackImage" style="width:64px; height:64px" />
@@ -226,129 +139,60 @@
             </template>
           </q-img>
 
-          <q-card-section class="q-pt-xs q-pb-sm">
-            <div class="row items-center q-mt-xs q-col-gutter-sm">
-              <div class="col-auto">
-                <q-badge v-if="p.marca" color="primary" class="text-bold q-pa-xs" text-color="blue-10" :label="p.marca" />
-              </div>
-            </div>
+          <q-card-section class="q-pt-sm q-pb-sm">
+            <div class="row items-start justify-between q-col-gutter-sm">
+              <div class="col">
+                <q-badge v-if="p.marca" color="primary" text-color="secondary" class="text-bold q-mb-xs">
+                  {{ p.marca }}
+                </q-badge>
 
-            <div class="text-subtitle2 text-weight-medium ellipsis-2 q-mt-xs">
-              {{ p.descricao }}
-            </div>
-
-            <div class="q-mt-xs">
-              <div v-if="p.precoPromocao && p.precoPromocao > 0" class="column">
-                <div class="text-caption text-negative">
-                  <s>{{ money(p.preco) }}</s>
+                <div class="text-subtitle2 text-weight-medium ellipsis-2">
+                  {{ p.descricao }}
                 </div>
-                <div class="text-subtitle1 text-positive">{{ money(p.precoPromocao) }}</div>
               </div>
-              <div v-else class="text-subtitle1">
-                {{ money(p.precoEfetivo ?? p.preco) }}
+
+              <div class="col-auto text-right">
+                <div v-if="p.precoPromocao && p.precoPromocao > 0">
+                  <div class="text-caption text-grey-6">
+                    <s>{{ money(p.preco) }}</s>
+                  </div>
+                  <div class="text-subtitle1 text-positive text-weight-bold">
+                    {{ money(p.precoPromocao) }}
+                  </div>
+                </div>
+                <div v-else class="text-subtitle1 text-weight-bold text-grey-9">
+                  {{ money(p.precoEfetivo ?? p.preco) }}
+                </div>
               </div>
             </div>
           </q-card-section>
 
           <q-separator />
 
-          <q-card-actions class="">
-            <q-btn class="w100 " color="secondary" icon-right="visibility" @click="openDetails(p)" label="Detalhes" />
+          <q-card-actions class="q-pa-sm">
+            <q-btn class="w100" color="secondary" unelevated icon-right="visibility" label="Detalhes"
+              @click="openDetails(p)" />
           </q-card-actions>
         </q-card>
       </template>
     </div>
 
-    <div class="w100 row justify-between items-center q-mt-md">
-      <span v-if="!loading">{{ total }} resultado(s)</span>
-      <span v-else>Carregando…</span>
+    <!-- PAGINATION -->
+    <div class="row justify-between items-center q-mt-md q-pb-sm">
+      <div class="text-grey-7">
+        <span v-if="!loading">{{ total }} produto(s)</span>
+        <span v-else>Carregando…</span>
+      </div>
 
-      <q-pagination
-        color="secondary"
-        v-model="page"
-        :max="maxPage"
-        :max-pages="6"
-        boundary-numbers
-        direction-links
-        dense
-        @update:model-value="onPageChange"
-      />
+      <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links
+        dense @update:model-value="onPageChange" />
     </div>
 
-    <div class="w100 q-pt-md"></div>
-
+    <!-- “floating actions” no mobile (opcional) -->
+    <div v-if="isMobile" class="mobile-actions">
+      <q-btn round color="secondary" class="shadow-2" size="md" icon="search" @click="toTopPage()" />
+    </div>
   </q-page>
-  <!-- Footer (mantido) -->
-  <footer class="footer q-pt-sm bg-primary">
-    <div class="container footer-grid q-pb-md">
-      <div>
-        <div class="brand">
-          <div class="logo">
-            <q-img
-              style="border-radius: 20%;"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-              alt="Eletro Nogueira Logo"
-            />
-          </div>
-          <div class="brand-text">
-            <strong class="text-secondary">EletroNogueira</strong>
-            <small>Em frente à BR-040 • Valparaíso de Goiás</small>
-          </div>
-        </div>
-        <p class="foot-copy q-pt-sm">
-          Soluções em elétrica, hidráulica, automação e agro.<br />Pronta-entrega e
-          suporte técnico.<br /><br />CNPJ • <strong>26.931.014/0001-12.</strong>
-        </p>
-      </div>
-
-      <div class="column">
-        <q-btn
-          unelevated
-          color="positive"
-          class="text-shadow btn whats q-ml-xs"
-          glossy
-          type="a"
-          target="_blank"
-          rel="noopener"
-          href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento."
-        >
-          WhatsApp
-          <q-img
-            src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-            alt="EN"
-            style="border-radius:100%; width:30px; height:30px"
-          />
-        </q-btn>
-
-        <q-btn outline icon-right="phone" color="secondary" class="btn outline q-mt-sm" href="tel:+556136290040" label="(61) 3629-0040" />
-        <q-btn icon-right="phone" color="secondary" class="btn q-mt-sm" href="tel:+556136296858" label="(61) 3629-6858" />
-      </div>
-    </div>
-
-    <div class="w100 column justify-center items-center text-center">
-      Siga-nos no Instagram!!
-      <br /><br />
-      <q-btn
-        unelevated
-        color="warning"
-        class="text-shadow btn whats q-ml-sm"
-        glossy
-        type="a"
-        target="_blank"
-        rel="noopener"
-        href="https://www.instagram.com/nogueiravalparaiso/"
-      >
-        @nogueiravalparaiso
-        <q-img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-          alt="Logo Instagram"
-          style="border-radius:100%; width:30px; height:30px"
-        />
-      </q-btn>
-    </div>
-
-    <div class="copy q-mt-md">© Eletro Nogueira — 26.931.014/0001-12.</div>
-  </footer>
 </template>
 
 <script setup>
@@ -388,6 +232,10 @@ const orderOptions = [
 
 const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
 
+function toTopPage() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 function safeUrl(url) {
   if (!url) return null
   const s = String(url).trim()
@@ -420,9 +268,9 @@ const offset = computed(() => (page.value - 1) * limit.value)
 const hasAnyFilter = computed(() => {
   return Boolean(
     (filters.value.descricaoProduto || '').trim() ||
-      selectedBrand.value ||
-      filters.value.precoMin != null ||
-      filters.value.precoMax != null
+    selectedBrand.value ||
+    filters.value.precoMin != null ||
+    filters.value.precoMax != null
   )
 })
 
@@ -740,52 +588,83 @@ onMounted(async () => {
 
 watch([page, limit], () => writeToURL())
 </script>
-
 <style scoped>
-.header-bar {
+.catalog-page {
+  min-height: 100vh;
+}
+
+.header-wrap {
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
+}
+
+.filters-card,
+.toolbar {
+  border-radius: 16px;
 }
 
 .catalog-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(150px, 1fr));
-  gap: 10px;
+  gap: 12px;
+  grid-template-columns: repeat(5, minmax(180px, 1fr));
 }
 
 @media (max-width: 1400px) {
   .catalog-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
   }
 }
+
 @media (max-width: 1200px) {
   .catalog-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
   }
 }
+
 @media (max-width: 900px) {
   .catalog-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
   }
 }
+
 @media (max-width: 520px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 390px) {
   .catalog-grid {
     grid-template-columns: 1fr;
   }
 }
 
 .product-card {
+  border-radius: 16px;
   overflow: hidden;
-  border-radius: 12px;
-  transition: transform 0.12s ease;
+  transition: transform .12s ease, box-shadow .12s ease;
 }
+
 .product-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .10);
 }
 
 .card-skel {
-  height: 210px;
-  border-radius: 12px;
+  height: 250px;
+  border-radius: 16px;
+}
+
+.product-img {
+  height: 170px;
+  background: #fff;
+}
+
+.product-img :deep(img),
+.product-img :deep(.q-img__image) {
+  object-fit: contain;
+  object-position: center;
 }
 
 .ellipsis-2 {
@@ -795,13 +674,14 @@ watch([page, limit], () => writeToURL())
   overflow: hidden;
 }
 
-.product-img {
-  height: 150px;
-}
-
-.product-img :deep(img),
-.product-img :deep(.q-img__image) {
-  object-fit: contain;
-  object-position: center;
+/* ações flutuantes no mobile */
+.mobile-actions {
+  position: fixed;
+  right: 12px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
 }
 </style>
