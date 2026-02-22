@@ -152,26 +152,17 @@
 
           <q-separator />
 
-          <div class="w100 row no-wrap justify-between items-center q-gutter-x-xs q-px-sm q-pt-sm q-pb-md">
+          <div class="w100 row no-wrap justify-between items-center  q-px-sm q-pt-sm q-pb-md">
 
             <div class="w100 text-subtitle2 text-weight-medium">
               {{ p.descricao }}
             </div>
-            <div v-if="p.precoPromocao && p.precoPromocao > 0" class="absolute-top-right">
-
-              <div class="text-caption text-grey-6">
-                <s>{{ money(p.preco) }}</s>
-              </div>
-              <div class="text-subtitle1 text-positive text-weight-bold">
-                {{ money(p.precoPromocao) }}
-              </div>
-            </div>
-            <div v-else class=" text-weight-bold text-white q-px-sm q-py-sm absolute-top-right bg-green-14" style="font-size: 1.2rem;">
+            <div class=" text-weight-bold text-white q-px-sm q-py-sm rounded-borders absolute-top-left bg-green-14" style="font-size: 1.1rem;">
               {{ money(p.precoEfetivo ?? p.preco) }}
             </div>
           </div>
-          <q-card-actions class="q-pa-sm absolute-top">
-            <q-btn color="secondary" unelevated icon-right="visibility" @click="openDetails(p)" />
+          <q-card-actions class="q-pa-sm absolute-top-right">
+            <q-btn color="secondary" unelevated size="sm" icon-right="visibility" @click="openDetails(p)" />
           </q-card-actions>
         </q-card>
       </template>
