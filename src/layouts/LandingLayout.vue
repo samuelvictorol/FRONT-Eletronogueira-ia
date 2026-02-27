@@ -125,8 +125,8 @@ onMounted(() => {
 
 <style scoped>
 .nav-link {
-  color: #012060;
-  font-weight: 600;
+  color: #002f8d;
+  font-weight: bolder;
   position: relative;
 }
 
