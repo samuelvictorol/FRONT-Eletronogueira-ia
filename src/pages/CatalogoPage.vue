@@ -8,13 +8,17 @@
 
     <!-- HEADER -->
     <div
-      class="header-wrap bg-primary q-pa-md q-mt-xl q-mb-md animate__animated animate__fadeInDown animate__delay-2s animate__slower">
+      class="header-wrap bg-primary q-pa-md q-mt-xl q-mb-md animate__animated animate__fadeInDown animate__delay-2s animate__slower"
+    >
       <div class="row items-center justify-between">
         <div class="col">
           <q-breadcrumbs class="text-secondary">
             <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
-            <q-breadcrumbs-el class="text-bold" label="Catálogo"
-              :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`" />
+            <q-breadcrumbs-el
+              class="text-bold"
+              label="Catálogo"
+              :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`"
+            />
           </q-breadcrumbs>
 
           <div class="row items-center q-mt-md no-wrap">
@@ -28,8 +32,16 @@
     <div class="filters-card bg-white rounded-borders shadow-1 q-pa-md q-mb-md">
       <div class="row q-col-gutter-md items-end">
         <div class="col-12 col-md-4">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoProduto"
-            label="Buscar por produto" dense outlined clearable hint="Ex.: furadeira, bomba, martelo">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            v-model="filters.descricaoProduto"
+            label="Buscar por produto"
+            dense
+            outlined
+            clearable
+            hint="Ex.: furadeira, bomba, martelo"
+          >
             <template #prepend>
               <q-icon name="search" />
             </template>
@@ -37,10 +49,27 @@
         </div>
 
         <div class="col-12 col-md-3">
-          <q-select v-model="selectedBrand" color="secondary" label="Marca" dense outlined clearable use-input
-            fill-input hide-selected input-debounce="350" :options="brandOptions" :loading="brandLoading"
-            option-label="label" option-value="value" hint="Digite para sugerir" behavior="menu" @filter="onBrandFilter"
-            @clear="clearBrand(false)" @update:model-value="onBrandModelChanged">
+          <q-select
+            v-model="selectedBrand"
+            color="secondary"
+            label="Marca"
+            dense
+            outlined
+            clearable
+            use-input
+            fill-input
+            hide-selected
+            input-debounce="350"
+            :options="brandOptions"
+            :loading="brandLoading"
+            option-label="label"
+            option-value="value"
+            hint="Digite para sugerir"
+            behavior="menu"
+            @filter="onBrandFilter"
+            @clear="clearBrand(false)"
+            @update:model-value="onBrandModelChanged"
+          >
             <template #prepend>
               <q-icon name="sell" />
             </template>
@@ -57,9 +86,21 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
-            reverse-fill-mask v-model="priceMinStr" label="Preço mín." dense outlined clearable hint="Ex.: 199,90"
-            @blur="normalizePrice('min')">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            maxlength="9"
+            prefix="R$"
+            mask="####,##"
+            reverse-fill-mask
+            v-model="priceMinStr"
+            label="Preço mín."
+            dense
+            outlined
+            clearable
+            hint="Ex.: 199,90"
+            @blur="normalizePrice('min')"
+          >
             <template #prepend>
               <q-icon name="payments" />
             </template>
@@ -67,9 +108,21 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
-            reverse-fill-mask v-model="priceMaxStr" label="Preço máx." dense outlined clearable hint="Ex.: 1299,00"
-            @blur="normalizePrice('max')">
+          <q-input
+            @keyup.enter="applyFilters(true)"
+            color="secondary"
+            maxlength="9"
+            prefix="R$"
+            mask="####,##"
+            reverse-fill-mask
+            v-model="priceMaxStr"
+            label="Preço máx."
+            dense
+            outlined
+            clearable
+            hint="Ex.: 1299,00"
+            @blur="normalizePrice('max')"
+          >
             <template #prepend>
               <q-icon name="price_check" />
             </template>
@@ -79,40 +132,80 @@
         <div class="col-12 q-mb-md">
           <div class="row justify-center q-gutter-sm items-center">
             <q-btn flat color="secondary" label="Limpar" @click="resetFilters" />
-            <q-btn color="secondary" label="Consultar" icon-right="search" :loading="loading"
-              @click="applyFilters(true)" />
+            <q-btn
+              color="secondary"
+              label="Consultar"
+              icon-right="search"
+              :loading="loading"
+              @click="applyFilters(true)"
+            />
           </div>
         </div>
       </div>
 
       <div class="row items-center justify-between q-col-gutter-sm">
         <div class="col-12 col-md-auto">
-          <q-select color="secondary" v-model="orderBy" :options="orderOptions" dense outlined emit-value map-options
-            label="Ordenar" style="min-width: 220px" @update:model-value="onOrderChange" />
+          <q-select
+            color="secondary"
+            v-model="orderBy"
+            :options="orderOptions"
+            dense
+            outlined
+            emit-value
+            map-options
+            label="Ordenar"
+            style="min-width: 220px"
+            @update:model-value="onOrderChange"
+          />
         </div>
 
         <div v-if="hasAnyFilter" class="row q-mt-sm q-gutter-sm items-center">
-          <q-chip v-if="filters.descricaoProduto" color="grey-2" text-color="grey-9" icon="search" removable
-            @remove="filters.descricaoProduto = ''; applyFilters(true)">
+          <q-chip
+            v-if="filters.descricaoProduto"
+            color="grey-2"
+            text-color="grey-9"
+            icon="search"
+            removable
+            @remove="filters.descricaoProduto = ''; applyFilters(true)"
+          >
             {{ filters.descricaoProduto }}
           </q-chip>
 
-          <q-chip v-if="selectedBrand" color="grey-2" text-color="grey-9" icon="sell" removable
-            @remove="clearBrand(true); applyFilters(true)">
+          <q-chip
+            v-if="selectedBrand"
+            color="grey-2"
+            text-color="grey-9"
+            icon="sell"
+            removable
+            @remove="clearBrand(true); applyFilters(true)"
+          >
             {{ selectedBrand.label }}
           </q-chip>
 
-          <q-chip v-if="filters.precoMin != null || filters.precoMax != null" color="grey-2" text-color="grey-9"
-            icon="payments" removable
-            @remove="filters.precoMin = null; filters.precoMax = null; priceMinStr = ''; priceMaxStr = ''; applyFilters(true)">
+          <q-chip
+            v-if="filters.precoMin != null || filters.precoMax != null"
+            color="grey-2"
+            text-color="grey-9"
+            icon="payments"
+            removable
+            @remove="filters.precoMin = null; filters.precoMax = null; priceMinStr = ''; priceMaxStr = ''; applyFilters(true)"
+          >
             {{ (filters.precoMin != null ? money(filters.precoMin) : '—') }} →
             {{ (filters.precoMax != null ? money(filters.precoMax) : '—') }}
           </q-chip>
         </div>
 
         <div class="col-12 col-md-auto">
-          <q-select color="secondary" v-model="limit" :options="[10, 15, 30, 45, 100]" dense outlined
-            label="Itens por página" style="min-width: 180px" @update:model-value="onLimitChange" />
+          <q-select
+            color="secondary"
+            v-model="limit"
+            :options="[10, 15, 30, 45, 100]"
+            dense
+            outlined
+            label="Itens por página"
+            style="min-width: 180px"
+            @update:model-value="onLimitChange"
+          />
         </div>
       </div>
     </div>
@@ -131,10 +224,22 @@
       </template>
 
       <template v-else>
-        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id"
-          class="bg-secondary text-white relative product-card" flat bordered @click="openDetails(p)"
-          style="cursor: pointer;">
-          <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="secondary" fit="contain" class="product-img">
+        <q-card
+          v-for="p in items"
+          :key="p.codProduto ?? p.id ?? p._id"
+          class="bg-secondary text-white relative product-card"
+          flat
+          bordered
+          @click="openDetails(p)"
+          style="cursor: pointer;"
+        >
+          <q-img
+            :src="resolveImage(p)"
+            :alt="p.descricao"
+            spinner-color="secondary"
+            fit="contain"
+            class="product-img"
+          >
             <template #error>
               <div class="absolute-full flex flex-center bg-grey-2 text-grey-8">
                 <q-img :src="fallbackImage" style="width:64px; height:64px" />
@@ -149,6 +254,14 @@
                   {{ p.marca }}
                 </q-badge>
               </div>
+
+              <div class="col-auto">
+                <q-btn
+                  dense
+                  icon="add_shopping_cart" class="text-secondary bg-primary"
+                  @click.stop="confirmAddToCart(p)"
+                />
+              </div>
             </div>
           </q-card-section>
 
@@ -159,8 +272,10 @@
               {{ p.descricao }}
             </div>
 
-            <div class="text-weight-bold text-white q-px-sm q-py-sm rounded-borders absolute-top-left bg-green-14"
-              style="font-size: 1rem;">
+            <div
+              class="text-weight-bold text-white q-px-sm q-py-sm rounded-borders absolute-top-left bg-green-14"
+              style="font-size: 1rem;"
+            >
               {{ money(p.precoEfetivo ?? p.preco) }}
             </div>
           </div>
@@ -187,17 +302,38 @@
         <q-btn dense flat color="secondary" icon="first_page" :disable="isFirstPage || loading" @click="goFirst" />
         <q-btn dense flat color="secondary" icon="chevron_left" :disable="isFirstPage || loading" @click="goPrev" />
 
-        <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links
-          dense :disable="loading" @update:model-value="onPageChange" />
+        <q-pagination
+          color="secondary"
+          v-model="page"
+          :max="maxPage"
+          :max-pages="6"
+          boundary-numbers
+          direction-links
+          dense
+          :disable="loading"
+          @update:model-value="onPageChange"
+        />
 
         <q-btn dense flat color="secondary" icon="chevron_right" :disable="isLastPage || loading" @click="goNext" />
         <q-btn dense flat color="secondary" icon="last_page" :disable="isLastPage || loading" @click="goLast" />
       </div>
     </div>
 
-    <!-- “floating actions” no mobile (opcional) -->
+    <!-- “floating actions” no mobile -->
     <div v-if="isMobile" class="mobile-actions">
       <q-btn round color="secondary" class="shadow-2" size="md" icon="search" @click="toTopPage()" />
+      <q-btn
+        round
+        color="green-14"
+        class="shadow-2"
+        size="md"
+        icon="shopping_cart"
+        @click="cart.state.drawerOpen = true"
+      >
+        <q-badge v-if="cart.count.value > 0" color="negative" floating>
+          {{ cart.count.value }}
+        </q-badge>
+      </q-btn>
     </div>
   </q-page>
 </template>
@@ -207,11 +343,14 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
+import { useCart } from 'src/composables/useCart'
 
 const isHydrating = ref(true)
 const $q = useQuasar()
 const isMobile = $q.screen.lt.md
 const router = useRouter()
+
+const cart = useCart()
 
 const loading = ref(false)
 const items = ref([])
@@ -288,21 +427,18 @@ const offset = computed(() => {
 const isFirstPage = computed(() => Number(page.value) <= 1 || offset.value <= 0)
 
 const isLastPage = computed(() => {
-  // prioridade: backend
   if (typeof apiIsLastPage.value === 'boolean') return apiIsLastPage.value
-  // fallback: quando tiver total
   return Number(page.value) >= maxPage.value
 })
 
 const nextOffset = computed(() => offset.value + (Number(limit.value) || 10))
-const prevOffset = computed(() => Math.max(0, offset.value - (Number(limit.value) || 10)))
 
 const hasAnyFilter = computed(() => {
   return Boolean(
     (filters.value.descricaoProduto || '').trim() ||
-    selectedBrand.value ||
-    filters.value.precoMin != null ||
-    filters.value.precoMax != null
+      selectedBrand.value ||
+      filters.value.precoMin != null ||
+      filters.value.precoMax != null
   )
 })
 
@@ -325,7 +461,7 @@ function numberToBR(n) {
 function money(n) {
   if (n == null) return '—'
   try {
-    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    return Number(n).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
   } catch {
     return `R$ ${numberToBR(n)}`
   }
@@ -377,7 +513,7 @@ function writeToURL() {
 
   const qs = new URLSearchParams()
 
-  if (filters.value.descricaoProduto) qs.set('q', filters.value.descricaoProduto)
+  if ((filters.value.descricaoProduto || '').trim()) qs.set('q', (filters.value.descricaoProduto || '').trim())
 
   const marca = (selectedBrand.value?.marca || filters.value.descricaoMarca || '').trim()
   if (marca) qs.set('marca', marca.toUpperCase())
@@ -522,7 +658,6 @@ function normalizeProdutos(data) {
 
   return raw.map((p) => {
     const imgPath = p.IMG_PATH ?? p.imgPath ?? null
-
     const preco = p.PRECO ?? p.preco ?? null
     const promo = p.PRECOPROMOCAO ?? p.precoPromocao ?? 0
     const efetivo = p.PRECO_EFETIVO ?? p.precoEfetivo ?? (Number(promo) > 0 ? promo : preco)
@@ -547,13 +682,6 @@ function normalizeProdutos(data) {
   })
 }
 
-/**
- * ✅ Busca paginada integrada ao backend:
- * - envia limit/offset
- * - usa total/limit/offset do response
- * - calcula is_first_page e is_last_page (com prioridade pro backend)
- * - calcula next page automaticamente via page/limit
- */
 async function applyFilters(updateURL = true) {
   loading.value = true
   try {
@@ -565,7 +693,7 @@ async function applyFilters(updateURL = true) {
       limit: L,
       offset: offset.value,
       descricaoProduto: (filters.value.descricaoProduto || '').trim() || null,
-      descricaoMarca: (selectedBrand.value?.marca || filters.value.descricaoMarca || null),
+      descricaoMarca: selectedBrand.value?.marca || filters.value.descricaoMarca || null,
       precoMin: filters.value.precoMin,
       precoMax: filters.value.precoMax,
       orderBy: orderBy.value || 'updated_desc'
@@ -575,21 +703,18 @@ async function applyFilters(updateURL = true) {
 
     items.value = normalizeProdutos(data)
 
-    // paginação do backend
     apiOffset.value = Number(data?.offset ?? offset.value) || 0
 
     const apiTotal = pickTotalFromResponse(data)
     if (apiTotal != null) total.value = apiTotal
     else total.value = (page.value - 1) * L + items.value.length
 
-    // prioridade: is_last_page do backend; fallback: cálculo por total
     if (typeof data?.is_last_page === 'boolean') {
       apiIsLastPage.value = data.is_last_page
     } else {
       apiIsLastPage.value = nextOffset.value >= (Number(total.value) || 0)
     }
 
-    // se o usuário caiu numa página acima do máximo, corrige
     const newMax = Math.max(1, Math.ceil((Number(total.value) || 0) / L))
     if (page.value > newMax) page.value = newMax
 
@@ -652,6 +777,23 @@ function openDetails(p) {
   })
 }
 
+/** carrinho */
+function confirmAddToCart(p) {
+  const name = p?.descricao || 'Produto'
+  $q.dialog({
+    title: '🛒 Adicionar ao carrinho',
+    message: `Adicionar "${name}" ao carrinho?`,
+    cancel: true,
+    persistent: true,
+    ok: { label: 'Adicionar', color: 'green-14' },
+    cancel: { label: 'Cancelar', color: 'grey-6' }
+  }).onOk(() => {
+    cart.addItem(p, 1)
+    cart.state.drawerOpen = true
+    $q.notify({ type: 'secondary', message: 'Adicionado ao carrinho!' })
+  })
+}
+
 onMounted(async () => {
   isHydrating.value = true
   readFromURL()
@@ -659,11 +801,6 @@ onMounted(async () => {
   isHydrating.value = false
 })
 
-/**
- * ✅ controla URL e busca:
- * - page/limit mudaram => refaz consulta
- * - filtros já chamam applyFilters(true) diretamente
- */
 watch([page, limit], async () => {
   if (isHydrating.value) return
   writeToURL()
@@ -750,7 +887,6 @@ watch([page, limit], async () => {
   object-position: center;
 }
 
-/* ações flutuantes no mobile */
 .mobile-actions {
   position: fixed;
   right: 12px;

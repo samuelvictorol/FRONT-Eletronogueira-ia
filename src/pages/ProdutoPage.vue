@@ -1,68 +1,28 @@
 <template>
-  <q-page
-    class="q-px-md q-mt-xl q-pt-xs bg-grey-3 animate__animated animate__fadeInLeft animate__slower">
-    <div
-      class="q-mb-lg bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
-      style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;"
-    >
-      <q-btn
-        flat
-        color="secondary"
-        icon="arrow_back"
-        @click="goBackToCatalog"
-        label="Voltar"
-      />
+  <q-page class="q-px-md q-mt-xl q-pt-xs bg-grey-3 animate__animated animate__fadeInLeft animate__slower">
+    <div class="q-mb-lg bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
+      style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
+      <q-btn flat color="secondary" icon="arrow_back" @click="goBackToCatalog" label="Voltar" />
     </div>
 
-    <q-card
-      flat
-      bordered
-      class="bg-white rounded-borders shadow-1 animate__animated animate__fadeInLeft animate__slower"
-    >
+    <q-card flat bordered
+      class="bg-white rounded-borders shadow-1 animate__animated animate__fadeInLeft animate__slower">
       <q-card-section>
         <div class="row q-col-gutter-xl">
           <div class="col-12 col-md-6">
-            <q-skeleton
-              v-if="loading"
-              type="rect"
-              style="height: 360px; border-radius: 14px"
-            />
+            <q-skeleton v-if="loading" type="rect" style="height: 360px; border-radius: 14px" />
             <div class="w100 row justify-center" v-else>
-              <q-img
-                :src="productImage"
-                :alt="product?.descricao || 'Imagem do produto'"
-                fit="contain"
-                class="product-detail-img"
-                @error="onMainImageError"
-              />
+              <q-img :src="productImage" :alt="product?.descricao || 'Imagem do produto'" fit="contain"
+                class="product-detail-img" @error="onMainImageError" />
             </div>
           </div>
 
           <div class="col-12 col-md-6">
             <div class="row items-center q-col-gutter-sm">
-              <q-badge
-                v-if="product?.marca"
-                color="primary"
-                class="text-bold q-pa-sm"
-                text-color="blue-10"
-                :label="product.marca"
-              />
-              <q-chip
-                v-if="inStock"
-                color="secondary"
-                text-color="white"
-                icon="check_circle"
-              >
-                Em estoque
-              </q-chip>
-              <q-chip
-                v-else
-                color="grey-6"
-                text-color="white"
-                icon="hourglass_empty"
-              >
-                Sob consulta
-              </q-chip>
+              <q-badge v-if="product?.marca" color="primary" class="text-bold q-pa-sm" text-color="blue-10"
+                :label="product.marca" />
+              <q-chip v-if="inStock" color="secondary" text-color="white" icon="check_circle">Em estoque</q-chip>
+              <q-chip v-else color="grey-6" text-color="white" icon="hourglass_empty">Sob consulta</q-chip>
             </div>
 
             <div class="text-h5 text-weight-bold q-mt-xs">
@@ -73,10 +33,7 @@
             </div>
 
             <div class="q-mt-md">
-              <div
-                v-if="product?.precoPromocao && product.precoPromocao > 0"
-                class="column"
-              >
+              <div v-if="product?.precoPromocao && product.precoPromocao > 0" class="column">
                 <div class="text-caption text-negative">
                   <s>{{ money(product.precoEfetivo) }}</s>
                 </div>
@@ -101,6 +58,11 @@
 
             <div class="q-mt-lg row q-col-gutter-sm">
               <div class="col-12 col-sm-6">
+                <q-btn unelevated color="green-14" icon="add_shopping_cart" class="w100 text-bold"
+                  label="Adicionar ao carrinho" :disable="!product" @click="confirmAddToCart(product)" />
+              </div>
+
+              <!-- <div class="col-12 col-sm-6">
                 <q-btn
                   unelevated
                   color="green-14"
@@ -110,16 +72,24 @@
                   target="_blank"
                   label="Pedir orçamento"
                 />
-              </div>
-              <div class="col-12 col-sm-6">
+              </div> -->
+
+
+              <!-- <div class="col-12 col-sm-6">
                 <q-btn
-                  outline
-                  color="secondary"
-                  icon="share"
-                  class="w100"
-                  @click="shareOrCopy"
-                  label="Compartilhar"
-                />
+                color="secondary"
+                icon="shopping_cart"
+                class="w100"
+                label="Ver carrinho"
+                @click="cart.state.drawerOpen = true"
+                >
+                <q-badge v-if="cart.count.value > 0" color="negative" floating>
+                  {{ cart.count.value }}
+                </q-badge>
+              </q-btn>
+            </div> -->
+              <div class="col-12 col-sm-6">
+                <q-btn outline color="secondary" icon="share" class="w100" @click="shareOrCopy" label="Compartilhar" />
               </div>
             </div>
           </div>
@@ -128,13 +98,7 @@
     </q-card>
 
     <div class="q-mt-lg">
-      <q-btn
-        flat
-        color="secondary"
-        icon="arrow_back"
-        @click="goBackToCatalog"
-        label="Voltar"
-      />
+      <q-btn flat color="secondary" icon="arrow_back" @click="goBackToCatalog" label="Voltar" />
     </div>
   </q-page>
 </template>
@@ -144,24 +108,18 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar, useMeta } from 'quasar'
 import { api } from 'boot/axios'
+import { useCart } from 'src/composables/useCart'
 
 const $q = useQuasar()
-const isMobile = $q.screen.lt.md
 const route = useRoute()
 const router = useRouter()
+
+const cart = useCart()
 
 const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
 
 const loading = ref(true)
 const product = ref(null)
-
-// edição de imagem
-const editDialog = ref(false)
-const imgLink = ref('')
-const file = ref(null)
-const filePreviewUrl = ref(null)
-const previewError = ref(false)
-const saving = ref(false)
 
 // erro na imagem principal
 const mainImageError = ref(false)
@@ -176,11 +134,7 @@ function normalizeProduct(p) {
     marca: p.MARCA ?? p.marca,
     preco: p.PRECO ?? p.preco,
     precoPromocao: p.PRECOPROMOCAO ?? p.precoPromocao,
-    precoEfetivo:
-      p.PRECO_EFETIVO ??
-      p.precoEfetivo ??
-      p.PRECO ??
-      p.preco,
+    precoEfetivo: p.PRECO_EFETIVO ?? p.precoEfetivo ?? p.PRECO ?? p.preco,
     CODORIGINAL: p.CODORIGINAL ?? p.codOriginal ?? p.sku,
     INATIVO: p.INATIVO ?? p.inativo,
     IMG: p.IMG ?? p.img ?? null,
@@ -189,8 +143,7 @@ function normalizeProduct(p) {
   }
 }
 
-const stateProduct =
-  (history && history.state && history.state.product) || null
+const stateProduct = (history && history.state && history.state.product) || null
 
 if (stateProduct) {
   product.value = normalizeProduct(stateProduct)
@@ -200,7 +153,7 @@ if (stateProduct) {
     try {
       const cached = sessionStorage.getItem(`prod:${idFromSlug}`)
       if (cached) product.value = normalizeProduct(JSON.parse(cached))
-    } catch {}
+    } catch { }
   }
 }
 
@@ -220,12 +173,11 @@ const skuText = computed(() => {
 })
 
 const shortDesc = computed(() =>
-  (product.value && product.value.descricao)
-    ? product.value.descricao.slice(0, 180)
+  product.value?.descricao
+    ? String(product.value.descricao).slice(0, 180)
     : 'Ferramentas e bombas com pronta-entrega em Valparaíso de Goiás.'
 )
 
-// imagem principal, sempre com fallback e levando em conta erro
 const productImage = computed(() => {
   if (mainImageError.value) return fallbackImage
   const p = product.value
@@ -235,40 +187,11 @@ const productImage = computed(() => {
   return fallbackImage
 })
 
-// preview do diálogo (arquivo ou link)
-const previewSrc = computed(() => {
-  if (filePreviewUrl.value) return filePreviewUrl.value
-  if (imgLink.value) return imgLink.value
-  return null
-})
-
-// --------- watchers ---------
-watch(file, newVal => {
-  if (filePreviewUrl.value) {
-    URL.revokeObjectURL(filePreviewUrl.value)
-    filePreviewUrl.value = null
-  }
-  if (newVal) {
-    const f = Array.isArray(newVal) ? newVal[0] : newVal
-    if (f) {
-      filePreviewUrl.value = URL.createObjectURL(f)
-    }
-  }
-  previewError.value = false
-})
-
-watch(imgLink, () => {
-  previewError.value = false
-})
-
 // --------- helpers diversos ---------
 function money(n) {
   if (n == null) return '—'
   try {
-    return Number(n).toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    })
+    return Number(n).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
   } catch {
     return `R$ ${String(n)}`
   }
@@ -284,7 +207,8 @@ function whatsLink(p) {
 
 function slugify(s = '') {
   return String(s)
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-zA-Z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .toLowerCase()
@@ -311,15 +235,30 @@ function goBackToCatalog() {
   return router.push({ path: '/catalogo' })
 }
 
+/** carrinho */
+function confirmAddToCart(p) {
+  const name = p?.descricao || 'Produto'
+  $q.dialog({
+    title: '🛒 Adicionar ao carrinho',
+    message: `Adicionar "${name}" ao carrinho?`,
+    cancel: true,
+    persistent: true,
+    ok: { label: 'Adicionar', color: 'green-14' },
+    cancel: { label: 'Cancelar', color: 'grey-6' }
+  }).onOk(() => {
+    cart.addItem(p, 1)
+    cart.state.drawerOpen = true
+    $q.notify({ type: 'secondary', message: 'Adicionado ao carrinho!' })
+  })
+}
+
 // --------- SEO ---------
 function updateHead() {
   const p = product.value
   const img = productImage.value
 
   useMeta(() => {
-    const title = p
-      ? `${p.descricao || p.DESCRICAO} | Eletro Nogueira`
-      : 'Produto | Eletro Nogueira'
+    const title = p ? `${p.descricao || p.DESCRICAO} | Eletro Nogueira` : 'Produto | Eletro Nogueira'
     const desc = shortDesc.value
     const canonical = `${location.origin}/catalogo/produto/${route.params.slug}`
 
@@ -344,28 +283,15 @@ function updateHead() {
             image: [img],
             description: desc,
             sku: p?.sku || p?.CODORIGINAL || String(p?.id || ''),
-            brand: p?.marca
-              ? { '@type': 'Brand', name: p.marca }
-              : undefined,
+            brand: p?.marca ? { '@type': 'Brand', name: p.marca } : undefined,
             offers: {
               '@type': 'Offer',
               url: canonical,
               priceCurrency: 'BRL',
-              price: Number(
-                p?.precoEfetivo ??
-                  p?.PRECO_EFETIVO ??
-                  p?.preco ??
-                  p?.PRECO ??
-                  0
-              ).toFixed(2),
-              availability: inStock.value
-                ? 'https://schema.org/InStock'
-                : 'https://schema.org/PreOrder',
+              price: Number(p?.precoEfetivo ?? p?.PRECO_EFETIVO ?? p?.preco ?? p?.PRECO ?? 0).toFixed(2),
+              availability: inStock.value ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
               itemCondition: 'https://schema.org/NewCondition',
-              seller: {
-                '@type': 'Organization',
-                name: 'Eletro Nogueira'
-              }
+              seller: { '@type': 'Organization', name: 'Eletro Nogueira' }
             }
           })
         }
@@ -388,11 +314,8 @@ async function load() {
         if (data?.ok && data.data) {
           product.value = normalizeProduct(data.data)
           try {
-            sessionStorage.setItem(
-              `prod:${idFromSlug}`,
-              JSON.stringify(product.value)
-            )
-          } catch {}
+            sessionStorage.setItem(`prod:${idFromSlug}`, JSON.stringify(product.value))
+          } catch { }
         }
       } catch (err) {
         console.error('[ProductPage] erro ao buscar na API:', err)
@@ -413,10 +336,7 @@ async function load() {
     }
   } catch (err) {
     console.error('[ProductPage] erro:', err)
-    $q.notify({
-      type: 'negative',
-      message: 'Falha ao carregar o produto.'
-    })
+    $q.notify({ type: 'negative', message: 'Falha ao carregar o produto.' })
   } finally {
     loading.value = false
   }
@@ -432,133 +352,11 @@ async function shareOrCopy() {
       await navigator.clipboard.writeText(url)
       $q.notify({ type: 'positive', message: 'Link copiado!' })
     }
-  } catch {}
+  } catch { }
 }
 
-// --------- edição de imagem ---------
-function productIdForApi() {
-  const p = product.value
-  if (!p) return extractIdFromSlug(route.params.slug)
-  return p.CODPRODUTO ?? p.id ?? extractIdFromSlug(route.params.slug)
-}
-
-function openEditDialog() {
-  if (!product.value) {
-    $q.notify({
-      type: 'warning',
-      message: 'Produto não carregado ainda'
-    })
-    return
-  }
-
-  $q.dialog({
-    title: 'Acesso restrito',
-    color:'secondary',
-    message: 'Digite a senha de acesso para editar a imagem:',
-    prompt: {
-      model: '',
-      type: 'password',
-      isValid: val => !!val && val.length >= 4 // só pra não deixar vazio
-    },
-    cancel: true,
-    persistent: true
-  }).onOk(password => {
-    if (password !== 'eletronogueira@') {
-      $q.notify({
-        type: 'negative',
-        message: 'Senha incorreta.'
-      })
-      return
-    }
-
-    // 🔓 Senha correta -> libera o modal
-
-    // limpa estados
-    previewError.value = false
-    file.value = null
-    if (filePreviewUrl.value) {
-      URL.revokeObjectURL(filePreviewUrl.value)
-      filePreviewUrl.value = null
-    }
-
-    const current = productImage.value
-    imgLink.value = current === fallbackImage ? '' : current
-
-    editDialog.value = true
-  }).onCancel(() => {
-    // opcional: feedback se cancelar
-    // $q.notify({ type: 'info', message: 'Edição cancelada.' })
-  })
-}
-
-
-function onPreviewError() {
-  previewError.value = true
-}
-
-function onMainImageError () {
+function onMainImageError() {
   mainImageError.value = true
-}
-
-async function saveImage() {
-  const id = productIdForApi()
-  if (!id) {
-    $q.notify({
-      type: 'negative',
-      message: 'ID do produto não encontrado para salvar imagem'
-    })
-    return
-  }
-
-  try {
-    saving.value = true
-    previewError.value = false
-
-    // se tiver arquivo, manda multipart
-    if (file.value) {
-      const f = Array.isArray(file.value) ? file.value[0] : file.value
-      const fd = new FormData()
-      fd.append('file', f)
-      if (imgLink.value) fd.append('link', imgLink.value)
-
-      await api.put(`/catalogo/produtos/${id}/imagem`, fd, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-    } else {
-      // só link
-      await api.put(`/catalogo/produtos/${id}/imagem`, {
-        link: imgLink.value
-      })
-    }
-
-    // re-carrega produto pra pegar IMG.link real do backend
-    const { data } = await api.get(`/catalogo/produtos/${id}`)
-    if (data?.ok && data.data) {
-      product.value = normalizeProduct(data.data)
-      mainImageError.value = false
-      try {
-        sessionStorage.setItem(
-          `prod:${id}`,
-          JSON.stringify(product.value)
-        )
-      } catch {}
-    }
-
-    $q.notify({
-      color: 'green', position: 'top', icon: 'save',
-      message: 'Imagem atualizada com sucesso'
-    })
-    editDialog.value = false
-    updateHead()
-  } catch (err) {
-    console.error('Erro ao salvar imagem:', err)
-    $q.notify({
-      type: 'negative',
-      message: 'Erro ao salvar imagem do produto'
-    })
-  } finally {
-    saving.value = false
-  }
 }
 
 onMounted(load)
@@ -574,18 +372,6 @@ onMounted(load)
 /* garante contain + centralizado dentro do q-img */
 .product-detail-img :deep(img),
 .product-detail-img :deep(.q-img__image) {
-  object-fit: contain;
-  object-position: center;
-}
-
-/* preview do diálogo */
-.preview-img {
-  max-width: 100%;
-  max-height: 220px;
-}
-
-.preview-img :deep(img),
-.preview-img :deep(.q-img__image) {
   object-fit: contain;
   object-position: center;
 }

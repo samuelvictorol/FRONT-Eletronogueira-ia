@@ -5,7 +5,7 @@
       <div class="img-parallax bg-primary"></div>
       <!-- SECTION: BANNERS / HERO CAROUSEL -->
       <section
-        class="banner-section q-mx-sm q-mt-xl q-pt-sm animate__animated animate__fadeInDown animate__delay-5s animate__slower">
+        class="banner-section q-mx-sm q-mt-xl q-pt-sm animate__animated animate__fadeInDown animate__delay-2s animate__slower">
         <!-- DESKTOP/TABLET (>= md) -->
         <q-carousel v-if="!isMobile" v-model="bannerSlideDesktop" class="banner-carousel rounded-borders" animated
           swipeable infinite arrows navigation height="620px" :autoplay="bannerAutoplay"
@@ -38,7 +38,7 @@
           </q-carousel-slide>
         </q-carousel>
       </section>
-      <section id="produtos" class="animate__animated animate__fadeInUp animate__delay-5s animate__slower">
+      <section id="produtos" class="animate__animated animate__fadeInUp animate__slower">
         <!-- <div class="bg-grey-3 text-white q-pt-xl">
           <div class="text-h2 center text-secondary q-py-md">Produtos e Marcas</div>
         </div> -->
@@ -538,9 +538,9 @@
               label="(61) 3629-6858" />
           </div>
         </div>
-        <div class="w100 column justify-center items-center text-center"><q-btn
-            unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
-            rel="noopener" href="https://www.instagram.com/nogueiravalparaiso/">
+        <div class="w100 column justify-center items-center text-center"><q-btn unelevated color="warning"
+            class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank" rel="noopener"
+            href="https://www.instagram.com/nogueiravalparaiso/">
             @nogueiravalparaiso
             <q-img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
@@ -590,6 +590,13 @@ function resumeBannerAutoplay() {
 // arrays dinâmicos (2 tipos: mobile e desktop)
 const bannersDesktop = ref([
   {
+    url: '/assets/promo5.png',
+    alt: 'Automação',
+    action: { type: 'route', to: '/localizacao' },
+    title: 'Automação Industrial',
+    subtitle: 'CLP, inversores, sensores e painéis'
+  },
+  {
     url: '/assets/promo1.png',
     alt: 'Promoção 1',
     // você pode colocar rota, query, ou ação
@@ -618,16 +625,16 @@ const bannersDesktop = ref([
     title: 'Agro & Irrigação',
     subtitle: 'Bombas, mangueiras e conexões'
   },
-  {
-    url: '/assets/promo5.png',
-    alt: 'Automação',
-    action: { type: 'route', to: '/localizacao' },
-    title: 'Automação Industrial',
-    subtitle: 'CLP, inversores, sensores e painéis'
-  }
 ])
 
 const bannersMobile = ref([
+  {
+    url: '/assets/promo5.png',
+    alt: 'Mobile 5',
+    action: { type: 'route', to: '/localizacao' },
+    title: 'Kärcher',
+    subtitle: 'Lavadoras e aspiradores'
+  },
   {
     url: '/assets/promo1.png',
     alt: 'Mobile 1',
@@ -656,13 +663,6 @@ const bannersMobile = ref([
     title: 'Automação',
     subtitle: 'CLP, inversores, sensores e painéis'
   },
-  {
-    url: '/assets/promo5.png',
-    alt: 'Mobile 5',
-    action: { type: 'route', to: '/localizacao' },
-    title: 'Kärcher',
-    subtitle: 'Lavadoras e aspiradores'
-  }
 ])
 
 // click handler (pronto pra você evoluir)
