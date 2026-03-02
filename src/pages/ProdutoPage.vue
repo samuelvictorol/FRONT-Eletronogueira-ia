@@ -1,8 +1,6 @@
 <template>
   <q-page
-    class="q-px-md q-mt-xl q-pt-xs bg-grey-3 animate__animated animate__fadeInLeft animate__slower"
-    :class="!isMobile ? 'q-pb-xl q-px-xl' : ''"
-  >
+    class="q-px-md q-mt-xl q-pt-xs bg-grey-3 animate__animated animate__fadeInLeft animate__slower">
     <div
       class="q-mb-lg bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
       style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;"
@@ -138,90 +136,6 @@
         label="Voltar"
       />
     </div>
-
-    <div class="w100 q-py-xl"></div>
-
-    <footer class="footer q-pt-xl">
-      <div class="container footer-grid q-pb-md">
-        <div>
-          <div class="brand">
-            <div class="logo">
-              <q-img
-                style="border-radius: 20%;"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-                alt="Eletro Nogueira Logo"
-              />
-            </div>
-            <div class="brand-text">
-              <strong class="text-secondary">Eletro Nogueira</strong>
-              <small>Em frente à BR-040 • Valparaíso de Goiás</small>
-            </div>
-          </div>
-          <p class="foot-copy q-pt-sm">
-            Soluções em elétrica, hidráulica, automação e agro.<br />Pronta-entrega
-            e suporte técnico.<br /><br />CNPJ •
-            <strong>26.931.014/0001-12.</strong>
-          </p>
-        </div>
-        <div class="column">
-          <q-btn
-            unelevated
-            color="positive"
-            class="text-shadow btn whats q-ml-xs"
-            glossy
-            type="a"
-            target="_blank"
-            rel="noopener"
-            href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento."
-          >
-            WhatsApp
-            <q-img
-              src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-              alt="EN"
-              style="border-radius:100%; width:30px; height:30px"
-            />
-          </q-btn>
-          <q-btn
-            outline
-            icon-right="phone"
-            color="secondary"
-            class="btn outline q-mt-sm"
-            href="tel:+556136290040"
-            label="(61) 3629-0040"
-          />
-          <q-btn
-            icon-right="phone"
-            color="secondary"
-            class=" btn q-mt-sm"
-            href="tel:+556136296858"
-            label="(61) 3629-6858"
-          />
-        </div>
-      </div>
-      <div class="w100 column justify-center items-center text-center">
-        Siga-nos no Instagram!! <br /><br /><br />
-        <q-btn
-          unelevated
-          color="warning"
-          class="text-shadow btn whats q-ml-sm"
-          glossy
-          type="a"
-          target="_blank"
-          rel="noopener"
-          href="https://www.instagram.com/nogueiravalparaiso/"
-        >
-          @nogueiravalparaiso
-          <q-img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-            alt="Logo Instagram"
-            style="border-radius:100%; width:30px; height:30px"
-          />
-        </q-btn>
-      </div>
-      <div class="copy q-mt-md">
-        © Eletro Nogueira — 26.931.014/0001-12.
-      </div>
-    </footer>
   </q-page>
 </template>
 
@@ -389,16 +303,12 @@ function buildSlug(p) {
 }
 
 function goBackToCatalog() {
-  if (window.history.length > 1) {
-    router.back()
-    return
-  }
   const last = sessionStorage.getItem('catalog:lastUrl')
-  if (last) {
-    router.push(last)
-  } else {
-    router.push({ path: '/catalogo' })
-  }
+  if (last) return router.push(last)
+
+  if (window.history.length > 1) return router.back()
+
+  return router.push({ path: '/catalogo' })
 }
 
 // --------- SEO ---------

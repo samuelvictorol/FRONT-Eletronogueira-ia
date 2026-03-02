@@ -463,7 +463,8 @@
           </q-card>
         </div>
       </section>
-      <section class="hero bg-secondary animate__animated animate__fadeIn animate__delay-4s animate__slower ">
+      <section id="buscar"
+        class="hero bg-secondary animate__animated animate__fadeIn animate__delay-4s animate__slower ">
         <div class="hero-overlay"></div>
 
         <div
@@ -504,7 +505,6 @@
             {{ openNowText }}</div>
         </div>
       </section>
-      <div class="w100" style="height: 90vh;"></div>
       <footer class="footer bg-secondary text-grey-3">
         <div class="container footer-grid q-pt-xl q-pb-md">
           <div>
@@ -513,7 +513,7 @@
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
                   alt="Eletro Nogueira Logo" /></div>
               <div class="brand-text text-grey">
-                <strong class="text-primary">EletroNogueira</strong>
+                <strong class="text-negative">Eletro</strong><strong class="text-primary">Nogueira</strong><br>
                 <small>Em frente à BR-040 • Valparaíso de Goiás</small>
               </div>
             </div>
@@ -522,9 +522,8 @@
             </p>
           </div>
           <div class="foot-links">
-            <a class="cursor-pointer" @click.prevent="scrollTo('#sobre')">Sobre</a>
             <a class="cursor-pointer" @click.prevent="scrollTo('#produtos')">Produtos</a>
-            <a class="cursor-pointer" @click.prevent="scrollTo('#horarios')">Horários</a>
+            <a class="cursor-pointer" @click.prevent="scrollTo('#como-chegar')">Horários</a>
             <a class="cursor-pointer" @click.prevent="scrollTo('#como-chegar')">Como chegar</a>
           </div>
           <div class="column">
@@ -539,7 +538,7 @@
               label="(61) 3629-6858" />
           </div>
         </div>
-        <div class="w100 column justify-center items-center text-center">Siga-nos no Instagram!! <br></br><br><q-btn
+        <div class="w100 column justify-center items-center text-center"><q-btn
             unelevated color="warning" class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank"
             rel="noopener" href="https://www.instagram.com/nogueiravalparaiso/">
             @nogueiravalparaiso
@@ -594,16 +593,37 @@ const bannersDesktop = ref([
     url: '/assets/promo1.png',
     alt: 'Promoção 1',
     // você pode colocar rota, query, ou ação
-    action: { type: 'route', to: '/catalogo?limit=15&page=1&orderBy=updated_desc' },
+    action: { type: 'scroll', to: '#buscar' },
     title: 'Ofertas da Semana',
     subtitle: 'Ferramentas e elétrica com preço bom'
   },
   {
     url: '/assets/promo2.png',
     alt: 'Kärcher',
-    action: { type: 'route', to: '/catalogo?marca=KARCHER&limit=15&page=1&orderBy=updated_desc' },
+    action: { type: 'route', to: '/catalogo?q=furadeira&limit=15&page=1&orderBy=updated_desc' },
     title: 'Kärcher',
     subtitle: 'Lavadoras e aspiradores'
+  },
+  {
+    url: '/assets/promo3.png',
+    alt: 'Serviços',
+    action: { type: 'route', to: '/servicos-manutencao' },
+    title: 'Serviços & Manutenção',
+    subtitle: 'Soluções sob medida para você'
+  },
+  {
+    url: '/assets/promo4.png',
+    alt: 'Agro',
+    action: { type: 'route', to: '/servicos-manutencao' },
+    title: 'Agro & Irrigação',
+    subtitle: 'Bombas, mangueiras e conexões'
+  },
+  {
+    url: '/assets/promo5.png',
+    alt: 'Automação',
+    action: { type: 'route', to: '/localizacao' },
+    title: 'Automação Industrial',
+    subtitle: 'CLP, inversores, sensores e painéis'
   }
 ])
 
@@ -611,16 +631,37 @@ const bannersMobile = ref([
   {
     url: '/assets/promo1.png',
     alt: 'Mobile 1',
-    action: { type: 'route', to: '/catalogo?q=furadeira&limit=15&page=1&orderBy=updated_desc' },
+    action: { type: 'scroll', to: '#buscar' },
     title: 'Furadeiras',
     subtitle: 'Clique e veja'
   },
   {
     url: '/assets/promo2.png',
     alt: 'Mobile 2',
-    action: { type: 'scroll', to: '#servicos' },
+    action: { type: 'route', to: '/catalogo?q=furadeira&limit=15&page=1&orderBy=updated_desc' },
     title: 'Serviços',
     subtitle: 'Manutenção e assistência'
+  },
+  {
+    url: '/assets/promo3.png',
+    alt: 'Mobile 3',
+    action: { type: 'route', to: '/servicos-manutencao' },
+    title: 'Agro',
+    subtitle: 'Bombas, mangueiras e conexões'
+  },
+  {
+    url: '/assets/promo4.png',
+    alt: 'Mobile 4',
+    action: { type: 'route', to: '/servicos-manutencao' },
+    title: 'Automação',
+    subtitle: 'CLP, inversores, sensores e painéis'
+  },
+  {
+    url: '/assets/promo5.png',
+    alt: 'Mobile 5',
+    action: { type: 'route', to: '/localizacao' },
+    title: 'Kärcher',
+    subtitle: 'Lavadoras e aspiradores'
   }
 ])
 

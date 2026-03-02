@@ -21,9 +21,9 @@
         <div class="nav-actions gt-sm">
           <q-btn flat class="nav-link" to="/">Início</q-btn>
           <q-btn flat class="nav-link q-ml-xs"
-            to="/servicos-manutencao">Serviços e Manutenção</q-btn>
+            to="/servicos-manutencao">Serviços</q-btn>
           <q-btn flat class="nav-link q-ml-xs"
-            to="/catalogo?min=299.9&max=8299.9&limit=15&page=1&orderBy=updated_desc">Catálogo</q-btn>
+            to="/catalogo?limit=15&page=1&orderBy=updated_desc">Catálogo</q-btn>
           <q-btn flat class="nav-link q-mx-xs" to="/localizacao">Localização</q-btn>
           <q-btn  color="green-14" class=" q-ml-xs text-bold text-shadow"  type="a"
             target="_blank" rel="noopener" icon-right="mdi-whatsapp" label="WhatsApp"
@@ -39,7 +39,7 @@
         <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/">Início</q-btn>
         <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/servicos-manutencao">Serviços e Manutenção</q-btn>
         <q-btn flat align="left" class="bg-secondary text-white nav-link"
-          to="/catalogo?min=599.9&max=1299.9&limit=15&page=1&orderBy=updated_desc">Catálogo</q-btn>
+          to="/catalogo?limit=15&page=1&orderBy=updated_desc">Catálogo</q-btn>
         <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/localizacao">Localização</q-btn>
         <!-- <q-btn icon-right="phone" color="secondary" class=" btn q-mt-sm" href="tel:+556136296858"
           label="(61) 3629-6858" /> -->
@@ -125,7 +125,7 @@ onMounted(() => {
 
 <style scoped>
 .nav-link {
-  color: #002f8d;
+  color: #000000;
   font-weight: bolder;
   position: relative;
 }

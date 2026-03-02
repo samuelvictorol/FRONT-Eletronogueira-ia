@@ -8,17 +8,13 @@
 
     <!-- HEADER -->
     <div
-      class="header-wrap bg-primary q-pa-md q-mt-xl q-mb-md animate__animated animate__fadeInDown animate__delay-2s animate__slower"
-    >
+      class="header-wrap bg-primary q-pa-md q-mt-xl q-mb-md animate__animated animate__fadeInDown animate__delay-2s animate__slower">
       <div class="row items-center justify-between">
         <div class="col">
           <q-breadcrumbs class="text-secondary">
             <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
-            <q-breadcrumbs-el
-              class="text-bold"
-              label="Catálogo"
-              :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`"
-            />
+            <q-breadcrumbs-el class="text-bold" label="Catálogo"
+              :to="`/catalogo?min=${filters.precoMin ?? ''}&max=${filters.precoMax ?? ''}&limit=${limit}&page=${page}&orderBy=${orderBy}`" />
           </q-breadcrumbs>
 
           <div class="row items-center q-mt-md no-wrap">
@@ -32,16 +28,8 @@
     <div class="filters-card bg-white rounded-borders shadow-1 q-pa-md q-mb-md">
       <div class="row q-col-gutter-md items-end">
         <div class="col-12 col-md-4">
-          <q-input
-            @keyup.enter="applyFilters(true)"
-            color="secondary"
-            v-model="filters.descricaoProduto"
-            label="Buscar por produto"
-            dense
-            outlined
-            clearable
-            hint="Ex.: furadeira, bomba, martelo"
-          >
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" v-model="filters.descricaoProduto"
+            label="Buscar por produto" dense outlined clearable hint="Ex.: furadeira, bomba, martelo">
             <template #prepend>
               <q-icon name="search" />
             </template>
@@ -49,27 +37,10 @@
         </div>
 
         <div class="col-12 col-md-3">
-          <q-select
-            v-model="selectedBrand"
-            color="secondary"
-            label="Marca"
-            dense
-            outlined
-            clearable
-            use-input
-            fill-input
-            hide-selected
-            input-debounce="350"
-            :options="brandOptions"
-            :loading="brandLoading"
-            option-label="label"
-            option-value="value"
-            hint="Digite para sugerir"
-            behavior="menu"
-            @filter="onBrandFilter"
-            @clear="clearBrand(false)"
-            @update:model-value="onBrandModelChanged"
-          >
+          <q-select v-model="selectedBrand" color="secondary" label="Marca" dense outlined clearable use-input
+            fill-input hide-selected input-debounce="350" :options="brandOptions" :loading="brandLoading"
+            option-label="label" option-value="value" hint="Digite para sugerir" behavior="menu" @filter="onBrandFilter"
+            @clear="clearBrand(false)" @update:model-value="onBrandModelChanged">
             <template #prepend>
               <q-icon name="sell" />
             </template>
@@ -86,21 +57,9 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input
-            @keyup.enter="applyFilters(true)"
-            color="secondary"
-            maxlength="9"
-            prefix="R$"
-            mask="####,##"
-            reverse-fill-mask
-            v-model="priceMinStr"
-            label="Preço mín."
-            dense
-            outlined
-            clearable
-            hint="Ex.: 199,90"
-            @blur="normalizePrice('min')"
-          >
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
+            reverse-fill-mask v-model="priceMinStr" label="Preço mín." dense outlined clearable hint="Ex.: 199,90"
+            @blur="normalizePrice('min')">
             <template #prepend>
               <q-icon name="payments" />
             </template>
@@ -108,21 +67,9 @@
         </div>
 
         <div class="col-6 col-md-2">
-          <q-input
-            @keyup.enter="applyFilters(true)"
-            color="secondary"
-            maxlength="9"
-            prefix="R$"
-            mask="####,##"
-            reverse-fill-mask
-            v-model="priceMaxStr"
-            label="Preço máx."
-            dense
-            outlined
-            clearable
-            hint="Ex.: 1299,00"
-            @blur="normalizePrice('max')"
-          >
+          <q-input @keyup.enter="applyFilters(true)" color="secondary" maxlength="9" prefix="R$" mask="####,##"
+            reverse-fill-mask v-model="priceMaxStr" label="Preço máx." dense outlined clearable hint="Ex.: 1299,00"
+            @blur="normalizePrice('max')">
             <template #prepend>
               <q-icon name="price_check" />
             </template>
@@ -132,74 +79,40 @@
         <div class="col-12 q-mb-md">
           <div class="row justify-center q-gutter-sm items-center">
             <q-btn flat color="secondary" label="Limpar" @click="resetFilters" />
-            <q-btn color="secondary" label="Consultar" icon-right="search" :loading="loading" @click="applyFilters(true)" />
+            <q-btn color="secondary" label="Consultar" icon-right="search" :loading="loading"
+              @click="applyFilters(true)" />
           </div>
         </div>
       </div>
 
       <div class="row items-center justify-between q-col-gutter-sm">
         <div class="col-12 col-md-auto">
-          <q-select
-            color="secondary"
-            v-model="orderBy"
-            :options="orderOptions"
-            dense
-            outlined
-            emit-value
-            map-options
-            label="Ordenar"
-            style="min-width: 220px"
-            @update:model-value="onOrderChange"
-          />
+          <q-select color="secondary" v-model="orderBy" :options="orderOptions" dense outlined emit-value map-options
+            label="Ordenar" style="min-width: 220px" @update:model-value="onOrderChange" />
         </div>
 
         <div v-if="hasAnyFilter" class="row q-mt-sm q-gutter-sm items-center">
-          <q-chip
-            v-if="filters.descricaoProduto"
-            color="grey-2"
-            text-color="grey-9"
-            icon="search"
-            removable
-            @remove="filters.descricaoProduto = ''; applyFilters(true)"
-          >
+          <q-chip v-if="filters.descricaoProduto" color="grey-2" text-color="grey-9" icon="search" removable
+            @remove="filters.descricaoProduto = ''; applyFilters(true)">
             {{ filters.descricaoProduto }}
           </q-chip>
 
-          <q-chip
-            v-if="selectedBrand"
-            color="grey-2"
-            text-color="grey-9"
-            icon="sell"
-            removable
-            @remove="clearBrand(true); applyFilters(true)"
-          >
+          <q-chip v-if="selectedBrand" color="grey-2" text-color="grey-9" icon="sell" removable
+            @remove="clearBrand(true); applyFilters(true)">
             {{ selectedBrand.label }}
           </q-chip>
 
-          <q-chip
-            v-if="filters.precoMin != null || filters.precoMax != null"
-            color="grey-2"
-            text-color="grey-9"
-            icon="payments"
-            removable
-            @remove="filters.precoMin = null; filters.precoMax = null; priceMinStr = ''; priceMaxStr = ''; applyFilters(true)"
-          >
+          <q-chip v-if="filters.precoMin != null || filters.precoMax != null" color="grey-2" text-color="grey-9"
+            icon="payments" removable
+            @remove="filters.precoMin = null; filters.precoMax = null; priceMinStr = ''; priceMaxStr = ''; applyFilters(true)">
             {{ (filters.precoMin != null ? money(filters.precoMin) : '—') }} →
             {{ (filters.precoMax != null ? money(filters.precoMax) : '—') }}
           </q-chip>
         </div>
 
         <div class="col-12 col-md-auto">
-          <q-select
-            color="secondary"
-            v-model="limit"
-            :options="[10, 15, 30, 45, 100]"
-            dense
-            outlined
-            label="Itens por página"
-            style="min-width: 180px"
-            @update:model-value="onLimitChange"
-          />
+          <q-select color="secondary" v-model="limit" :options="[10, 15, 30, 45, 100]" dense outlined
+            label="Itens por página" style="min-width: 180px" @update:model-value="onLimitChange" />
         </div>
       </div>
     </div>
@@ -218,15 +131,9 @@
       </template>
 
       <template v-else>
-        <q-card
-          v-for="p in items"
-          :key="p.codProduto ?? p.id ?? p._id"
-          class="bg-secondary text-white relative product-card"
-          flat
-          bordered
-          @click="openDetails(p)"
-          style="cursor: pointer;"
-        >
+        <q-card v-for="p in items" :key="p.codProduto ?? p.id ?? p._id"
+          class="bg-secondary text-white relative product-card" flat bordered @click="openDetails(p)"
+          style="cursor: pointer;">
           <q-img :src="resolveImage(p)" :alt="p.descricao" spinner-color="secondary" fit="contain" class="product-img">
             <template #error>
               <div class="absolute-full flex flex-center bg-grey-2 text-grey-8">
@@ -252,10 +159,8 @@
               {{ p.descricao }}
             </div>
 
-            <div
-              class="text-weight-bold text-white q-px-sm q-py-sm rounded-borders absolute-top-left bg-green-14"
-              style="font-size: 1rem;"
-            >
+            <div class="text-weight-bold text-white q-px-sm q-py-sm rounded-borders absolute-top-left bg-green-14"
+              style="font-size: 1rem;">
               {{ money(p.precoEfetivo ?? p.preco) }}
             </div>
           </div>
@@ -279,51 +184,14 @@
       </div>
 
       <div class="row items-center q-gutter-xs">
-        <q-btn
-          dense
-          flat
-          color="secondary"
-          icon="first_page"
-          :disable="isFirstPage || loading"
-          @click="goFirst"
-        />
-        <q-btn
-          dense
-          flat
-          color="secondary"
-          icon="chevron_left"
-          :disable="isFirstPage || loading"
-          @click="goPrev"
-        />
+        <q-btn dense flat color="secondary" icon="first_page" :disable="isFirstPage || loading" @click="goFirst" />
+        <q-btn dense flat color="secondary" icon="chevron_left" :disable="isFirstPage || loading" @click="goPrev" />
 
-        <q-pagination
-          color="secondary"
-          v-model="page"
-          :max="maxPage"
-          :max-pages="6"
-          boundary-numbers
-          direction-links
-          dense
-          :disable="loading"
-          @update:model-value="onPageChange"
-        />
+        <q-pagination color="secondary" v-model="page" :max="maxPage" :max-pages="6" boundary-numbers direction-links
+          dense :disable="loading" @update:model-value="onPageChange" />
 
-        <q-btn
-          dense
-          flat
-          color="secondary"
-          icon="chevron_right"
-          :disable="isLastPage || loading"
-          @click="goNext"
-        />
-        <q-btn
-          dense
-          flat
-          color="secondary"
-          icon="last_page"
-          :disable="isLastPage || loading"
-          @click="goLast"
-        />
+        <q-btn dense flat color="secondary" icon="chevron_right" :disable="isLastPage || loading" @click="goNext" />
+        <q-btn dense flat color="secondary" icon="last_page" :disable="isLastPage || loading" @click="goLast" />
       </div>
     </div>
 
@@ -432,9 +300,9 @@ const prevOffset = computed(() => Math.max(0, offset.value - (Number(limit.value
 const hasAnyFilter = computed(() => {
   return Boolean(
     (filters.value.descricaoProduto || '').trim() ||
-      selectedBrand.value ||
-      filters.value.precoMin != null ||
-      filters.value.precoMax != null
+    selectedBrand.value ||
+    filters.value.precoMin != null ||
+    filters.value.precoMax != null
   )
 })
 
@@ -725,7 +593,10 @@ async function applyFilters(updateURL = true) {
     const newMax = Math.max(1, Math.ceil((Number(total.value) || 0) / L))
     if (page.value > newMax) page.value = newMax
 
-    if (updateURL) writeToURL()
+    if (updateURL) {
+      writeToURL()
+      sessionStorage.setItem('catalog:lastUrl', `${location.pathname}${location.search}`)
+    }
   } catch (err) {
     console.error('[Catalogo] erro ao buscar:', err)
     $q.notify({ type: 'negative', message: 'Falha ao buscar produtos.' })
@@ -742,6 +613,8 @@ const showDetails = ref(false)
 const detailItem = ref(null)
 
 function openDetails(p) {
+  sessionStorage.setItem('catalog:lastUrl', `${location.pathname}${location.search}`)
+
   const slugify = (s = '') =>
     String(s)
       .normalize('NFD')
@@ -772,6 +645,7 @@ function openDetails(p) {
 
   const slug = `${slugify(`${desc} ${brand}`)}-${id}`
   sessionStorage.setItem(`prod:${id}`, JSON.stringify(prod))
+
   router.push({
     path: `/catalogo/produto/${slug}`,
     state: { product: prod }
