@@ -1,17 +1,18 @@
 <template>
-  <q-page class="svc-page bg-grey-3" :class="!isMobile ? 'q-px-xl q-pb-xl' : 'q-px-md q-pb-lg'">
+  <q-page class="svc-page bg-grey-3 relative" :class="!isMobile ? 'q-px-xl q-pb-xl' : 'q-px-md q-pb-lg'">
     <!-- HERO / HEADER -->
-    <section class="svc-hero bg-primary q-pa-md q-pt-xl q-mt-md">
-      <q-breadcrumbs class="text-secondary animate__animated animate__fadeInDown animate__delay-3s animate__slower">
+    <div class="w100 q-pa-md animate__animated animate__fadeInDown animate__delay-3s animate__slower bg-primary" style="position: sticky;top: 55px;z-index: 9;border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
+      <q-breadcrumbs class="text-secondary ">
         <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
         <q-breadcrumbs-el class="text-bold" label="Serviços e Manutenção" to="/servicos-manutencao" />
       </q-breadcrumbs>
-
+      <div class="text-h5 text-secondary q-mt-md text-weight-bolder">
+        Serviços e Manutenção
+      </div>
+    </div>
+    <section class="svc-hero bg-primary q-pa-md q-pt-md" >
       <div class="row items-start justify-between q-mt-xs q-col-gutter-md">
         <div class="col-12 col-md">
-          <div class="text-h5 text-secondary text-weight-bolder">
-            Serviços e Manutenção
-          </div>
           <div class="row q-col-gutter-sm q-mt-md">
             <div class="col-12 col-sm-6 col-md-4">
               <q-btn

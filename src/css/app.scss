@@ -133,12 +133,13 @@ a {
 .nav-actions .nav-link {
   padding: 8px 10px;
   border-radius: 10px;
-  border: 1px solid transparent
+  border: 2px solid transparent
 }
 
 .nav-actions .nav-link:hover {
-  border-color: rgba(10, 42, 102, .2);
-  background: #fff
+  border-color: #00205a;
+  background: #ffef08;
+  color: #012060;
 }
 
 .btn {
@@ -394,4 +395,8 @@ a {
   background: rgba(0, 3, 29, 0.616);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+.low-opacity {
+  opacity: .8;
 }

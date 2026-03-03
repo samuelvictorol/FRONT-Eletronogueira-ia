@@ -1,17 +1,18 @@
 <template>
-  <q-page class="loc-page bg-grey-3" :class="!isMobile ? 'q-pb-xl q-px-xl' : 'q-pb-lg q-px-md'">
+  <q-page class="loc-page bg-grey-3 relative" :class="!isMobile ? 'q-pb-xl q-px-xl' : 'q-pb-lg q-px-md'">
     <!-- HERO -->
-    <section class="loc-hero bg-primary rounded-borders q-pa-md q-pt-xl q-mt-md">
-      <q-breadcrumbs class="text-secondary animate__animated animate__fadeInDown animate__delay-3s animate__slower">
+    <div class="w100 bg-primary q-pa-md animate__animated animate__fadeInDown animate__delay-3s animate__slower" style="position: sticky;top:60px;z-index: 9;border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;">
+      <q-breadcrumbs class="text-secondary " >
         <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
         <q-breadcrumbs-el class="text-bold" label="Localização" to="/localizacao" />
       </q-breadcrumbs>
-
-      <div class="row items-center justify-between q-mt-sm">
-        <div>
-          <div class="text-h5 text-secondary text-weight-bolder">Como chegar na loja</div>
-        </div>
-
+      <div>
+        <div class="text-h5 text-secondary text-weight-bolder q-mt-sm">Como chegar na loja</div>
+      </div>
+    </div>
+    <section class="loc-hero bg-primary rounded-borders q-pa-md q-pt-xl animate__animated animate__fadeInUp animate__delay-3s animate__slower">
+    <div class="row items-center justify-between">
+      
         <div class="row q-gutter-sm q-mt-sm">
           <q-chip outline color="secondary" icon="pin_drop">Valparaíso - GO</q-chip>
           <q-chip outline color="secondary" icon="support_agent">Suporte técnico</q-chip>
