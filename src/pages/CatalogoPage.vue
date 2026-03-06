@@ -135,9 +135,9 @@
                   {{ p.marca }}
                 </q-badge>
               <!-- </div> -->
+              <q-btn  class="bg-green-14 text-white" dense style="position: absolute;top: 124px;right: 6px;" icon="add_shopping_cart" @click.stop="confirmAddToCart(p)" />
 
               <!-- <div class="w100 row no-wrap justify-end items-center">
-                <q-btn  class="bg-green-14 text-secondary" icon="add_shopping_cart" @click.stop="confirmAddToCart(p)" />
                 <q-btn dense icon-right="visibility" @click.stop="openDetails(p)"
                   class="bg-secondary"/>
               </div> -->
