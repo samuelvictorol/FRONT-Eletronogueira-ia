@@ -479,8 +479,10 @@ const orderOptions = [
 
 const suggestedBrands = [
   { label: 'Black & Decker', value: 'BLACK & DECKER', marca: 'Black & Decker', codMarca: null },
-  { label: 'Stanley', value: 'STANLEY', marca: 'Stanley', codMarca: null },
-  { label: '3M', value: '3M', marca: '3M', codMarca: null }
+  { label: 'Makita', value: 'VONDER', marca: 'Vonder', codMarca: null },
+  { label: '3M', value: '3M', marca: '3M', codMarca: null },
+  { label: 'Bosch', value: 'BOSCH', marca: 'Bosch', codMarca: null },
+  { label: 'DeWalt', value: 'DEWALT', marca: 'DeWalt', codMarca: null },
 ]
 
 const currentBrandName = computed(() => {
