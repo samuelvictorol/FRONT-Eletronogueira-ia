@@ -3,7 +3,7 @@
   <q-page class="q-px-md q-mt-xl q-pt-xs bg-grey-3 animate__animated animate__fadeInLeft animate__slowerr relative">
     <div class="q-mb-lg bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
       style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;position: sticky;top: 55px;z-index: 9;">
-      <q-btn flat color="secondary" icon="arrow_back" @click="goBackToCatalog" label="Voltar" />
+      <q-btn flat color="secondary" icon="arrow_back" @click="goBackToCatalog" label="Catálogo" />
     </div>
 
     <q-card flat bordered
@@ -103,7 +103,7 @@
     </q-card>
 
     <div class="q-mt-lg">
-      <q-btn flat color="secondary" icon="arrow_back" @click="goBackToCatalog" label="Voltar" />
+      <q-btn flat color="secondary" icon="arrow_back" @click="goBackToCatalog" label="Catálogo" />
     </div>
 
     <!-- FULLSCREEN -->
