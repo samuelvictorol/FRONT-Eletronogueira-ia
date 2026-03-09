@@ -45,7 +45,7 @@
       </section>
       <!-- PRODUTOS -->
       <section
-        class="section bg-secondary q-pt-lg animate__animated animate__fadeInUp animate__delay-3s animate__slower">
+        class="section bg-grad-secondary q-pt-lg animate__animated animate__fadeInUp animate__delay-3s animate__slower">
         <div class=" text-secondary">
           <div class="brand-tabs">
             <q-tabs v-model="tab1" dense no-caps align="center" outside-arrows mobile-arrows
@@ -182,7 +182,7 @@
                     <div class="svc-item">
                       <q-avatar size="58px" rounded class="svc-thumb">
                         <img
-                          src="https://armac.com.br/wordpress/wp-content/uploads/2023/01/armac-guindaste-e-munck-blog.jpg"
+                          src="/assets/munck.webp"
                           alt="Munck (Guindaste articulado)" />
                       </q-avatar>
                       <div class="svc-text">
@@ -195,7 +195,7 @@
                     <div class="svc-item">
                       <q-avatar size="58px" rounded class="svc-thumb">
                         <img
-                          src="https://blog.ferramentaskennedy.com.br/wp-content/uploads/2024/05/o-que-um-torno-mecnico8695f1a75961409e918edbcd14fc128b.jpg"
+                          src="/assets/torno.jpg"
                           alt="Torno mecânico" />
                       </q-avatar>
                       <div class="svc-text">
@@ -208,7 +208,7 @@
                     <div class="svc-item">
                       <q-avatar size="58px" rounded class="svc-thumb">
                         <img
-                          src="https://www.g20brasil.com.br/wp-content/uploads/2016/08/ferro-de-solda-dicas-cuidados.jpg"
+                          src="/assets/solda.jpg"
                           alt="Solda TIG/MIG" />
                       </q-avatar>
                       <div class="svc-text">
@@ -221,7 +221,7 @@
                     <div class="svc-item">
                       <q-avatar size="58px" rounded class="svc-thumb">
                         <img
-                          src="https://www.agbrasil360.com.br/agreletrotecnica/imgs_eventos/53ec6-rebobinamento-6.jpg"
+                          src="/assets/rebobinagem.jpg"
                           alt="Rebobinagem de motores elétricos" />
                       </q-avatar>
                       <div class="svc-text">
@@ -274,7 +274,7 @@
                       </div>
                       <q-avatar size="58px" rounded class="svc-thumb">
                         <img
-                          src="https://blog.meritocomercial.com.br/wp-content/uploads/2023/11/manutencao-preventiva-bomba-de-agua-1024x683.jpg.webp"
+                          src="/assets/bomba.webp"
                           alt="Manutenção de bombas d'água" />
                       </q-avatar>
                     </div>
@@ -287,7 +287,7 @@
                       </div>
                       <q-avatar size="58px" rounded class="svc-thumb">
                         <img
-                          src="https://s1.kaercher-media.com/media/image/file/9734/d3/assistencia-tecnica-kaercher.webp"
+                          src="/assets/mangueira.webp"
                           alt="Mangueiras hidráulicas e lavadoras" />
                       </q-avatar>
                     </div>
@@ -300,7 +300,7 @@
                       </div>
                       <q-avatar size="58px" rounded class="svc-thumb">
                         <img
-                          src="https://locadoraequiloc.com.br/wp-content/uploads/2022/07/manutencao-de-compressores-servico.jpg"
+                          src="/assets/compressor.jpg"
                           alt="Manutenção de compressores" />
                       </q-avatar>
                     </div>
@@ -312,7 +312,7 @@
                         <div class="text-grey-8">CLP/inversores, sensores e painéis.</div>
                       </div>
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img src="https://blog.safetycontrol.ind.br/wp-content/uploads/2023/05/Manutencao-001.png"
+                        <img src="/assets/automacao.png"
                           alt="Automação industrial" />
                       </q-avatar>
                     </div>
@@ -450,12 +450,12 @@
                 src="https://www.google.com/maps?q=Eletro%20Nogueira%20Valpara%C3%ADso%20de%20Goi%C3%A1s&output=embed" />
               <div class="map-overlay row q-py-md w100 justify-center items-center bg-secondary text-primary">
                 <div class="row items-center q-gutter-sm">
-                  <div class="text-primary text-center q-px-xs">
+                  <div class="text-white text-center q-px-xs">
                     <q-icon name="pin_drop" class="q-pb-xs text-primary" />
                     Eletro Nogueira — Av. Marginal, QD, Lote 01 • Esplanada I • Valparaíso de Goiás
                   </div>
                 </div>
-                <q-btn dense unelevated color="primary" text-color="secondary" icon="directions" label="Ver no Maps"
+                <q-btn dense unelevated glossy color="primary" text-color="secondary" icon="directions" label="Ver no Maps"
                   class="q-mt-md text-bold w100 q-mx-lg" type="a" target="_blank" rel="noopener"
                   href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" />
               </div>
@@ -677,21 +677,21 @@ function onBannerClick(banner) {
   if (a.type === 'link' && a.href) window.open(a.href, '_blank', 'noopener,noreferrer')
 }
 const brandsRow1 = [
-  { name: 'makita', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Makita_Logo.svg/1280px-Makita_Logo.svg.png' },
-  { name: 'BLACK+%26+DECKER', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Black%2BDecker_Logo.svg/1200px-Black%2BDecker_Logo.svg.png' },
-  { name: '3m', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/3M_wordmark.svg/2560px-3M_wordmark.svg.png' },
-  { name: 'bosch', src: 'https://logodownload.org/wp-content/uploads/2014/12/bosch-logo-0.png' },
-  { name: 'tramontina', src: 'https://grandesnomesdapropaganda.com.br/wp-content/uploads/2020/01/Tramontina.jpg' },
-  { name: 'stanley', src: 'https://logodownload.org/wp-content/uploads/2021/03/stanley-logo-1.png' }
+  { name: 'makita', src: '/assets/makita-logo.png' },
+  { name: 'BLACK+%26+DECKER', src: '/assets/black-decker-logo.png' },
+  { name: '3m', src: '/assets/3m-logo.png' },
+  { name: 'bosch', src: '/assets/bosch-logo.png' },
+  { name: 'tramontina', src: '/assets/tramontina-logo.jpg' },
+  { name: 'stanley', src: '/assets/stanley-logo.png' }
 ]
 
 const brandsRow2 = [
-  { name: 'Karcher', src: 'https://upload.wikimedia.org/wikipedia/commons/9/9c/Kaercher_Logo_2015.png' },
-  { name: 'marluvas', src: 'https://images.seeklogo.com/logo-png/40/1/marluvas-logo-png_seeklogo-404913.png' },
-  { name: 'Tigre', src: 'https://logodownload.org/wp-content/uploads/2016/09/tigre-logo-1-1.png' },
-  { name: 'lamesa', src: 'https://http2.mlstatic.com/D_NQ_NP_896259-MLB77676344918_072024-O-cabo-fio-flexivel-cobre-15mm-100m-lamesa-450750v.webp' },
-  { name: 'nova', src: 'https://media.licdn.com/dms/image/v2/D563DAQFP8xwCqR0SpA/image-scale_191_1128/image-scale_191_1128/0/1721411832041/nova_motores_cover?e=2147483647&v=beta&t=NGpPzhgj6s10Y8SsfDc4CDaGt948DoRUxqqRC0R_QmI' },
-  { name: 'matsuyama', src: 'https://www.matsuyama.ind.br/imagens/logo/logo-matsuyama-top.png' }
+  { name: 'Karcher', src: '/assets/karcher-logo.png' },
+  { name: 'marluvas', src: '/assets/marluvas-logo.png' },
+  { name: 'Tigre', src: '/assets/tigre-logo.png' },
+  { name: 'lamesa', src: '/assets/lamesa-logo.webp' },
+  { name: 'matsuyama', src: '/assets/matsuyama-logo.png' },
+  { name: 'nova', src: '/assets/nova-logo.jpg' },
 ]
 
 const destaqueProducts = [
