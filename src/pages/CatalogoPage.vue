@@ -36,7 +36,7 @@
                 clearable
                 bg-color="white"
                 color="secondary"
-                placeholder="Buscar produto..."
+                placeholder="Pesquisar..."
                 @keyup.enter="searchNow"
                 @clear="searchNow"
               >
@@ -88,7 +88,7 @@
             outlined
             clearable
             color="secondary"
-            label="Buscar por produto"
+            label="O que você precisa?"
             hint="Ex.: furadeira, martelo, parafusadeira, disco 3M"
             @keyup.enter="searchNow"
             @clear="searchNow"
@@ -102,7 +102,6 @@
                 unelevated
                 color="secondary"
                 icon="search"
-                label="Buscar"
                 @click="searchNow"
               />
             </template>
