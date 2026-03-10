@@ -19,16 +19,29 @@ function pickPrice(p) {
 
 function normalizeCartProduct(p) {
   if (!p) return null
-  const id = String(p.id ?? p.codProduto ?? p.CODPRODUTO ?? p._id ?? '')
-  if (!id) return null
+
+  const codigo = String(
+    p.codProduto ??
+    p.CODPRODUTO ??
+    p.codigo ??
+    p.CODIGO ??
+    p.id ??
+    p._id ??
+    ''
+  ).trim()
+
+  if (!codigo) return null
 
   return {
-    id,
+    id: codigo,
+    codigo,
     descricao: String(p.descricao ?? p.DESCRICAO ?? '').trim() || 'Produto',
     marca: String(p.marca ?? p.MARCA ?? '').trim() || '',
     preco: Number(p.preco ?? p.PRECO ?? 0) || 0,
     precoPromocao: Number(p.precoPromocao ?? p.PRECOPROMOCAO ?? 0) || 0,
-    precoEfetivo: Number(p.precoEfetivo ?? p.PRECO_EFETIVO ?? p.preco ?? p.PRECO ?? 0) || 0,
+    precoEfetivo: Number(
+      p.precoEfetivo ?? p.PRECO_EFETIVO ?? p.preco ?? p.PRECO ?? 0
+    ) || 0,
     imagemUrl:
       p.imagemUrl ||
       p.imgPath ||
@@ -40,7 +53,10 @@ function normalizeCartProduct(p) {
 
 function moneyBR(n) {
   try {
-    return Number(n || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    return Number(n || 0).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    })
   } catch {
     return `R$ ${String(n || 0)}`
   }
@@ -48,7 +64,7 @@ function moneyBR(n) {
 
 const state = reactive({
   drawerOpen: false,
-  items: [] // { id, descricao, marca, precoEfetivo, precoPromocao, imagemUrl, qty }
+  items: [] // { id, codigo, descricao, marca, precoEfetivo, precoPromocao, imagemUrl, qty }
 })
 
 function persist() {
@@ -119,7 +135,9 @@ function clear() {
   persist()
 }
 
-const count = computed(() => state.items.reduce((acc, it) => acc + Number(it.qty || 0), 0))
+const count = computed(() => {
+  return state.items.reduce((acc, it) => acc + Number(it.qty || 0), 0)
+})
 
 const total = computed(() => {
   return state.items.reduce((acc, it) => {
@@ -130,15 +148,23 @@ const total = computed(() => {
 
 function buildWhatsAppText() {
   const lines = []
-  lines.push('Olá, estes items estão disponíveis?')
-  state.items.forEach((it, i) => {
+
+  lines.push('Olá, estes itens estão disponíveis?')
+  lines.push('')
+
+  state.items.forEach((it) => {
     const qty = Number(it.qty || 1)
     const price = pickPrice(it)
-    const name = String(it.descricao || '').trim()
-    // formato: 1x PRODUTO - R$ 589,00
-    lines.push(`${qty}x ${name} - ${moneyBR(price)}`)
+    const lineTotal = price * qty
+    const codigo = String(it.codigo ?? it.id ?? '').trim()
+    const nome = String(it.descricao || '').trim()
+
+    lines.push(`*Cod.${codigo}* - ${qty} uni ${nome} - ${moneyBR(lineTotal)}`)
   })
-  lines.push(`TOTAL: ${moneyBR(total.value)}.`)
+
+  lines.push('')
+  lines.push(`*TOTAL* = ${moneyBR(total.value)}`)
+
   return lines.join('\n')
 }
 

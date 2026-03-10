@@ -679,10 +679,10 @@ function onBannerClick(banner) {
 const brandsRow1 = [
   { name: 'makita', src: '/assets/makita-logo.png' },
   { name: 'BLACK+%26+DECKER', src: '/assets/black-decker-logo.png' },
+  { name: 'stanley', src: '/assets/stanley-logo.png' },
   { name: '3m', src: '/assets/3m-logo.png' },
-  { name: 'bosch', src: '/assets/bosch-logo.png' },
   { name: 'tramontina', src: '/assets/tramontina-logo.jpg' },
-  { name: 'stanley', src: '/assets/stanley-logo.png' }
+  { name: 'bosch', src: '/assets/bosch-logo.png' },
 ]
 
 const brandsRow2 = [

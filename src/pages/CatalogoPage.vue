@@ -9,7 +9,6 @@
       <div class="q-mt-sm text-grey-7">Carregando produtos...</div>
     </q-inner-loading>
 
-    <!-- HEADER STICKY -->
     <div
       ref="stickyHeaderEl"
       class="catalog-sticky-header bg-primary q-px-md q-py-md q-mt-lg q-mb-md"
@@ -75,12 +74,11 @@
       </div>
     </div>
 
-    <!-- BUSCA PRINCIPAL -->
     <div
       ref="mainSearchEl"
       class="main-search-card bg-white rounded-borders shadow-1 q-pa-md q-mb-md"
     >
-      <div class="row ">
+      <div class="row">
         <div class="w100">
           <q-input
             v-model="filters.descricaoProduto"
@@ -89,7 +87,7 @@
             clearable
             color="secondary"
             label="O que você precisa?"
-            hint="Ex.: furadeira, martelo, parafusadeira, disco 3M"
+            hint="Ex.: furadeira, martelo, parafusadeira, fita 3M"
             @keyup.enter="searchNow"
             @clear="searchNow"
           >
@@ -110,7 +108,6 @@
       </div>
     </div>
 
-    <!-- CHIPS DE FILTROS ATIVOS -->
     <div
       v-if="hasAnyFilter"
       class="row items-center q-gutter-sm q-mb-md"
@@ -171,7 +168,6 @@
       </q-chip>
     </div>
 
-    <!-- GRID -->
     <div class="catalog-grid">
       <template v-if="loading && items.length === 0">
         <q-skeleton
@@ -247,7 +243,7 @@
           </div>
 
           <q-card-section class="q-pt-md q-pb-md bg-grad-secondary">
-            <div class="product-title  text-subtitle2 text-weight-medium ellipsis-2-lines ">
+            <div class="product-title text-subtitle2 text-weight-medium ellipsis-2-lines">
               {{ p.descricao }}
             </div>
           </q-card-section>
@@ -255,7 +251,6 @@
       </template>
     </div>
 
-    <!-- STATUS LOAD -->
     <div class="row justify-center q-mt-lg q-mb-xl">
       <q-spinner-dots v-if="loadingMore" size="34px" color="secondary" />
       <div
@@ -266,9 +261,9 @@
       </div>
     </div>
 
-    <!-- FAB MOBILE -->
     <q-page-sticky
-      v-if="isMobile" style="z-index: 9;"
+      v-if="isMobile"
+      style="z-index: 9;"
       position="bottom-right"
       :offset="[18, 18]"
     >
@@ -276,7 +271,8 @@
         round
         size="lg"
         color="primary"
-        text-color="secondary" glossy
+        text-color="secondary"
+        glossy
         icon="tune"
         class="shadow-8"
         @click="openFiltersModal"
@@ -291,7 +287,6 @@
       </q-btn>
     </q-page-sticky>
 
-    <!-- MODAL FILTROS -->
     <q-dialog v-model="filtersDialog">
       <q-card class="filters-modal-card">
         <q-card-section class="row items-center justify-between bg-primary">
@@ -423,6 +418,7 @@ import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCart } from 'src/composables/useCart'
+import { api_ia } from 'src/boot/axios-ia'
 
 const $q = useQuasar()
 const router = useRouter()
@@ -445,6 +441,7 @@ const limit = ref(15)
 const apiIsLastPage = ref(false)
 
 const orderBy = ref('updated_desc')
+const ia_url = ref('') // URL da IA externa que vai só corrigir o JSON de busca
 
 const filters = ref({
   descricaoProduto: '',
@@ -460,6 +457,7 @@ const modalFilters = ref({
   precoMax: null,
   descricaoMarca: null
 })
+
 const modalOrderBy = ref('updated_desc')
 const modalSelectedBrand = ref(null)
 const modalBrandOptions = ref([])
@@ -482,8 +480,10 @@ const suggestedBrands = [
   { label: 'MAKITA', value: 'MAKITA', marca: 'MAKITA', codMarca: null },
   { label: '3M', value: '3M', marca: '3M', codMarca: null },
   { label: 'BOSCH', value: 'BOSCH', marca: 'BOSCH', codMarca: null },
-  { label: 'DEWALT', value: 'DEWALT', marca: 'DEWALT', codMarca: null },
+  { label: 'DEWALT', value: 'DEWALT', marca: 'DEWALT', codMarca: null }
 ]
+
+const selectedBrand = ref(null)
 
 const currentBrandName = computed(() => {
   return (selectedBrand.value?.marca || filters.value.descricaoMarca || '').trim()
@@ -524,8 +524,6 @@ const isLastPage = computed(() => {
   return Number(page.value) >= maxPage.value
 })
 
-const selectedBrand = ref(null)
-
 let reqSeq = 0
 let scrollTarget = null
 let scrollTicking = false
@@ -548,6 +546,11 @@ function normalizeNumber(value) {
   if (value === null || value === undefined || value === '') return null
   const n = Number(String(value).replace(',', '.'))
   return Number.isFinite(n) ? n : null
+}
+
+function normalizeOrderValue(value) {
+  const allowed = ['updated_desc', 'price_asc', 'price_desc', 'created_desc']
+  return allowed.includes(String(value || '')) ? String(value) : 'updated_desc'
 }
 
 function safeUrl(url) {
@@ -669,7 +672,7 @@ function readFromURL() {
   filters.value.descricaoProduto = qs.get('q') || ''
   filters.value.precoMin = normalizeNumber(qs.get('min'))
   filters.value.precoMax = normalizeNumber(qs.get('max'))
-  orderBy.value = qs.get('orderBy') || 'updated_desc'
+  orderBy.value = normalizeOrderValue(qs.get('orderBy'))
 
   const marca = (qs.get('marca') || '').trim()
   if (marca) {
@@ -686,7 +689,7 @@ function readFromURL() {
   }
 
   page.value = 1
-  limit.value = 15
+  limit.value = Number(qs.get('limit')) > 0 ? Number(qs.get('limit')) : 15
 }
 
 function writeToURL() {
@@ -706,6 +709,118 @@ function writeToURL() {
   window.history.replaceState(null, '', `${location.pathname}${queryString ? `?${queryString}` : ''}`)
 }
 
+function buildRawSearchPayload({ append = false } = {}) {
+  return {
+    userText: (filters.value.descricaoProduto || '').trim(),
+    descricaoProduto: (filters.value.descricaoProduto || '').trim() || null,
+    descricaoMarca: currentBrandName.value || null,
+    precoMin: normalizeNumber(filters.value.precoMin),
+    precoMax: normalizeNumber(filters.value.precoMax),
+    limit: Number(limit.value),
+    offset: append ? Number(offset.value) : 0,
+    orderBy: normalizeOrderValue(orderBy.value),
+    ia_url: (ia_url.value || '').trim() || null
+  }
+}
+
+function buildFallbackSearchPayload(raw = {}) {
+  const precoMin = normalizeNumber(raw.precoMin)
+  const precoMax = normalizeNumber(raw.precoMax)
+
+  let nextMin = precoMin
+  let nextMax = precoMax
+
+  if (nextMin !== null && nextMax !== null && nextMin > nextMax) {
+    const tmp = nextMin
+    nextMin = nextMax
+    nextMax = tmp
+  }
+
+  return {
+    descricaoProduto: typeof raw.descricaoProduto === 'string' ? raw.descricaoProduto.trim() : '',
+    descricaoMarca: typeof raw.descricaoMarca === 'string' ? raw.descricaoMarca.trim() : null,
+    precoMin: nextMin,
+    precoMax: nextMax,
+    limit: Number(raw.limit) > 0 ? Number(raw.limit) : Number(limit.value),
+    offset: Number.isFinite(Number(raw.offset)) ? Number(raw.offset) : 0,
+    orderBy: normalizeOrderValue(raw.orderBy)
+  }
+}
+
+function normalizeOptimizerResponse(data = {}, rawFallback = {}) {
+  const source = data?.optimizedParams || data?.params || {}
+  return buildFallbackSearchPayload({
+    descricaoProduto: source?.descricaoProduto ?? rawFallback?.descricaoProduto ?? '',
+    descricaoMarca: source?.descricaoMarca ?? rawFallback?.descricaoMarca ?? null,
+    precoMin: rawFallback?.precoMin ?? null,
+    precoMax: rawFallback?.precoMax ?? null,
+    limit: rawFallback?.limit ?? Number(limit.value),
+    offset: rawFallback?.offset ?? 0,
+    orderBy: rawFallback?.orderBy ?? orderBy.value
+  })
+}
+
+function syncStateWithSearchPayload(payload = {}) {
+  const next = buildFallbackSearchPayload(payload)
+
+  filters.value.descricaoProduto = next.descricaoProduto || ''
+  filters.value.precoMin = next.precoMin
+  filters.value.precoMax = next.precoMax
+
+  limit.value = Number(next.limit) > 0 ? Number(next.limit) : 15
+  orderBy.value = normalizeOrderValue(next.orderBy)
+
+  if (next.descricaoMarca) {
+    selectedBrand.value = {
+      label: next.descricaoMarca,
+      value: next.descricaoMarca.toUpperCase(),
+      codMarca: null,
+      marca: next.descricaoMarca
+    }
+    filters.value.descricaoMarca = next.descricaoMarca
+  } else {
+    selectedBrand.value = null
+    filters.value.descricaoMarca = null
+  }
+}
+
+async function optimizeSearchPayload(rawPayload) {
+  const shouldTryAI = Boolean(
+    (rawPayload?.descricaoProduto || '').trim() ||
+    (rawPayload?.descricaoMarca || '').trim()
+  )
+
+  if (!shouldTryAI) {
+    return {
+      params: buildFallbackSearchPayload(rawPayload),
+      usedAI: false,
+      aiError: null
+    }
+  }
+
+  try {
+    const { data } = await api_ia.post('/catalog/optimize-search', rawPayload)
+
+    if (!data?.ok) {
+      throw new Error(data?.error || 'Falha ao otimizar a busca')
+    }
+
+    return {
+      params: normalizeOptimizerResponse(data, rawPayload),
+      usedAI: Boolean(data?.usedAI),
+      aiError: data?.aiError || null
+    }
+  } catch (err) {
+    console.warn('[Catalogo] IA indisponível, usando busca original:', err)
+
+    return {
+      params: buildFallbackSearchPayload(rawPayload),
+      usedAI: false,
+      aiError: err?.message || 'Falha ao otimizar busca'
+    }
+  }
+}
+
 async function applyFilters({ append = false, updateURL = true } = {}) {
   const mySeq = ++reqSeq
 
@@ -713,14 +828,32 @@ async function applyFilters({ append = false, updateURL = true } = {}) {
   else loading.value = true
 
   try {
+    let effectiveParams
+
+    if (append) {
+      effectiveParams = buildFallbackSearchPayload(buildRawSearchPayload({ append: true }))
+    } else {
+      const rawPayload = buildRawSearchPayload({ append: false })
+      const optimized = await optimizeSearchPayload(rawPayload)
+
+      if (mySeq !== reqSeq) return
+
+      effectiveParams = buildFallbackSearchPayload({
+        ...optimized.params,
+        offset: 0
+      })
+
+      syncStateWithSearchPayload(effectiveParams)
+    }
+
     const params = {
-      limit: Number(limit.value),
-      offset: Number(offset.value),
-      descricaoProduto: (filters.value.descricaoProduto || '').trim() || null,
-      descricaoMarca: currentBrandName.value || null,
-      precoMin: normalizeNumber(filters.value.precoMin),
-      precoMax: normalizeNumber(filters.value.precoMax),
-      orderBy: orderBy.value || 'updated_desc'
+      limit: Number(effectiveParams.limit),
+      offset: append ? Number(offset.value) : 0,
+      descricaoProduto: (effectiveParams.descricaoProduto || '').trim() || null,
+      descricaoMarca: (effectiveParams.descricaoMarca || '').trim() || null,
+      precoMin: normalizeNumber(effectiveParams.precoMin),
+      precoMax: normalizeNumber(effectiveParams.precoMax),
+      orderBy: normalizeOrderValue(effectiveParams.orderBy)
     }
 
     const { data } = await api.get('/produtos/', { params })
