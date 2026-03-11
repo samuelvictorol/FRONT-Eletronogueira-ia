@@ -84,7 +84,7 @@
     </q-drawer>
 
     <!-- RIGHT DRAWER (CART) -->
-    <q-drawer v-model="cart.state.drawerOpen" side="right" overlay class="bg-secondary text-primary"
+    <q-drawer v-model="cart.state.drawerOpen" side="right" overlay class="bg-grad-secondary text-primary"
       :width="$q.screen.lt.md ? 330 : 420">
       <div class="q-pa-md">
         <div class="row items-center justify-between">

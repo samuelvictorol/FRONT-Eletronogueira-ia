@@ -37,10 +37,10 @@
                 color="secondary"
                 placeholder="Pesquisar..."
                 @keyup.enter="searchNow"
-                @clear="searchNow"
+                @clear="clearFilters"
               >
                 <template #append>
-                  <q-btn
+                  <q-btn class="absolute-right"
                     flat
                     dense
                     icon="search"
@@ -89,7 +89,7 @@
             label="O que você precisa?"
             hint="Ex.: furadeira, martelo, parafusadeira, fita 3M"
             @keyup.enter="searchNow"
-            @clear="searchNow"
+            @clear="clearFilters"
           >
             <template #prepend>
               <q-icon name="search" color="secondary" />
@@ -912,6 +912,17 @@ async function applyFilters({ append = false, updateURL = true } = {}) {
   }
 }
 
+function clearFilters() {
+  filters.value = {
+    descricaoProduto: '',
+    descricaoMarca: null,
+    precoMin: null,
+    precoMax: null
+  }
+  selectedBrand.value = null
+  orderBy.value = 'updated_desc'
+}
+
 async function searchNow() {
   page.value = 1
   items.value = []
@@ -1352,13 +1363,7 @@ onBeforeUnmount(() => {
     top: 50px;
   }
 }
-
-@media (max-width: 390px) {
-  .catalog-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
+  
 .product-card {
   border-radius: 18px;
   overflow: hidden;

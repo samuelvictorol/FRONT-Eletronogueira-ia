@@ -464,7 +464,7 @@
         </div>
       </section>
       <section id="buscar"
-        class="hero bg-secondary animate__animated animate__fadeIn animate__delay-4s animate__slower ">
+        class="hero bg-grad-secondary animate__animated animate__fadeIn animate__delay-4s animate__slower ">
         <div class="hero-overlay"></div>
 
         <div
@@ -505,7 +505,7 @@
             {{ openNowText }}</div>
         </div>
       </section>
-      <footer class="footer bg-secondary text-grey-3">
+      <footer class="footer bg-primary text-secondary q-pt-lg">
         <div class="container footer-grid q-pt-xl q-pb-md">
           <div>
             <div class="brand">
@@ -513,8 +513,8 @@
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
                   alt="Eletro Nogueira Logo" /></div>
               <div class="brand-text text-grey">
-                <strong class="text-negative">Eletro</strong><strong class="text-primary">Nogueira</strong><br>
-                <small>Em frente à BR-040 • Valparaíso de Goiás</small>
+                <strong class="text-negative">Eletro</strong><strong class="text-secondary">Nogueira</strong><br>
+                <small class="text-black">Em frente à BR-040 • Valparaíso de Goiás</small>
               </div>
             </div>
             <p class="foot-copy q-pt-sm">Soluções em elétrica, hidráulica, automação e agro.<br>Pronta-entrega e
@@ -527,24 +527,24 @@
             <a class="cursor-pointer" @click.prevent="scrollTo('#como-chegar')">Como chegar</a>
           </div>
           <div class="column">
-            <q-btn unelevated color="positive" class="text-shadow btn whats q-ml-xs shadow-1" glossy type="a"
+            <q-btn unelevated color="positive" class="text-shadow q-ml-xs shadow-1"  type="a"
               target="_blank" rel="noopener"
               href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
               WhatsApp
               <q-img
                 src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
                 alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
-            <q-btn icon-right="phone" color="primary" outline class=" btn q-mt-sm" href="tel:+556136296858"
+            <q-btn icon-right="phone"  class="bg-secondary text-white rounded-borders q-mt-sm" href="tel:+556136296858"
               label="(61) 3629-6858" />
           </div>
         </div>
-        <div class="w100 column justify-center items-center text-center"><q-btn unelevated color="warning"
-            class="text-shadow btn whats q-ml-sm" glossy type="a" target="_blank" rel="noopener"
+        <div class="w100 column justify-center items-center text-center"><q-btn unelevated color="secondary"
+            class="text-shadow" type="a" target="_blank" rel="noopener"
             href="https://www.instagram.com/nogueiravalparaiso/">
             @nogueiravalparaiso
-            <q-img
+            <q-img class="q-ml-sm"
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-              alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px" /></q-btn></div>
+              alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px;filter: grayscale(1);" /></q-btn></div>
         <div class="copy q-mt-md">© {{ year }} Eletro Nogueira — 26.931.014/0001-12.</div>
       </footer>
     </q-page>
