@@ -290,7 +290,7 @@
     <q-dialog v-model="filtersDialog">
       <q-card class="filters-modal-card">
         <q-card-section class="row items-center justify-between bg-primary">
-          <div class="text-h6 text-weight-bold text-secondary">Ajustes do catálogo</div>
+          <div class="text-h6 text-weight-bold text-secondary">Ajustar Filtros</div>
           <q-btn flat round dense icon="close" v-close-popup />
         </q-card-section>
 
