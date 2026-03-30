@@ -32,12 +32,10 @@
                 v-model="filters.descricaoProduto"
                 dense
                 outlined
-                clearable
                 bg-color="white"
                 color="secondary"
                 placeholder="Pesquisar..."
                 @keyup.enter="searchNow"
-                @clear="clearFilters"
               >
                 <template #append>
                   <q-btn class="absolute-right"
@@ -79,32 +77,35 @@
       class="main-search-card bg-white rounded-borders shadow-1 q-pa-md q-mb-md"
     >
       <div class="row">
-        <div class="w100">
-          <q-input
-            v-model="filters.descricaoProduto"
-            dense
-            outlined
-            clearable
-            color="secondary"
-            label="O que você precisa?"
-            hint="Ex.: furadeira, martelo, parafusadeira, fita 3M"
-            @keyup.enter="searchNow"
-            @clear="clearFilters"
-          >
-            <template #prepend>
-              <q-icon name="search" color="secondary" />
-            </template>
+          <div class="w100">
+            <q-input
+              v-model="filters.descricaoProduto"
+              dense
+              outlined
+              clearable
+              color="secondary"
+              label="O que você precisa?"
+              hint="Ex.: furadeira, martelo, parafusadeira, fita 3M"
+              @keyup.enter="searchNow"
+              @clear="clearFilters" class="relative"
+            >
+              <template #prepend>
+                <q-icon name="search" color="secondary" />
+              </template>
 
-            <template #append>
-              <q-btn
-                unelevated
-                color="secondary"
-                icon="search"
-                @click="searchNow"
-              />
-            </template>
-          </q-input>
-        </div>
+              <template #append>
+                <div class="absolute-right">
+                  <q-icon name="close" color="grey-7" class="cursor-pointer q-mr-xs" @click="clearFilters" />
+                  <q-btn
+                    unelevated
+                    color="secondary"
+                    icon="search"
+                    @click="searchNow"
+                  />
+                </div>
+              </template>
+            </q-input>
+          </div>
       </div>
     </div>
 
@@ -413,13 +414,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCart } from 'src/composables/useCart'
 import { api_ia } from 'src/boot/axios-ia'
+import { useRouter, useRoute } from 'vue-router'
 
+const route = useRoute()
 const $q = useQuasar()
 const router = useRouter()
 const cart = useCart()
@@ -785,10 +787,11 @@ function syncStateWithSearchPayload(payload = {}) {
 }
 
 async function optimizeSearchPayload(rawPayload) {
-  const shouldTryAI = Boolean(
-    (rawPayload?.descricaoProduto || '').trim() ||
-    (rawPayload?.descricaoMarca || '').trim()
-  )
+  // const shouldTryAI = Boolean(
+  //   (rawPayload?.descricaoProduto || '').trim() ||
+  //   (rawPayload?.descricaoMarca || '').trim()
+  // ) descomente para ativar a IA apenas quando houver algo relevante para otimizar
+  const shouldTryAI = false
 
   if (!shouldTryAI) {
     return {
@@ -1216,6 +1219,16 @@ function resetAllFilters() {
   searchNow()
 }
 
+// um watch que monitora a url de query, se ela alterar (por exemplo, por navegação do usuário), ele lê os parâmetros e executa a busca correspondente
+watch(
+  () => route.query,
+  () => {
+    readFromURL()
+    searchNow()
+  },
+  { deep: true }
+)
+
 function confirmAddToCart(p) {
   const name = p?.descricao || 'Produto'
 
@@ -1453,4 +1466,6 @@ onBeforeUnmount(() => {
   opacity: 0;
   transform: translateY(-4px);
 }
+
+
 </style>

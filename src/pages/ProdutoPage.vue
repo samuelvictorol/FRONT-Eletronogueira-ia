@@ -1,27 +1,75 @@
-<!-- ProductPage.vue (COM CARROUSEL + FULLSCREEN, LÊ IMGS_PATH DO BACKEND / STATE / CACHE) -->
 <template>
   <q-page class="q-px-md q-mt-xl q-pt-xs bg-grey-3 animate__animated animate__fadeInLeft animate__slowerr relative">
-    <div class="q-mb-lg bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
-      style="border-bottom-left-radius: 20px;border-bottom-right-radius: 20px;position: sticky;top: 55px;z-index: 9;">
+    <div
+      class="q-mb-lg bg-primary animate__animated animate__fadeInDown animate__delay-3s animate__slower"
+      style="border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; position: sticky; top: 55px; z-index: 9;"
+    >
       <q-btn flat color="secondary" icon="arrow_back" @click="goBackToCatalog" label="Catálogo" />
     </div>
 
-    <q-card flat bordered
-      class="bg-white rounded-borders shadow-1 animate__animated animate__fadeInLeft animate__slower">
+    <q-card
+      flat
+      bordered
+      class="bg-white rounded-borders shadow-1 animate__animated animate__fadeInLeft animate__slower"
+    >
       <q-card-section>
-        <div class="row q-col-gutter-xl">
+        <div v-if="!product && loading" class="row q-col-gutter-xl">
+          <div class="col-12 col-md-6">
+            <q-skeleton type="rect" style="height: 360px; border-radius: 14px" />
+          </div>
+
+          <div class="col-12 col-md-6">
+            <q-skeleton type="text" class="q-mb-sm" width="35%" />
+            <q-skeleton type="text" class="q-mb-sm" width="90%" />
+            <q-skeleton type="text" class="q-mb-md" width="45%" />
+            <q-skeleton type="text" class="q-mb-sm" width="30%" />
+            <q-skeleton type="text" class="q-mb-md" width="40%" />
+
+            <q-separator class="q-my-md" />
+
+            <q-skeleton type="text" class="q-mb-sm" />
+            <q-skeleton type="text" class="q-mb-sm" />
+            <q-skeleton type="text" class="q-mb-md" width="75%" />
+
+            <q-card flat bordered class="bg-grey-1">
+              <q-card-section>
+                <q-skeleton type="text" class="q-mb-sm" />
+                <q-skeleton type="text" class="q-mb-sm" />
+                <q-skeleton type="text" class="q-mb-sm" />
+                <q-skeleton type="text" width="80%" />
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
+
+        <div v-else-if="product" class="row q-col-gutter-xl">
           <!-- IMAGENS -->
           <div class="col-12 col-md-6">
-            <q-skeleton v-if="loading" type="rect" style="height: 360px; border-radius: 14px" />
-
-            <div v-else class="w100 row justify-center">
+            <div class="w100 row justify-center">
               <div v-if="images.length" class="w100">
-                <q-carousel v-model="activeSlide" swipeable animated arrows navigation height="360px"
-                  class="rounded-borders bg-grey-3">
-                  <q-carousel-slide v-for="(src, idx) in images" :key="src + idx" :name="idx" class="flex flex-center">
-                    <q-img :src="src" :alt="product?.descricao || 'Imagem do produto'" fit="contain"
-                      class="product-detail-img cursor-pointer" @click="openFullscreen(src)"
-                      @error="onCarouselImageError(idx)">
+                <q-carousel
+                  v-model="activeSlide"
+                  swipeable
+                  animated
+                  arrows
+                  navigation
+                  height="360px"
+                  class="rounded-borders bg-grey-3"
+                >
+                  <q-carousel-slide
+                    v-for="(src, idx) in images"
+                    :key="src + idx"
+                    :name="idx"
+                    class="flex flex-center"
+                  >
+                    <q-img
+                      :src="src"
+                      :alt="product?.descricao || 'Imagem do produto'"
+                      fit="contain"
+                      class="product-detail-img cursor-pointer"
+                      @click="openFullscreen(src)"
+                      @error="onCarouselImageError(idx)"
+                    >
                       <div class="absolute-bottom-right q-pa-sm bg-secondary">
                         <q-chip dense color="secondary" text-color="white" icon="zoom_in">
                           Ampliar
@@ -33,16 +81,25 @@
 
                 <div class="row q-col-gutter-sm q-mt-sm justify-center">
                   <div v-for="(src, idx) in images" :key="'thumb-' + src + idx" class="col-auto">
-                    <q-img :src="src" fit="cover" class="thumb-img cursor-pointer"
-                      :class="idx === activeSlide ? 'thumb-active' : ''" @click="activeSlide = idx"
-                      @error="onThumbImageError(idx)" />
+                    <q-img
+                      :src="src"
+                      fit="cover"
+                      class="thumb-img cursor-pointer"
+                      :class="idx === activeSlide ? 'thumb-active' : ''"
+                      @click="activeSlide = idx"
+                      @error="onThumbImageError(idx)"
+                    />
                   </div>
                 </div>
               </div>
 
               <div v-else class="w100 row justify-center">
-                <q-img :src="fallbackImage" :alt="product?.descricao || 'Imagem do produto'" fit="contain"
-                  class="product-detail-img" />
+                <q-img
+                  :src="fallbackImage"
+                  :alt="product?.descricao || 'Imagem do produto'"
+                  fit="contain"
+                  class="product-detail-img"
+                />
               </div>
             </div>
           </div>
@@ -50,15 +107,25 @@
           <!-- DETALHES -->
           <div class="col-12 col-md-6">
             <div class="row items-center q-col-gutter-sm">
-              <q-badge v-if="product?.marca" color="primary" class="text-bold q-pa-sm" text-color="blue-10"
-                :label="product.marca" />
-              <q-chip v-if="inStock" color="secondary" text-color="white" icon="check_circle">Em estoque</q-chip>
-              <q-chip v-else color="grey-6" text-color="white" icon="hourglass_empty">Sob consulta</q-chip>
+              <q-badge
+                v-if="product?.marca"
+                color="primary"
+                class="text-bold q-pa-sm"
+                text-color="blue-10"
+                :label="product.marca"
+              />
+              <q-chip v-if="inStock" color="secondary" text-color="white" icon="check_circle">
+                Em estoque
+              </q-chip>
+              <q-chip v-else color="grey-6" text-color="white" icon="hourglass_empty">
+                Sob consulta
+              </q-chip>
             </div>
 
             <div class="text-h5 text-weight-bold q-mt-xs">
               {{ product?.descricao || 'Produto' }}
             </div>
+
             <div class="text-caption text-grey-7 q-mt-xs">
               Cód.: {{ product?.id || product?.CODPRODUTO || '—' }} • SKU: {{ skuText }}
             </div>
@@ -72,6 +139,7 @@
                   {{ money(product.precoPromocao) }}
                 </div>
               </div>
+
               <div v-else class="text-h5">
                 {{ money(product?.precoEfetivo ?? product?.preco) }}
               </div>
@@ -79,25 +147,65 @@
 
             <q-separator class="q-my-md" />
 
-            <div class="text-body2 text-grey-8">
+            <!-- <div class="text-body2 text-grey-8">
               <div class="q-mb-xs"><strong>Descrição:</strong></div>
               <div>
                 {{ shortDesc }} <br />
                 Marca: {{ product?.marca || '—' }}
               </div>
+            </div> -->
+
+            <div class="q-mt-md">
+              <div class="q-mb-xs text-body2 text-weight-bold text-grey-9 row items-center q-gutter-sm">
+                <!-- <span>Descrição gerada por IA</span> -->
+                <q-spinner-dots v-if="aiDescriptionLoading" color="secondary" size="22px" />
+              </div>
+
+              <q-card flat bordered class="bg-grey-1">
+                <q-card-section>
+                  <div v-if="aiDescriptionLoading">
+                    <q-skeleton type="text" class="q-mb-sm" />
+                    <q-skeleton type="text" class="q-mb-sm" />
+                    <q-skeleton type="text" class="q-mb-sm" />
+                    <q-skeleton type="text" class="q-mb-sm" width="90%" />
+                    <q-skeleton type="text" class="q-mb-sm" width="85%" />
+                    <q-skeleton type="text" width="75%" />
+                  </div>
+
+                  <div v-else class="ai-description-text" v-html="aiDescriptionHtml"></div>
+                </q-card-section>
+              </q-card>
             </div>
 
             <div class="q-mt-lg row q-col-gutter-sm">
               <div class="col-12 col-sm-6">
-                <q-btn unelevated color="green-14" icon="add_shopping_cart" class="w100 text-bold"
-                  label="Adicionar ao carrinho" :disable="!product" @click="confirmAddToCart(product)" />
+                <q-btn
+                  unelevated
+                  color="green-14"
+                  icon="add_shopping_cart"
+                  class="w100 text-bold"
+                  label="Adicionar ao carrinho"
+                  :disable="!product"
+                  @click="confirmAddToCart(product)"
+                />
               </div>
 
               <div class="col-12 col-sm-6">
-                <q-btn outline color="secondary" icon="share" class="w100" @click="shareOrCopy" label="Compartilhar" />
+                <q-btn
+                  outline
+                  color="secondary"
+                  icon="share"
+                  class="w100"
+                  @click="shareOrCopy"
+                  label="Compartilhar"
+                />
               </div>
             </div>
           </div>
+        </div>
+
+        <div v-else class="text-center q-py-xl text-grey-7">
+          Produto não encontrado.
         </div>
       </q-card-section>
     </q-card>
@@ -106,7 +214,6 @@
       <q-btn flat color="secondary" icon="arrow_back" @click="goBackToCatalog" label="Catálogo" />
     </div>
 
-    <!-- FULLSCREEN -->
     <q-dialog v-model="fullscreen.open" maximized transition-show="fade" transition-hide="fade">
       <q-card class="bg-black text-white">
         <q-bar class="bg-black text-white">
@@ -129,8 +236,11 @@
       </q-card>
     </q-dialog>
   </q-page>
+
   <footer class="footer bg-primary">
-    <div class="copy q-mt-md text-secondary text-bold">© Eletro Nogueira — 26.931.014/0001-12.</div>
+    <div class="copy q-mt-md text-secondary text-bold">
+      © Eletro Nogueira — 26.931.014/0001-12.
+    </div>
   </footer>
 </template>
 
@@ -147,15 +257,22 @@ const router = useRouter()
 const cart = useCart()
 
 const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
+const IA_BACKEND_URL = String(
+  import.meta.env.VITE_IA_BACKEND_URL ||
+  import.meta.env.IA_BACKEND_URL ||
+  'http://localhost:10000'
+).replace(/\/+$/, '')
 
-const loading = ref(true)
+const loading = ref(false)
 const product = ref(null)
 
-// carousel
+const aiDescriptionLoading = ref(false)
+const aiDescription = ref('-')
+const lastAiRequestKey = ref('')
+
 const activeSlide = ref(0)
 const images = ref([])
 
-// fullscreen
 const fullscreen = ref({ open: false, src: '' })
 
 function safeUrl(url) {
@@ -165,7 +282,45 @@ function safeUrl(url) {
   return s.replace(/ /g, '%20')
 }
 
-// --------- normalização ---------
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function formatAIDescriptionToHtml(text) {
+  const raw = String(text || '').trim()
+  if (!raw || raw === '-') return '-'
+
+  const lines = raw.split('\n').map(line => line.trim()).filter(Boolean)
+
+  return lines.map((line) => {
+    const safe = escapeHtml(line)
+
+    if (safe === 'DESCRICAO DO PRODUTO:' || safe === 'DESTAQUES:' || safe === 'DADOS DO CADASTRO:') {
+      return `<div class="ai-line-title"><strong>${safe}</strong></div>`
+    }
+
+    if (safe.startsWith('- ')) {
+      const content = safe.slice(2)
+      const idx = content.indexOf(':')
+      if (idx > -1) {
+        const label = content.slice(0, idx + 1)
+        const value = content.slice(idx + 1).trim()
+        return `<div class="ai-line-bullet">• <strong>${label}</strong> ${value}</div>`
+      }
+      return `<div class="ai-line-bullet">• ${content}</div>`
+    }
+
+    return `<div class="ai-line-paragraph">${safe}</div>`
+  }).join('')
+}
+
+const aiDescriptionHtml = computed(() => formatAIDescriptionToHtml(aiDescriptionText.value))
+
 function normalizeProduct(p) {
   if (!p) return null
 
@@ -175,8 +330,9 @@ function normalizeProduct(p) {
     : (typeof imgsPathRaw === 'string' && imgsPathRaw ? [safeUrl(imgsPathRaw)] : [])
 
   const legacyUrl =
-    (p.IMG && typeof p.IMG === 'object' && (p.IMG.link || p.IMG.url)) ? safeUrl(p.IMG.link || p.IMG.url) :
-      (p.imagemUrl ? safeUrl(p.imagemUrl) : null)
+    (p.IMG && typeof p.IMG === 'object' && (p.IMG.link || p.IMG.url))
+      ? safeUrl(p.IMG.link || p.IMG.url)
+      : (p.imagemUrl ? safeUrl(p.imagemUrl) : null)
 
   return {
     id: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p.ID,
@@ -189,11 +345,8 @@ function normalizeProduct(p) {
     CODORIGINAL: p.CODORIGINAL ?? p.codOriginal ?? p.sku,
     INATIVO: p.INATIVO ?? p.inativo,
     HAS_IMAGE: p.HAS_IMAGE ?? p.hasImage ?? null,
-
-    // ✅ imagens
     IMGS_PATH: imgsPath.length ? imgsPath : (legacyUrl ? [legacyUrl] : []),
     imagemUrl: legacyUrl || (imgsPath[0] || null),
-
     ...p
   }
 }
@@ -204,7 +357,15 @@ function setImagesFromProduct(p) {
   activeSlide.value = 0
 }
 
-// tenta pegar do history.state ou session cache
+function applyProduct(payload) {
+  if (!payload) return null
+  const normalized = normalizeProduct(payload)
+  product.value = normalized
+  setImagesFromProduct(normalized)
+  updateHead()
+  return normalized
+}
+
 const stateProduct = (history && history.state && history.state.product) || null
 
 function extractIdFromSlug(slug) {
@@ -213,22 +374,17 @@ function extractIdFromSlug(slug) {
 }
 
 if (stateProduct) {
-  product.value = normalizeProduct(stateProduct)
-  setImagesFromProduct(product.value)
+  applyProduct(stateProduct)
 } else {
   const idFromSlug = extractIdFromSlug(route.params.slug)
   if (idFromSlug) {
     try {
       const cached = sessionStorage.getItem(`prod:${idFromSlug}`)
-      if (cached) {
-        product.value = normalizeProduct(JSON.parse(cached))
-        setImagesFromProduct(product.value)
-      }
-    } catch { }
+      if (cached) applyProduct(JSON.parse(cached))
+    } catch {}
   }
 }
 
-// --------- computeds ---------
 const inStock = computed(() => {
   const p = product.value
   if (!p) return false
@@ -248,6 +404,11 @@ const shortDesc = computed(() =>
     ? String(product.value.descricao).slice(0, 220)
     : 'Ferramentas e bombas com pronta-entrega em Valparaíso de Goiás.'
 )
+
+const aiDescriptionText = computed(() => {
+  const txt = String(aiDescription.value || '').trim()
+  return txt || '-'
+})
 
 function money(n) {
   if (n == null) return '—'
@@ -281,7 +442,6 @@ function goBackToCatalog() {
   return router.push({ path: '/catalogo' })
 }
 
-/** carrinho */
 function confirmAddToCart(p) {
   const name = p?.descricao || 'Produto'
   $q.dialog({
@@ -298,7 +458,6 @@ function confirmAddToCart(p) {
   })
 }
 
-// --------- SEO ---------
 function updateHead() {
   const p = product.value
   const img = images.value[0] || fallbackImage
@@ -347,53 +506,133 @@ function updateHead() {
   })
 }
 
-// --------- carregar do backend ---------
-async function load() {
-  loading.value = true
+function extractGeneratedDescription(payload) {
+  const root = payload?.data ?? payload
+  return (
+    root?.descricaoGeradaIA ||
+    root?.descricao_gerada_ia ||
+    root?.descricaoGeradaIa ||
+    root?.descricao ||
+    '-'
+  )
+}
+
+async function loadAIDescription(p) {
+  const codProduto = p?.CODPRODUTO ?? p?.codProduto ?? p?.id
+  const produtoNome = p?.descricao ?? p?.DESCRICAO ?? ''
+  const marca = p?.marca ?? p?.MARCA ?? ''
+  const sku = p?.CODORIGINAL ?? p?.codOriginal ?? p?.sku ?? ''
+  const requestKey = [codProduto, produtoNome, marca, sku].join('|')
+
+  if (!codProduto || !produtoNome) {
+    aiDescription.value = '-'
+    aiDescriptionLoading.value = false
+    return
+  }
+
+  lastAiRequestKey.value = requestKey
+  aiDescriptionLoading.value = true
+  aiDescription.value = '-'
+
   try {
-    const slug = route.params.slug
-    const idFromSlug = extractIdFromSlug(slug)
-
-    if (idFromSlug) {
-      try {
-        const { data } = await api.get(`/catalogo/produtos/${idFromSlug}`)
-        // seu backend às vezes vem { data: [ ... ] }, às vezes { ok, data }
-        const payload =
-          (data?.ok && data?.data) ? data.data :
-            (Array.isArray(data?.data) ? data.data[0] : data?.data) ||
-            (Array.isArray(data) ? data[0] : data)
-
-        if (payload) {
-          product.value = normalizeProduct(payload)
-          setImagesFromProduct(product.value)
-
-          try {
-            sessionStorage.setItem(`prod:${idFromSlug}`, JSON.stringify(product.value))
-          } catch { }
-        }
-      } catch (err) {
-        console.error('[ProductPage] erro ao buscar na API:', err)
+    const { data } = await api.post(
+      `${IA_BACKEND_URL}/catalog/generate-description`,
+      {
+        codProduto,
+        produto: produtoNome,
+        marca,
+        sku
+      },
+      {
+        timeout: 15000
       }
-    }
+    )
 
-    if (product.value) {
-      const canonicalSlug = buildSlug(product.value)
-      if (canonicalSlug && canonicalSlug !== slug) {
-        router.replace(`/catalogo/produto/${canonicalSlug}`)
-      }
-      updateHead()
-    } else {
-      $q.notify({ type: 'warning', message: 'Produto não encontrado. Abra a partir do catálogo.' })
-    }
+    if (lastAiRequestKey.value !== requestKey) return
+    aiDescription.value = extractGeneratedDescription(data) || '-'
   } catch (err) {
-    console.error('[ProductPage] erro:', err)
-    $q.notify({ type: 'negative', message: 'Falha ao carregar o produto.' })
+    console.error('[ProductPage] erro ao gerar descrição com IA:', err)
+    if (lastAiRequestKey.value === requestKey) {
+      aiDescription.value = '-'
+    }
+  } finally {
+    if (lastAiRequestKey.value === requestKey) {
+      aiDescriptionLoading.value = false
+    }
+  }
+}
+
+async function loadProduct() {
+  const slug = route.params.slug
+  const idFromSlug = extractIdFromSlug(slug)
+
+  if (!idFromSlug) {
+    product.value = null
+    return null
+  }
+
+  const shouldBlockPage = !product.value
+  if (shouldBlockPage) loading.value = true
+
+  try {
+    const { data } = await api.get(`/catalogo/produtos/${idFromSlug}`)
+
+    const payload =
+      (data?.ok && data?.data) ? data.data :
+        (Array.isArray(data?.data) ? data.data[0] : data?.data) ||
+        (Array.isArray(data) ? data[0] : data)
+
+    if (!payload) return null
+
+    const resolved = applyProduct(payload)
+
+    try {
+      sessionStorage.setItem(`prod:${idFromSlug}`, JSON.stringify(resolved))
+    } catch {}
+
+    const canonicalSlug = buildSlug(resolved)
+    if (canonicalSlug && canonicalSlug !== slug) {
+      router.replace(`/catalogo/produto/${canonicalSlug}`)
+    }
+
+    return resolved
+  } catch (err) {
+    console.error('[ProductPage] erro ao buscar na API:', err)
+    return product.value || null
   } finally {
     loading.value = false
   }
 }
 
-// --------- share ---------
+async function load() {
+  try {
+    if (product.value) {
+      loading.value = false
+      loadAIDescription(product.value)
+    } else {
+      loading.value = true
+    }
+
+    const resolved = await loadProduct()
+
+    if (resolved) {
+      loadAIDescription(resolved)
+    } else if (!product.value) {
+      aiDescriptionLoading.value = false
+      aiDescription.value = '-'
+      $q.notify({ type: 'warning', message: 'Produto não encontrado. Abra a partir do catálogo.' })
+    }
+  } catch (err) {
+    console.error('[ProductPage] erro:', err)
+    aiDescriptionLoading.value = false
+    aiDescription.value = '-'
+    if (!product.value) {
+      $q.notify({ type: 'negative', message: 'Falha ao carregar o produto.' })
+    }
+    loading.value = false
+  }
+}
+
 async function shareOrCopy() {
   const url = location.href
   try {
@@ -403,10 +642,9 @@ async function shareOrCopy() {
       await navigator.clipboard.writeText(url)
       $q.notify({ type: 'positive', message: 'Link copiado!' })
     }
-  } catch { }
+  } catch {}
 }
 
-// --------- fullscreen ---------
 function openFullscreen(src) {
   fullscreen.value.src = src || fallbackImage
   fullscreen.value.open = true
@@ -440,6 +678,13 @@ function nextImage() {
 
 watch(activeSlide, (idx) => {
   if (fullscreen.value.open && images.value[idx]) fullscreen.value.src = images.value[idx]
+})
+
+watch(() => route.params.slug, () => {
+  aiDescription.value = '-'
+  aiDescriptionLoading.value = false
+  lastAiRequestKey.value = ''
+  load()
 })
 
 onMounted(load)
@@ -481,5 +726,37 @@ onMounted(load)
 .fullscreen-img {
   width: 100%;
   height: 100%;
+}
+
+.ai-description-text {
+  white-space: pre-line;
+  line-height: 1.6;
+  color: #37474f;
+  min-height: 110px;
+}
+
+.ai-description-text {
+  white-space: normal;
+  line-height: 1.7;
+  color: #37474f;
+  min-height: 110px;
+}
+
+.ai-line-title {
+  margin-top: 10px;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+
+.ai-line-title:first-child {
+  margin-top: 0;
+}
+
+.ai-line-paragraph {
+  margin-bottom: 10px;
+}
+
+.ai-line-bullet {
+  margin-bottom: 6px;
 }
 </style>

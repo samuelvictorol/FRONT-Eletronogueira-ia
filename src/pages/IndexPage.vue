@@ -69,14 +69,14 @@
                   <h4 class="text-bold">Cabos e Conexões</h4>
                 </article>
                 <article class=" bg-primary  product glass"
-                  @click="goTo('/catalogo?min=599.9&max=1299.9&limit=15&page=1&orderBy=updated_desc')">
+                  @click="goTo('/catalogo?limit=15&page=1&orderBy=updated_desc')">
                   <h4 class="text-secondary  text-bold">E muito mais!</h4>
                 </article>
               </div>
             </div>
             <div class="w100 row justify-center no-wrap">
               <q-btn class="bg-primary text-secondary  text-bold q-pa-md q-my-md"
-                to="/catalogo?min=199.9&max=599.9&limit=15&page=1&orderBy=updated_desc" label="Ver Catálogo Completo"
+                to="/catalogo?limit=15&page=1&orderBy=updated_desc" label="Ver Catálogo Completo"
                 icon-right="search" />
             </div>
             <!-- DESTAQUES -->
