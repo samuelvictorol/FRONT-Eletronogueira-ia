@@ -544,7 +544,7 @@ async function loadAIDescription(p) {
         sku
       },
       {
-        timeout: 15000
+        timeout: 95000
       }
     )
 
