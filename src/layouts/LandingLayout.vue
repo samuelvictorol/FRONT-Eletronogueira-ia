@@ -14,7 +14,7 @@
 
           <div class="brand-text animate__animated animate__fadeInLeft animate__delay-3s animate__slower"
             v-if="!isMobile">
-            <strong class="text-negative">ELETRO</strong><strong class="text-secondary">NOGUEIRA</strong>
+            <div class="row no-wrap"> <strong class="text-negative">ELETRO</strong><strong class="text-secondary">NOGUEIRA</strong></div>
             <small>Valparaíso de Goiás • BR-040</small>
           </div>
 
