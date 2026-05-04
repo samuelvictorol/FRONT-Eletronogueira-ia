@@ -54,6 +54,45 @@
                 class="brand-badge" :to="`/catalogo?marca=${b.name.toUpperCase()}&limit=15&page=1&orderBy=updated_desc`"
                 exact />
             </q-tabs>
+            <q-carousel v-if="promoProducts.length" v-model="promoSlide" swipeable animated arrows navigation infinite
+              control-color="secondary" padding height="390px" class="rounded-borders bg-transparent q-mt-md"
+              :autoplay="promoAutoplay" @mousedown="promoAutoplay = false" @touchstart="promoAutoplay = false"
+              @mouseup="resumePromoAutoplay" @touchend="resumePromoAutoplay" @mouseleave="resumePromoAutoplay">
+              <q-carousel-slide v-for="(group, index) in promoProductChunks" :key="index" :name="index"
+                class="row justify-center q-gutter-md items-start">
+                <q-card v-for="produto in group" :key="produto.id" class="product-card bg-blur glass cursor-pointer"
+                  style="width: 220px" @click="goTo(`/catalogo?q=${produto.descricao}&limit=15`)">
+                  <q-img :src="produto.imagemPrincipal || 'https://cdn-icons-png.flaticon.com/512/971/971904.png'"
+                    :alt="produto.descricao" style="height: 210px" fit="contain" class="bg-white" />
+
+                  <q-card-section class="q-pa-sm text-secondary">
+                    <q-badge color="negative" text-color="white" class="q-mb-sm">
+                      Promoção
+                    </q-badge>
+
+                    <q-badge color="primary" text-color="secondary" class="q-mb-sm q-ml-xs">
+                      {{ produto.marca }}
+                    </q-badge>
+
+                    <div class="text-weight-bold text-primary ellipsis-2">
+                      {{ produto.descricao.length > 50 ? produto.descricao.slice(0,37) + '...' : produto.descricao }}
+                    </div>
+
+                    <div class="text-grey-7 text-strike q-mt-sm">
+                      R$ {{ Number(produto.preco || 0).toFixed(2).replace('.', ',') }}
+                    </div>
+
+                    <div class="text-weight-bold text-green-14 text-h6">
+                      R$ {{ Number(produto.precoPromocao || 0).toFixed(2).replace('.', ',') }}
+                    </div>
+                  </q-card-section>
+                </q-card>
+              </q-carousel-slide>
+            </q-carousel>
+
+            <div v-else class="text-center text-secondary q-pa-md">
+              Nenhum produto em promoção encontrado.
+            </div>
             <div class="container rounded-borders q-pa-sm">
               <div class="cards text-secondary">
                 <article class=" bg-primary product glass"
@@ -76,8 +115,7 @@
             </div>
             <div class="w100 row justify-center no-wrap">
               <q-btn class="bg-primary text-secondary  text-bold q-pa-md q-my-md"
-                to="/catalogo?limit=15&page=1&orderBy=updated_desc" label="Ver Catálogo Completo"
-                icon-right="search" />
+                to="/catalogo?limit=15&page=1&orderBy=updated_desc" label="Ver Catálogo Completo" icon-right="search" />
             </div>
             <!-- DESTAQUES -->
             <div class="q-mt-md">
@@ -181,9 +219,7 @@
                     <!-- Munck -->
                     <div class="svc-item">
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img
-                          src="/assets/munck.webp"
-                          alt="Munck (Guindaste articulado)" />
+                        <img src="/assets/munck.webp" alt="Munck (Guindaste articulado)" />
                       </q-avatar>
                       <div class="svc-text">
                         <div class="text-secondary text-weight-bold">Munck</div>
@@ -194,9 +230,7 @@
                     <!-- Torno -->
                     <div class="svc-item">
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img
-                          src="/assets/torno.jpg"
-                          alt="Torno mecânico" />
+                        <img src="/assets/torno.jpg" alt="Torno mecânico" />
                       </q-avatar>
                       <div class="svc-text">
                         <div class="text-secondary text-weight-bold">Torno</div>
@@ -207,9 +241,7 @@
                     <!-- Solda -->
                     <div class="svc-item">
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img
-                          src="/assets/solda.jpg"
-                          alt="Solda TIG/MIG" />
+                        <img src="/assets/solda.jpg" alt="Solda TIG/MIG" />
                       </q-avatar>
                       <div class="svc-text">
                         <div class="text-secondary text-weight-bold">Solda</div>
@@ -220,9 +252,7 @@
                     <!-- Rebobinagem -->
                     <div class="svc-item">
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img
-                          src="/assets/rebobinagem.jpg"
-                          alt="Rebobinagem de motores elétricos" />
+                        <img src="/assets/rebobinagem.jpg" alt="Rebobinagem de motores elétricos" />
                       </q-avatar>
                       <div class="svc-text">
                         <div class="text-secondary text-weight-bold">Rebobinagem</div>
@@ -273,9 +303,7 @@
                         <div class="text-grey-8">Selo/rolamentos, limpeza de rotor e alinhamento.</div>
                       </div>
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img
-                          src="/assets/bomba.webp"
-                          alt="Manutenção de bombas d'água" />
+                        <img src="/assets/bomba.webp" alt="Manutenção de bombas d'água" />
                       </q-avatar>
                     </div>
 
@@ -286,9 +314,7 @@
                         <div class="text-grey-8">Crimpagem, troca de conexões e testes.</div>
                       </div>
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img
-                          src="/assets/mangueira.webp"
-                          alt="Mangueiras hidráulicas e lavadoras" />
+                        <img src="/assets/mangueira.webp" alt="Mangueiras hidráulicas e lavadoras" />
                       </q-avatar>
                     </div>
 
@@ -299,9 +325,7 @@
                         <div class="text-grey-8">Óleo/filtros, revisão de válvulas e correias.</div>
                       </div>
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img
-                          src="/assets/compressor.jpg"
-                          alt="Manutenção de compressores" />
+                        <img src="/assets/compressor.jpg" alt="Manutenção de compressores" />
                       </q-avatar>
                     </div>
 
@@ -312,8 +336,7 @@
                         <div class="text-grey-8">CLP/inversores, sensores e painéis.</div>
                       </div>
                       <q-avatar size="58px" rounded class="svc-thumb">
-                        <img src="/assets/automacao.png"
-                          alt="Automação industrial" />
+                        <img src="/assets/automacao.png" alt="Automação industrial" />
                       </q-avatar>
                     </div>
                   </div>
@@ -455,8 +478,8 @@
                     Eletro Nogueira — Av. Marginal, QD, Lote 01 • Esplanada I • Valparaíso de Goiás
                   </div>
                 </div>
-                <q-btn dense unelevated glossy color="primary" text-color="secondary" icon="directions" label="Ver no Maps"
-                  class="q-mt-md text-bold w100 q-mx-lg" type="a" target="_blank" rel="noopener"
+                <q-btn dense unelevated glossy color="primary" text-color="secondary" icon="directions"
+                  label="Ver no Maps" class="q-mt-md text-bold w100 q-mx-lg" type="a" target="_blank" rel="noopener"
                   href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" />
               </div>
             </div>
@@ -527,14 +550,14 @@
             <a class="cursor-pointer" @click.prevent="scrollTo('#como-chegar')">Como chegar</a>
           </div>
           <div class="column">
-            <q-btn unelevated color="positive" class="text-shadow q-ml-xs shadow-1"  type="a"
-              target="_blank" rel="noopener"
+            <q-btn unelevated color="positive" class="text-shadow q-ml-xs shadow-1" type="a" target="_blank"
+              rel="noopener"
               href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
               WhatsApp
               <q-img
                 src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
                 alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
-            <q-btn icon-right="phone"  class="bg-secondary text-white rounded-borders q-mt-sm" href="tel:+556136296858"
+            <q-btn icon-right="phone" class="bg-secondary text-white rounded-borders q-mt-sm" href="tel:+556136296858"
               label="(61) 3629-6858" />
           </div>
         </div>
@@ -544,7 +567,8 @@
             @nogueiravalparaiso
             <q-img class="q-ml-sm"
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-              alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px;filter: grayscale(1);" /></q-btn></div>
+              alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px;filter: grayscale(1);" /></q-btn>
+        </div>
         <div class="copy q-mt-md">© {{ year }} Eletro Nogueira — 26.931.014/0001-12.</div>
       </footer>
     </q-page>
@@ -554,13 +578,20 @@
 import { ref, computed, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import { api } from 'src/boot/axios'
 const isMobile = useQuasar().screen.lt.md
 const $q = useQuasar()
 const leftDrawerOpen = ref(false)
 const year = new Date().getFullYear()
 const destaqueSlide = ref(0)
 const autoPlay = ref(3500)
+const promoAutoplay = ref(3500)
 
+function resumePromoAutoplay() {
+  setTimeout(() => {
+    promoAutoplay.value = 3500
+  }, 1200)
+}
 function resumeAutoplay() {
   setTimeout(() => (autoPlay.value = 3500), 1200)
 }
@@ -586,7 +617,7 @@ const bannerAutoplay = ref(4500)
 function resumeBannerAutoplay() {
   setTimeout(() => (bannerAutoplay.value = 4500), 1200)
 }
-
+const promoProducts = ref([])
 // arrays dinâmicos (2 tipos: mobile e desktop)
 const bannersDesktop = ref([
   {
@@ -746,6 +777,56 @@ function corrigirErrosComuns(text) {
     .replace(/\btecnica\b/g, 'tecnica')
 }
 
+async function fetchPromoProducts() {
+  try {
+    const res = await api.get('/produtos/', {
+      params: {
+        limit: 8,
+        offset: 0,
+        orderBy: 'updated_desc',
+        isPromotion: true
+      }
+    })
+
+    promoProducts.value = Array.isArray(res.data?.data)
+      ? res.data.data.map((produto) => ({
+        id: produto.CODPRODUTO,
+        codigo: produto.CODPRODUTO,
+        descricao: produto.DESCRICAO,
+        marca: produto.MARCA,
+        preco: produto.PRECO,
+        precoPromocao: produto.PRECOPROMOCAO,
+        isPromotion: produto.ISPROMOTION === 1 || produto.ISPROMOTION === true,
+        hasImage: produto.HAS_IMAGE === 1,
+        imagens: produto.IMGS_PATH || [],
+        imagemPrincipal: produto.IMGS_PATH?.[0],
+        dataAtualizacao: produto.DATAATUALIZACAO,
+        dataCadastro: produto.DATACADASTRO,
+        obs: produto.OBS
+      }))
+      : []
+
+    return promoProducts.value
+  } catch (err) {
+    console.error('Erro ao buscar produtos em promoção:', err)
+    promoProducts.value = []
+    return []
+  }
+}
+
+const promoSlide = ref(0)
+
+const promoProductChunks = computed(() => {
+  const chunkSize = isMobile ? 1 : 4
+  const arr = []
+
+  for (let i = 0; i < promoProducts.value.length; i += chunkSize) {
+    arr.push(promoProducts.value.slice(i, i + chunkSize))
+  }
+
+  return arr
+})
+
 function buscarCatalogo() {
   if (!inputBuscar.value?.trim()) return
 
@@ -812,6 +893,7 @@ function goAndClose(selector) {
 onMounted(() => {
   // fecha drawer ao virar desktop
   $q.screen.gt.md && (leftDrawerOpen.value = false)
+  fetchPromoProducts()
 })
 </script>
 

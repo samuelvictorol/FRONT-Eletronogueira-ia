@@ -17,7 +17,11 @@
         <div class="col-auto">
           <q-breadcrumbs class="text-secondary">
             <q-breadcrumbs-el class="text-secondary" icon="home" label="Início" to="/" />
-            <q-breadcrumbs-el class="text-bold" label="Catálogo" :to="`/catalogo?limit=${limit}&orderBy=${orderBy}`" />
+            <q-breadcrumbs-el
+              class="text-bold"
+              label="Catálogo"
+              :to="`/catalogo?limit=${limit}&orderBy=${orderBy}`"
+            />
           </q-breadcrumbs>
 
           <div class="row items-center no-wrap q-mt-sm">
@@ -38,7 +42,8 @@
                 @keyup.enter="searchNow"
               >
                 <template #append>
-                  <q-btn class="absolute-right"
+                  <q-btn
+                    class="absolute-right"
                     flat
                     dense
                     icon="search"
@@ -77,35 +82,41 @@
       class="main-search-card bg-white rounded-borders shadow-1 q-pa-md q-mb-md"
     >
       <div class="row">
-          <div class="w100">
-            <q-input
-              v-model="filters.descricaoProduto"
-              dense
-              outlined
-              clearable
-              color="secondary"
-              label="O que você precisa?"
-              hint="Ex.: furadeira, martelo, parafusadeira, fita 3M"
-              @keyup.enter="searchNow"
-              @clear="clearFilters" class="relative"
-            >
-              <template #prepend>
-                <q-icon name="search" color="secondary" />
-              </template>
+        <div class="w100">
+          <q-input
+            v-model="filters.descricaoProduto"
+            dense
+            outlined
+            clearable
+            color="secondary"
+            label="O que você precisa?"
+            hint="Ex.: furadeira, martelo, parafusadeira, fita 3M"
+            class="relative"
+            @keyup.enter="searchNow"
+            @clear="clearFilters"
+          >
+            <template #prepend>
+              <q-icon name="search" color="secondary" />
+            </template>
 
-              <template #append>
-                <div class="absolute-right">
-                  <q-icon name="close" color="grey-7" class="cursor-pointer q-mr-xs" @click="clearFilters" />
-                  <q-btn
-                    unelevated
-                    color="secondary"
-                    icon="search"
-                    @click="searchNow"
-                  />
-                </div>
-              </template>
-            </q-input>
-          </div>
+            <template #append>
+              <div class="absolute-right">
+                <q-icon
+                  name="close"
+                  color="grey-7"
+                  class="cursor-pointer q-mr-xs"
+                  @click="clearFilters"
+                />
+                <q-btn
+                  unelevated
+                  color="secondary"
+                  icon="search"
+                  @click="searchNow"
+                />
+              </div>
+            </template>
+          </q-input>
+        </div>
       </div>
     </div>
 
@@ -133,6 +144,17 @@
         @remove="clearBrandAndSearch"
       >
         {{ currentBrandName }}
+      </q-chip>
+
+      <q-chip
+        v-if="filters.isPromotion"
+        removable
+        color="negative"
+        text-color="white"
+        icon="local_offer"
+        @remove="removePromotionOnly"
+      >
+        Promoção
       </q-chip>
 
       <q-chip
@@ -222,14 +244,38 @@
             </q-img>
 
             <q-badge
+              v-if="p.isPromotion"
+              class="promo-badge text-weight-bold"
+              color="negative"
+              text-color="white"
+              icon="local_offer"
+            >
+              Promoção
+            </q-badge>
+
+            <q-badge
               v-if="p.marca"
               class="brand-badge text-weight-bold bg-primary text-secondary"
             >
               {{ p.marca }}
             </q-badge>
 
-            <div class="price-tag text-weight-bold">
-              {{ money(p.precoEfetivo ?? p.preco) }}
+            <div
+              class="price-tag text-weight-bold"
+              :class="{ 'price-tag-promo': p.isPromotion && p.precoPromocao }"
+            >
+              <template v-if="p.isPromotion && p.precoPromocao">
+                <div class="old-price">
+                  {{ money(p.preco) }}
+                </div>
+                <div class="promo-price">
+                  {{ money(p.precoPromocao) }}
+                </div>
+              </template>
+
+              <template v-else>
+                {{ money(p.precoEfetivo ?? p.preco) }}
+              </template>
             </div>
 
             <q-btn
@@ -307,6 +353,14 @@
             dense
             color="secondary"
             label="Ordenar"
+          />
+
+          <q-toggle
+            v-model="modalFilters.isPromotion"
+            color="negative"
+            checked-icon="local_offer"
+            unchecked-icon="sell"
+            label="Mostrar somente produtos em promoção"
           />
 
           <q-select
@@ -443,13 +497,14 @@ const limit = ref(15)
 const apiIsLastPage = ref(false)
 
 const orderBy = ref('updated_desc')
-const ia_url = ref('') // URL da IA externa que vai só corrigir o JSON de busca
+const ia_url = ref('')
 
 const filters = ref({
   descricaoProduto: '',
   descricaoMarca: null,
   precoMin: null,
-  precoMax: null
+  precoMax: null,
+  isPromotion: false
 })
 
 const filtersDialog = ref(false)
@@ -457,7 +512,8 @@ const filtersDialog = ref(false)
 const modalFilters = ref({
   precoMin: null,
   precoMax: null,
-  descricaoMarca: null
+  descricaoMarca: null,
+  isPromotion: false
 })
 
 const modalOrderBy = ref('updated_desc')
@@ -499,6 +555,7 @@ const hasAnyFilter = computed(() => {
   return Boolean(
     (filters.value.descricaoProduto || '').trim() ||
     currentBrandName.value ||
+    filters.value.isPromotion ||
     filters.value.precoMin !== null ||
     filters.value.precoMax !== null ||
     orderBy.value !== 'updated_desc'
@@ -508,6 +565,7 @@ const hasAnyFilter = computed(() => {
 const activeExtraFiltersCount = computed(() => {
   let count = 0
   if (currentBrandName.value) count++
+  if (filters.value.isPromotion) count++
   if (filters.value.precoMin !== null && filters.value.precoMin !== '') count++
   if (filters.value.precoMax !== null && filters.value.precoMax !== '') count++
   if (orderBy.value !== 'updated_desc') count++
@@ -534,6 +592,7 @@ let resizeHandler = null
 
 function money(n) {
   if (n == null || n === '') return '—'
+
   try {
     return Number(n).toLocaleString('pt-BR', {
       style: 'currency',
@@ -548,6 +607,10 @@ function normalizeNumber(value) {
   if (value === null || value === undefined || value === '') return null
   const n = Number(String(value).replace(',', '.'))
   return Number.isFinite(n) ? n : null
+}
+
+function normalizeBoolean(value) {
+  return value === true || value === 'true' || value === 1 || value === '1'
 }
 
 function normalizeOrderValue(value) {
@@ -605,8 +668,20 @@ function normalizeProdutos(data) {
 
   return raw.map((p) => {
     const preco = p.PRECO ?? p.preco ?? null
-    const promo = p.PRECOPROMOCAO ?? p.precoPromocao ?? 0
-    const efetivo = p.PRECO_EFETIVO ?? p.precoEfetivo ?? (Number(promo) > 0 ? promo : preco)
+    const promo = p.PRECOPROMOCAO ?? p.precoPromocao ?? null
+
+    const isPromotion = Boolean(
+      p.ISPROMOTION === 1 ||
+      p.ISPROMOTION === true ||
+      p.isPromotion === true ||
+      p.isPromotion === 1 ||
+      Number(promo) > 0
+    )
+
+    const efetivo =
+      p.PRECO_EFETIVO ??
+      p.precoEfetivo ??
+      (isPromotion && Number(promo) > 0 ? promo : preco)
 
     const imgsPathRaw = p.IMGS_PATH ?? p.imgsPath ?? p.imagensPath ?? null
     const imgsPath = Array.isArray(imgsPathRaw)
@@ -625,6 +700,7 @@ function normalizeProdutos(data) {
       preco: preco != null ? Number(preco) : null,
       precoPromocao: promo != null ? Number(promo) : null,
       precoEfetivo: efetivo != null ? Number(efetivo) : null,
+      isPromotion,
       imgsPath,
       imgs: Array.isArray(p.IMGS) ? p.IMGS : (p.IMGS != null ? [p.IMGS] : null),
       imgPath: legacyUrl,
@@ -674,9 +750,11 @@ function readFromURL() {
   filters.value.descricaoProduto = qs.get('q') || ''
   filters.value.precoMin = normalizeNumber(qs.get('min'))
   filters.value.precoMax = normalizeNumber(qs.get('max'))
+  filters.value.isPromotion = normalizeBoolean(qs.get('isPromotion'))
   orderBy.value = normalizeOrderValue(qs.get('orderBy'))
 
   const marca = (qs.get('marca') || '').trim()
+
   if (marca) {
     selectedBrand.value = {
       label: marca,
@@ -702,9 +780,11 @@ function writeToURL() {
 
   if (q) qs.set('q', q)
   if (marca) qs.set('marca', marca)
+  if (filters.value.isPromotion) qs.set('isPromotion', 'true')
   if (filters.value.precoMin !== null && filters.value.precoMin !== '') qs.set('min', String(filters.value.precoMin))
   if (filters.value.precoMax !== null && filters.value.precoMax !== '') qs.set('max', String(filters.value.precoMax))
   if (orderBy.value) qs.set('orderBy', orderBy.value)
+
   qs.set('limit', String(limit.value))
 
   const queryString = qs.toString()
@@ -718,6 +798,7 @@ function buildRawSearchPayload({ append = false } = {}) {
     descricaoMarca: currentBrandName.value || null,
     precoMin: normalizeNumber(filters.value.precoMin),
     precoMax: normalizeNumber(filters.value.precoMax),
+    isPromotion: Boolean(filters.value.isPromotion),
     limit: Number(limit.value),
     offset: append ? Number(offset.value) : 0,
     orderBy: normalizeOrderValue(orderBy.value),
@@ -743,6 +824,7 @@ function buildFallbackSearchPayload(raw = {}) {
     descricaoMarca: typeof raw.descricaoMarca === 'string' ? raw.descricaoMarca.trim() : null,
     precoMin: nextMin,
     precoMax: nextMax,
+    isPromotion: Boolean(raw.isPromotion),
     limit: Number(raw.limit) > 0 ? Number(raw.limit) : Number(limit.value),
     offset: Number.isFinite(Number(raw.offset)) ? Number(raw.offset) : 0,
     orderBy: normalizeOrderValue(raw.orderBy)
@@ -751,11 +833,13 @@ function buildFallbackSearchPayload(raw = {}) {
 
 function normalizeOptimizerResponse(data = {}, rawFallback = {}) {
   const source = data?.optimizedParams || data?.params || {}
+
   return buildFallbackSearchPayload({
     descricaoProduto: source?.descricaoProduto ?? rawFallback?.descricaoProduto ?? '',
     descricaoMarca: source?.descricaoMarca ?? rawFallback?.descricaoMarca ?? null,
     precoMin: rawFallback?.precoMin ?? null,
     precoMax: rawFallback?.precoMax ?? null,
+    isPromotion: rawFallback?.isPromotion ?? false,
     limit: rawFallback?.limit ?? Number(limit.value),
     offset: rawFallback?.offset ?? 0,
     orderBy: rawFallback?.orderBy ?? orderBy.value
@@ -768,6 +852,7 @@ function syncStateWithSearchPayload(payload = {}) {
   filters.value.descricaoProduto = next.descricaoProduto || ''
   filters.value.precoMin = next.precoMin
   filters.value.precoMax = next.precoMax
+  filters.value.isPromotion = Boolean(next.isPromotion)
 
   limit.value = Number(next.limit) > 0 ? Number(next.limit) : 15
   orderBy.value = normalizeOrderValue(next.orderBy)
@@ -787,10 +872,6 @@ function syncStateWithSearchPayload(payload = {}) {
 }
 
 async function optimizeSearchPayload(rawPayload) {
-  // const shouldTryAI = Boolean(
-  //   (rawPayload?.descricaoProduto || '').trim() ||
-  //   (rawPayload?.descricaoMarca || '').trim()
-  // ) descomente para ativar a IA apenas quando houver algo relevante para otimizar
   const shouldTryAI = false
 
   if (!shouldTryAI) {
@@ -859,6 +940,10 @@ async function applyFilters({ append = false, updateURL = true } = {}) {
       orderBy: normalizeOrderValue(effectiveParams.orderBy)
     }
 
+    if (effectiveParams.isPromotion) {
+      params.isPromotion = true
+    }
+
     const { data } = await api.get('/produtos/', { params })
 
     if (mySeq !== reqSeq) return
@@ -867,15 +952,18 @@ async function applyFilters({ append = false, updateURL = true } = {}) {
 
     if (append) {
       const merged = new Map(items.value.map(item => [String(item.id), item]))
+
       for (const item of newItems) {
         merged.set(String(item.id), item)
       }
+
       items.value = Array.from(merged.values())
     } else {
       items.value = newItems
     }
 
     const apiTotal = pickTotalFromResponse(data)
+
     if (apiTotal != null) {
       total.value = apiTotal
     } else {
@@ -898,6 +986,7 @@ async function applyFilters({ append = false, updateURL = true } = {}) {
     if (mySeq !== reqSeq) return
 
     console.error('[Catalogo] erro ao buscar produtos:', err)
+
     $q.notify({
       type: 'negative',
       message: 'Falha ao buscar produtos.'
@@ -910,6 +999,7 @@ async function applyFilters({ append = false, updateURL = true } = {}) {
     }
   } finally {
     if (mySeq !== reqSeq) return
+
     loading.value = false
     loadingMore.value = false
   }
@@ -920,8 +1010,10 @@ function clearFilters() {
     descricaoProduto: '',
     descricaoMarca: null,
     precoMin: null,
-    precoMax: null
+    precoMax: null,
+    isPromotion: false
   }
+
   selectedBrand.value = null
   orderBy.value = 'updated_desc'
 }
@@ -940,7 +1032,9 @@ async function searchNow() {
 
 async function loadNextPageIfPossible() {
   if (loading.value || loadingMore.value || isLastPage.value) return
+
   page.value = Number(page.value) + 1
+
   await applyFilters({ append: true, updateURL: false })
   await nextTick()
   updateStickySearchVisibility()
@@ -953,7 +1047,9 @@ function getScrollTarget(el) {
     const style = window.getComputedStyle(parent)
     const overflowY = style.overflowY
     const isScrollable = /(auto|scroll|overlay)/i.test(overflowY)
+
     if (isScrollable) return parent
+
     parent = parent.parentElement
   }
 
@@ -1020,6 +1116,7 @@ async function ensureViewportFilled(maxRounds = 4) {
   for (let i = 0; i < maxRounds; i++) {
     if (loading.value || loadingMore.value || isLastPage.value) break
     if (!isNearBottom(250)) break
+
     await loadNextPageIfPossible()
   }
 }
@@ -1056,7 +1153,8 @@ function openFiltersModal() {
   modalFilters.value = {
     precoMin: filters.value.precoMin,
     precoMax: filters.value.precoMax,
-    descricaoMarca: filters.value.descricaoMarca
+    descricaoMarca: filters.value.descricaoMarca,
+    isPromotion: Boolean(filters.value.isPromotion)
   }
 
   modalOrderBy.value = orderBy.value
@@ -1074,6 +1172,7 @@ function onModalBrandChanged(v) {
     modalFilters.value.descricaoMarca = null
     return
   }
+
   modalFilters.value.descricaoMarca = v.marca || v.label || null
 }
 
@@ -1109,6 +1208,7 @@ async function onModalBrandFilter(val, update) {
     update(() => {
       modalBrandOptions.value = filteredSuggestions.length ? filteredSuggestions : [...suggestedBrands]
     })
+
     return
   }
 
@@ -1155,8 +1255,10 @@ function clearModalFilters() {
   modalFilters.value = {
     precoMin: null,
     precoMax: null,
-    descricaoMarca: null
+    descricaoMarca: null,
+    isPromotion: false
   }
+
   modalOrderBy.value = 'updated_desc'
   modalSelectedBrand.value = null
   modalBrandInput.value = ''
@@ -1166,6 +1268,7 @@ function clearModalFilters() {
 async function applyModalFilters() {
   filters.value.precoMin = normalizeNumber(modalFilters.value.precoMin)
   filters.value.precoMax = normalizeNumber(modalFilters.value.precoMax)
+  filters.value.isPromotion = Boolean(modalFilters.value.isPromotion)
   orderBy.value = modalOrderBy.value || 'updated_desc'
 
   if (modalSelectedBrand.value) {
@@ -1191,6 +1294,11 @@ function clearBrandAndSearch() {
   searchNow()
 }
 
+function removePromotionOnly() {
+  filters.value.isPromotion = false
+  searchNow()
+}
+
 function removePrecoMin() {
   filters.value.precoMin = null
   searchNow()
@@ -1211,7 +1319,8 @@ function resetAllFilters() {
     descricaoProduto: '',
     descricaoMarca: null,
     precoMin: null,
-    precoMax: null
+    precoMax: null,
+    isPromotion: false
   }
 
   selectedBrand.value = null
@@ -1219,7 +1328,6 @@ function resetAllFilters() {
   searchNow()
 }
 
-// um watch que monitora a url de query, se ela alterar (por exemplo, por navegação do usuário), ele lê os parâmetros e executa a busca correspondente
 watch(
   () => route.query,
   () => {
@@ -1276,6 +1384,8 @@ function openDetails(p) {
     preco: p.preco,
     precoPromocao: p.precoPromocao,
     precoEfetivo: p.precoEfetivo,
+    isPromotion: p.isPromotion,
+    ISPROMOTION: p.isPromotion ? 1 : 0,
     imagemUrl: p.imagemUrl || null,
     IMGS_PATH: Array.isArray(p.imgsPath) ? p.imgsPath : [],
     IMGS: Array.isArray(p.imgs) ? p.imgs : null,
@@ -1376,7 +1486,7 @@ onBeforeUnmount(() => {
     top: 50px;
   }
 }
-  
+
 .product-card {
   border-radius: 18px;
   overflow: hidden;
@@ -1406,13 +1516,22 @@ onBeforeUnmount(() => {
   object-position: center;
 }
 
+.promo-badge {
+  position: absolute;
+  bottom: 32px;
+  left: 10px;
+  z-index: 3;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+}
+
 .brand-badge {
   position: absolute;
   top: 162px;
   left: 10px;
   z-index: 2;
   border-radius: 10px;
-  opacity: .8;
+  opacity: .9;
 }
 
 .price-tag {
@@ -1425,6 +1544,24 @@ onBeforeUnmount(() => {
   padding: 8px 10px;
   border-radius: 10px;
   font-size: 0.8rem;
+}
+
+.price-tag-promo {
+  background: rgba(20, 120, 65, 0.96);
+  padding: 7px 10px;
+}
+
+.old-price {
+  color: rgba(255, 255, 255, .75);
+  text-decoration: line-through;
+  font-size: .72rem;
+  line-height: 1;
+}
+
+.promo-price {
+  color: #fff;
+  font-size: .9rem;
+  line-height: 1.2;
 }
 
 .cart-btn {
@@ -1466,6 +1603,4 @@ onBeforeUnmount(() => {
   opacity: 0;
   transform: translateY(-4px);
 }
-
-
 </style>
