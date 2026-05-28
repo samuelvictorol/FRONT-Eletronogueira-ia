@@ -605,14 +605,15 @@
     <q-dialog
       v-model="barcodeDialog"
       persistent
+      :maximized="isMobile"
       @hide="stopBarcodeScanner"
     >
       <q-card class="barcode-modal-card">
         <q-card-section class="barcode-modal-header">
           <div>
-            <div class="text-h6 text-weight-bold">Escanear código de barras</div>
+            <div class="text-h6 text-weight-bold">Código de barras</div>
             <div class="text-caption">
-              Aponte a câmera para o código. Ao detectar, a busca será feita automaticamente.
+              Escaneie com a câmera ou digite o código manualmente.
             </div>
           </div>
 
@@ -636,11 +637,18 @@
             </div>
 
             <div
-              v-if="barcodeScanning"
+              v-if="barcodeCameraLoading || barcodeScanning"
               class="barcode-status"
             >
               <q-spinner-dots color="primary" size="28px" />
-              Procurando código...
+              {{ barcodeCameraLoading ? 'Solicitando câmera...' : 'Procurando código...' }}
+            </div>
+
+            <div
+              v-else-if="barcodeDialog && !barcodeScanError"
+              class="barcode-status barcode-status--idle"
+            >
+              Aguardando câmera ou digitação
             </div>
           </div>
 
@@ -662,7 +670,8 @@
             outlined
             dense
             color="secondary"
-            label="Ou digite o código manualmente"
+            label="Digite o código manualmente"
+            hint="Funciona mesmo se o navegador não suportar leitura automática pela câmera."
             inputmode="numeric"
             @keyup.enter="applyManualBarcode"
           >
@@ -675,13 +684,46 @@
                 flat
                 dense
                 round
+                icon="photo_camera"
+                color="secondary"
+                :loading="barcodeCameraLoading"
+                @click="startBarcodeScanner"
+              >
+                <q-tooltip>Tentar câmera novamente</q-tooltip>
+              </q-btn>
+
+              <q-btn
+                flat
+                dense
+                round
                 icon="arrow_forward"
                 color="secondary"
                 @click="applyManualBarcode"
-              />
+              >
+                <q-tooltip>Buscar código digitado</q-tooltip>
+              </q-btn>
             </template>
           </q-input>
         </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions align="between" class="q-pa-md">
+          <q-btn
+            flat
+            color="grey-7"
+            label="Cancelar"
+            @click="closeBarcodeScanner"
+          />
+
+          <q-btn
+            unelevated
+            color="secondary"
+            icon="search"
+            label="Buscar código digitado"
+            @click="applyManualBarcode"
+          />
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </q-page>
@@ -719,6 +761,7 @@ const loadingPromos = ref(false)
 const barcodeDialog = ref(false)
 const barcodeVideoRef = ref(null)
 const barcodeScanning = ref(false)
+const barcodeCameraLoading = ref(false)
 const barcodeScanError = ref('')
 const manualBarcode = ref('')
 
@@ -1058,7 +1101,7 @@ function getStockLabel(product) {
   if (stock <= 0) return 'Sem estoque'
   if (stock === 1) return '1 em estoque'
 
-  return ``
+  return `${stock} em estoque`
 }
 
 function getFinalPrice(product) {
@@ -1841,8 +1884,39 @@ function supportsBarcodeDetector() {
   return typeof window !== 'undefined' && 'BarcodeDetector' in window
 }
 
+function supportsCameraAccess() {
+  return Boolean(
+    typeof navigator !== 'undefined' &&
+    navigator.mediaDevices &&
+    typeof navigator.mediaDevices.getUserMedia === 'function'
+  )
+}
+
+function getBarcodeCameraErrorMessage(err) {
+  const name = String(err?.name || '')
+
+  if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
+    return 'Permissão da câmera negada. Libere a câmera no navegador ou digite o código manualmente.'
+  }
+
+  if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
+    return 'Nenhuma câmera foi encontrada neste dispositivo. Digite o código manualmente.'
+  }
+
+  if (name === 'NotReadableError' || name === 'TrackStartError') {
+    return 'A câmera está em uso por outro aplicativo. Feche outros apps ou digite o código manualmente.'
+  }
+
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    return 'A câmera exige HTTPS ou localhost. Acesse por localhost/HTTPS ou digite o código manualmente.'
+  }
+
+  return 'Não foi possível acessar a câmera. Você ainda pode digitar o código manualmente.'
+}
+
 function stopBarcodeScanner() {
   barcodeScanning.value = false
+  barcodeCameraLoading.value = false
 
   if (barcodeScanTimer) {
     window.clearTimeout(barcodeScanTimer)
@@ -1855,8 +1929,11 @@ function stopBarcodeScanner() {
   }
 
   if (barcodeVideoRef.value) {
+    barcodeVideoRef.value.pause?.()
     barcodeVideoRef.value.srcObject = null
   }
+
+  barcodeDetector = null
 }
 
 function closeBarcodeScanner() {
@@ -1866,47 +1943,56 @@ function closeBarcodeScanner() {
 
 async function openBarcodeScanner() {
   barcodeScanError.value = ''
-  manualBarcode.value = ''
-
-  if (!supportsBarcodeDetector()) {
-    openManualBarcodeDialog('Seu navegador não liberou leitura automática de código de barras. Digite o código manualmente.')
-    return
-  }
-
+  manualBarcode.value = normalizeBarcode(filters.value.codBarras || modalFilters.value.codBarras || '')
   barcodeDialog.value = true
 
   await nextTick()
   await startBarcodeScanner()
 }
 
-function openManualBarcodeDialog(message = 'Digite o código de barras do produto.') {
-  $q.dialog({
-    title: 'Código de barras',
-    message,
-    prompt: {
-      model: '',
-      type: 'text',
-      isValid: value => Boolean(normalizeBarcode(value))
-    },
-    cancel: {
-      label: 'Cancelar',
-      flat: true
-    },
-    ok: {
-      label: 'Buscar',
-      color: 'secondary',
-      unelevated: true
-    },
-    persistent: true
-  }).onOk(async value => {
-    await applyBarcodeValue(value)
-  })
-}
-
 async function startBarcodeScanner() {
   stopBarcodeScanner()
+  barcodeScanError.value = ''
+  barcodeCameraLoading.value = true
 
   try {
+    if (!supportsCameraAccess()) {
+      throw new Error('CAMERA_UNAVAILABLE')
+    }
+
+    barcodeStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: {
+          ideal: 'environment'
+        },
+        width: {
+          ideal: 1280
+        },
+        height: {
+          ideal: 720
+        }
+      },
+      audio: false
+    })
+
+    await nextTick()
+
+    if (!barcodeVideoRef.value) {
+      throw new Error('VIDEO_ELEMENT_NOT_FOUND')
+    }
+
+    barcodeVideoRef.value.srcObject = barcodeStream
+    barcodeVideoRef.value.setAttribute('playsinline', 'true')
+    barcodeVideoRef.value.muted = true
+
+    await barcodeVideoRef.value.play()
+
+    if (!supportsBarcodeDetector()) {
+      barcodeScanError.value = 'A câmera abriu, mas este navegador não suporta leitura automática de código de barras. Digite o código no campo abaixo.'
+      barcodeScanning.value = false
+      return
+    }
+
     const formats = [
       'ean_13',
       'ean_8',
@@ -1914,32 +2000,20 @@ async function startBarcodeScanner() {
       'upc_e',
       'code_128',
       'code_39',
-      'itf'
+      'itf',
+      'codabar'
     ]
 
     barcodeDetector = new window.BarcodeDetector({ formats })
-
-    barcodeStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: {
-          ideal: 'environment'
-        }
-      },
-      audio: false
-    })
-
-    if (!barcodeVideoRef.value) return
-
-    barcodeVideoRef.value.srcObject = barcodeStream
-    await barcodeVideoRef.value.play()
-
     barcodeScanning.value = true
     scanBarcodeFrame()
   } catch (err) {
     console.error('[Catalogo] erro ao iniciar scanner de código de barras:', err)
 
-    barcodeScanError.value = 'Não foi possível acessar a câmera. Verifique a permissão do navegador ou digite o código manualmente.'
+    barcodeScanError.value = getBarcodeCameraErrorMessage(err)
     barcodeScanning.value = false
+  } finally {
+    barcodeCameraLoading.value = false
   }
 }
 
@@ -1971,7 +2045,7 @@ async function applyBarcodeValue(value) {
       message: 'Código de barras inválido.'
     })
 
-    return
+    return false
   }
 
   filters.value.codBarras = codBarras
@@ -1986,11 +2060,16 @@ async function applyBarcodeValue(value) {
 
   await searchNow()
   scrollToSection('results')
+
+  return true
 }
 
 async function applyManualBarcode() {
-  await applyBarcodeValue(manualBarcode.value)
-  closeBarcodeScanner()
+  const applied = await applyBarcodeValue(manualBarcode.value)
+
+  if (applied) {
+    closeBarcodeScanner()
+  }
 }
 
 function confirmAddToCart(product) {
@@ -2727,6 +2806,49 @@ onBeforeUnmount(() => {
   background: rgba(3, 18, 46, 0.78);
   font-weight: 800;
   backdrop-filter: blur(8px);
+}
+
+.barcode-status--idle {
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(3, 18, 46, 0.64);
+}
+
+.barcode-frame-line {
+  animation: barcode-scan-line 1.35s ease-in-out infinite;
+}
+
+@keyframes barcode-scan-line {
+  0% {
+    transform: translateY(-105px);
+  }
+
+  50% {
+    transform: translateY(105px);
+  }
+
+  100% {
+    transform: translateY(-105px);
+  }
+}
+
+@media (max-width: 600px) {
+  .barcode-modal-card {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .barcode-video-wrap {
+    min-height: 54vh;
+  }
+
+  .barcode-video {
+    height: 54vh;
+  }
+
+  .barcode-frame {
+    inset: 80px 24px;
+  }
 }
 
 .ellipsis-3-lines {
