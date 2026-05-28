@@ -18,6 +18,17 @@
               </template>
 
               <template #append>
+                <q-btn
+                  flat
+                  dense
+                  round
+                  icon="qr_code_scanner"
+                  color="secondary"
+                  @click="openBarcodeScanner"
+                >
+                  <q-tooltip>Ler código de barras</q-tooltip>
+                </q-btn>
+
                 <q-btn flat dense round icon="arrow_forward" color="secondary" @click="searchNow" />
               </template>
             </q-input>
@@ -76,6 +87,17 @@
             </template>
 
             <template #append>
+              <q-btn
+                flat
+                round
+                dense
+                color="secondary"
+                icon="qr_code_scanner"
+                @click="openBarcodeScanner"
+              >
+                <q-tooltip>Ler código de barras</q-tooltip>
+              </q-btn>
+
               <q-btn unelevated color="secondary" text-color="white" icon="search" @click="searchNow" />
             </template>
           </q-input>
@@ -97,6 +119,14 @@
             <q-btn unelevated color="secondary" text-color="white" icon="tune" label="Filtros avançados"
               @click="openFiltersModal" />
 
+            <q-btn
+              outline
+              color="secondary"
+              icon="qr_code_scanner"
+              label="Ler código"
+              @click="openBarcodeScanner"
+            />
+
             <q-btn flat color="secondary" icon="restart_alt" label="Limpar tudo" @click="resetAllFilters" />
           </div>
         </div>
@@ -109,6 +139,11 @@
           <q-chip v-if="(filters.descricaoProduto || '').trim()" removable color="white" text-color="secondary"
             icon="search" @remove="clearSearchOnly">
             {{ filters.descricaoProduto }}
+          </q-chip>
+
+          <q-chip v-if="(filters.codBarras || '').trim()" removable color="white" text-color="secondary"
+            icon="qr_code_scanner" @remove="removeCodBarrasOnly">
+            Código: {{ filters.codBarras }}
           </q-chip>
 
           <q-chip v-if="currentBrandName" removable color="white" text-color="secondary" icon="sell"
@@ -129,6 +164,11 @@
           <q-chip v-if="filters.precoMax !== null && filters.precoMax !== ''" removable color="white"
             text-color="secondary" icon="attach_money" @remove="removePrecoMax">
             Máx: {{ money(filters.precoMax) }}
+          </q-chip>
+
+          <q-chip v-if="filters.estoque !== null && filters.estoque !== ''" removable color="white"
+            text-color="secondary" icon="inventory" @remove="removeEstoqueOnly">
+            Estoque: {{ filters.estoque }}
           </q-chip>
 
           <q-chip v-if="orderBy !== DEFAULT_ORDER" removable color="white" text-color="secondary" icon="sort"
@@ -156,6 +196,33 @@
           <q-card v-for="p in showcaseProducts" :key="`promo-${productKey(p)}`" flat bordered
             class="catalog-product-card catalog-product-card--promo" @click="openDetails(p)">
             <div class="product-image-wrap">
+              <div
+                v-if="isOutOfStock(p)"
+                class="stock-watermark"
+              >
+                Sem estoque
+              </div>
+
+              <q-badge
+                v-if="isOutOfStock(p)"
+                class="stock-badge"
+                color="grey-10"
+                text-color="white"
+                icon="block"
+              >
+                Sem estoque
+              </q-badge>
+
+              <q-badge
+                v-else-if="hasStockValue(p)"
+                class="stock-badge stock-badge--available"
+                color="positive"
+                text-color="white"
+                icon="inventory_2"
+              >
+                {{ getStockLabel(p) }}
+              </q-badge>
+
               <q-img :src="resolveImage(p)" :alt="p.descricao" fit="contain" class="product-img"
                 spinner-color="secondary">
                 <template #error>
@@ -183,8 +250,20 @@
                 </template>
               </div>
 
-              <q-btn round dense glossy color="green-14" icon="add_shopping_cart" class="cart-btn"
-                @click.stop="confirmAddToCart(p)" />
+              <q-btn
+                round
+                dense
+                glossy
+                :color="isOutOfStock(p) ? 'grey-6' : 'green-14'"
+                icon="add_shopping_cart"
+                class="cart-btn"
+                :disable="isOutOfStock(p)"
+                @click.stop="confirmAddToCart(p)"
+              >
+                <q-tooltip>
+                  {{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}
+                </q-tooltip>
+              </q-btn>
             </div>
 
             <q-card-section class="product-info">
@@ -300,6 +379,33 @@
           <q-card v-for="p in items" :key="`result-${productKey(p)}`" flat bordered class="catalog-product-card"
             @click="openDetails(p)">
             <div class="product-image-wrap">
+              <div
+                v-if="isOutOfStock(p)"
+                class="stock-watermark"
+              >
+                Sem estoque
+              </div>
+
+              <q-badge
+                v-if="isOutOfStock(p)"
+                class="stock-badge"
+                color="grey-10"
+                text-color="white"
+                icon="block"
+              >
+                Sem estoque
+              </q-badge>
+
+              <q-badge
+                v-else-if="hasStockValue(p)"
+                class="stock-badge stock-badge--available"
+                color="positive"
+                text-color="white"
+                icon="inventory_2"
+              >
+                {{ getStockLabel(p) }}
+              </q-badge>
+
               <q-img :src="resolveImage(p)" :alt="p.descricao" fit="contain" class="product-img"
                 spinner-color="secondary">
                 <template #error>
@@ -329,8 +435,20 @@
                 </template>
               </div>
 
-              <q-btn round dense glossy color="green-14" icon="add_shopping_cart" class="cart-btn"
-                @click.stop="confirmAddToCart(p)" />
+              <q-btn
+                round
+                dense
+                glossy
+                :color="isOutOfStock(p) ? 'grey-6' : 'green-14'"
+                icon="add_shopping_cart"
+                class="cart-btn"
+                :disable="isOutOfStock(p)"
+                @click.stop="confirmAddToCart(p)"
+              >
+                <q-tooltip>
+                  {{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}
+                </q-tooltip>
+              </q-btn>
             </div>
 
             <q-card-section class="product-info">
@@ -341,6 +459,9 @@
               <div class="product-meta">
                 <span v-if="p.marca">{{ p.marca }}</span>
                 <span v-if="p.codProduto">#{{ p.codProduto }}</span>
+                <span v-if="hasStockValue(p)" :class="{ 'text-negative': isOutOfStock(p) }">
+                  {{ getStockLabel(p) }}
+                </span>
               </div>
             </q-card-section>
           </q-card>
@@ -388,6 +509,34 @@
           <q-toggle v-model="modalFilters.isPromotion" color="negative" checked-icon="local_offer" unchecked-icon="sell"
             label="Mostrar somente produtos em promoção" />
 
+          <q-input
+            v-model="modalFilters.codBarras"
+            outlined
+            dense
+            clearable
+            color="secondary"
+            label="Código de barras"
+            placeholder="Leia ou digite o código"
+            inputmode="numeric"
+          >
+            <template #prepend>
+              <q-icon name="qr_code_scanner" color="secondary" />
+            </template>
+
+            <template #append>
+              <q-btn
+                flat
+                dense
+                round
+                icon="photo_camera"
+                color="secondary"
+                @click="openBarcodeScanner"
+              >
+                <q-tooltip>Ler com a câmera</q-tooltip>
+              </q-btn>
+            </template>
+          </q-input>
+
           <q-select v-model="modalSelectedBrand" :options="modalBrandOptions" option-label="label" option-value="value"
             use-input fill-input hide-selected input-debounce="350" outlined dense clearable color="secondary"
             label="Marca" hint="Digite para buscar marcas ou escolha uma sugestão" :loading="modalBrandLoading"
@@ -423,6 +572,23 @@
               </template>
             </q-input>
           </div>
+
+          <!-- <div class="col-12 col-sm-6">
+            <q-input
+              v-model="modalFilters.estoque"
+              outlined
+              dense
+              color="secondary"
+              label="Quantidade em estoque"
+              inputmode="numeric"
+              placeholder="Ex.: 1, 5, 10"
+              hint="Busca produtos com a quantidade informada no estoque."
+            >
+              <template #prepend>
+                <q-icon name="inventory" color="secondary" />
+              </template>
+            </q-input>
+          </div> -->
         </q-card-section>
 
         <q-separator />
@@ -433,6 +599,89 @@
             <q-btn unelevated color="secondary" icon-right="search" label="Buscar" :loading="loading"
               @click="applyModalFilters" />
         </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog
+      v-model="barcodeDialog"
+      persistent
+      @hide="stopBarcodeScanner"
+    >
+      <q-card class="barcode-modal-card">
+        <q-card-section class="barcode-modal-header">
+          <div>
+            <div class="text-h6 text-weight-bold">Escanear código de barras</div>
+            <div class="text-caption">
+              Aponte a câmera para o código. Ao detectar, a busca será feita automaticamente.
+            </div>
+          </div>
+
+          <q-btn flat round dense icon="close" @click="closeBarcodeScanner" />
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-section>
+          <div class="barcode-video-wrap">
+            <video
+              ref="barcodeVideoRef"
+              class="barcode-video"
+              autoplay
+              muted
+              playsinline
+            />
+
+            <div class="barcode-frame">
+              <div class="barcode-frame-line" />
+            </div>
+
+            <div
+              v-if="barcodeScanning"
+              class="barcode-status"
+            >
+              <q-spinner-dots color="primary" size="28px" />
+              Procurando código...
+            </div>
+          </div>
+
+          <q-banner
+            v-if="barcodeScanError"
+            rounded
+            class="q-mt-md bg-red-1 text-negative"
+          >
+            <template #avatar>
+              <q-icon name="warning" color="negative" />
+            </template>
+
+            {{ barcodeScanError }}
+          </q-banner>
+
+          <q-input
+            v-model="manualBarcode"
+            class="q-mt-md"
+            outlined
+            dense
+            color="secondary"
+            label="Ou digite o código manualmente"
+            inputmode="numeric"
+            @keyup.enter="applyManualBarcode"
+          >
+            <template #prepend>
+              <q-icon name="qr_code_scanner" color="secondary" />
+            </template>
+
+            <template #append>
+              <q-btn
+                flat
+                dense
+                round
+                icon="arrow_forward"
+                color="secondary"
+                @click="applyManualBarcode"
+              />
+            </template>
+          </q-input>
+        </q-card-section>
       </q-card>
     </q-dialog>
   </q-page>
@@ -467,6 +716,12 @@ const loading = ref(false)
 const loadingMore = ref(false)
 const loadingPromos = ref(false)
 
+const barcodeDialog = ref(false)
+const barcodeVideoRef = ref(null)
+const barcodeScanning = ref(false)
+const barcodeScanError = ref('')
+const manualBarcode = ref('')
+
 const items = ref([])
 const promotionItems = ref([])
 const total = ref(0)
@@ -478,9 +733,11 @@ const orderBy = ref(DEFAULT_ORDER)
 const filters = ref({
   descricaoProduto: '',
   descricaoMarca: null,
+  codBarras: '',
   precoMin: null,
   precoMax: null,
-  isPromotion: false
+  isPromotion: false,
+  estoque: null
 })
 
 const selectedBrand = ref(null)
@@ -489,7 +746,9 @@ const modalFilters = ref({
   precoMin: null,
   precoMax: null,
   descricaoMarca: null,
-  isPromotion: false
+  codBarras: '',
+  isPromotion: false,
+  estoque: null
 })
 const modalOrderBy = ref(DEFAULT_ORDER)
 const modalSelectedBrand = ref(null)
@@ -530,10 +789,12 @@ const currentOrderLabel = computed(() => {
 const hasAnyFilter = computed(() => {
   return Boolean(
     String(filters.value.descricaoProduto || '').trim() ||
+    String(filters.value.codBarras || '').trim() ||
     currentBrandName.value ||
     filters.value.isPromotion ||
     filters.value.precoMin !== null ||
     filters.value.precoMax !== null ||
+    filters.value.estoque !== null ||
     orderBy.value !== DEFAULT_ORDER
   )
 })
@@ -541,10 +802,12 @@ const hasAnyFilter = computed(() => {
 const activeExtraFiltersCount = computed(() => {
   let count = 0
 
+  if (String(filters.value.codBarras || '').trim()) count++
   if (currentBrandName.value) count++
   if (filters.value.isPromotion) count++
   if (filters.value.precoMin !== null && filters.value.precoMin !== '') count++
   if (filters.value.precoMax !== null && filters.value.precoMax !== '') count++
+  if (filters.value.estoque !== null && filters.value.estoque !== '') count++
   if (orderBy.value !== DEFAULT_ORDER) count++
 
   return count
@@ -679,6 +942,9 @@ let scrollTarget = null
 let scrollTicking = false
 let resizeHandler = null
 let routeWatchLocked = false
+let barcodeStream = null
+let barcodeDetector = null
+let barcodeScanTimer = null
 
 function money(value) {
   if (value === null || value === undefined || value === '') return '—'
@@ -704,6 +970,20 @@ function normalizeNumber(value) {
   const n = Number(normalized)
 
   return Number.isFinite(n) ? n : null
+}
+
+function normalizeInteger(value) {
+  if (value === null || value === undefined || value === '') return null
+
+  const n = Number(String(value).replace(/[^\d-]/g, ''))
+
+  return Number.isFinite(n) ? Math.trunc(n) : null
+}
+
+function normalizeBarcode(value) {
+  return String(value || '')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .trim()
 }
 
 function normalizeBoolean(value) {
@@ -747,6 +1027,38 @@ function hasPromotion(product) {
     product?.ISPROMOTION === 1 ||
     (promo > 0 && (!preco || promo < preco))
   )
+}
+
+function getStockValue(product) {
+  return normalizeInteger(
+    product?.estoque ??
+    product?.ESTOQUE ??
+    product?.qtdEstoque ??
+    product?.QTDESTOQUE ??
+    product?.saldo ??
+    product?.SALDO ??
+    product?.quantidadeEstoque
+  )
+}
+
+function hasStockValue(product) {
+  return getStockValue(product) !== null
+}
+
+function isOutOfStock(product) {
+  const stock = getStockValue(product)
+
+  return stock !== null && stock <= 0
+}
+
+function getStockLabel(product) {
+  const stock = getStockValue(product)
+
+  if (stock === null) return 'Estoque não informado'
+  if (stock <= 0) return 'Sem estoque'
+  if (stock === 1) return '1 em estoque'
+
+  return ``
 }
 
 function getFinalPrice(product) {
@@ -839,10 +1151,12 @@ function normalizeProdutos(data) {
       codProduto: p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id,
       descricao: p.DESCRICAO ?? p.descricao ?? p.title ?? '',
       codOriginal: p.CODORIGINAL ?? p.codOriginal ?? p.sku ?? null,
-      marca: p.MARCA ?? p.marca ?? '',
+      codBarras: p.CODBARRAS ?? p.codBarras ?? p.COD_BARRAS ?? p.codigoBarras ?? p.BARRAS ?? null,
+      marca: p.MARCA ?? p.marca ?? '', 
       preco: preco !== null && preco !== undefined ? Number(preco) : null,
       precoPromocao: promo !== null && promo !== undefined ? Number(promo) : null,
       precoEfetivo: efetivo !== null && efetivo !== undefined ? Number(efetivo) : null,
+      estoque: normalizeInteger(p.ESTOQUE ?? p.estoque ?? p.QTDESTOQUE ?? p.qtdEstoque ?? p.SALDO ?? p.saldo ?? p.quantidadeEstoque),
       isPromotion,
       imgsPath: imgsPath.filter(Boolean),
       imgs: Array.isArray(p.IMGS) ? p.IMGS : (p.IMGS != null ? [p.IMGS] : null),
@@ -925,8 +1239,10 @@ function readFromURL() {
   const q = route.query
 
   filters.value.descricaoProduto = String(q.q || '')
+  filters.value.codBarras = normalizeBarcode(q.codBarras || q.cb || '')
   filters.value.precoMin = normalizeNumber(q.min)
   filters.value.precoMax = normalizeNumber(q.max)
+  filters.value.estoque = normalizeInteger(q.estoque)
   filters.value.isPromotion = normalizeBoolean(q.isPromotion)
   orderBy.value = normalizeOrderValue(q.orderBy)
 
@@ -955,11 +1271,15 @@ function getURLQuery() {
   const q = String(filters.value.descricaoProduto || '').trim()
   const marca = currentBrandName.value
 
+  const codBarras = normalizeBarcode(filters.value.codBarras || '')
+
   if (q) query.q = q
+  if (codBarras) query.codBarras = codBarras
   if (marca) query.marca = marca
   if (filters.value.isPromotion) query.isPromotion = 'true'
   if (filters.value.precoMin !== null && filters.value.precoMin !== '') query.min = String(filters.value.precoMin)
   if (filters.value.precoMax !== null && filters.value.precoMax !== '') query.max = String(filters.value.precoMax)
+  if (filters.value.estoque !== null && filters.value.estoque !== '') query.estoque = String(filters.value.estoque)
   if (orderBy.value && orderBy.value !== DEFAULT_ORDER) query.orderBy = orderBy.value
 
   query.limit = String(PAGE_LIMIT)
@@ -982,6 +1302,8 @@ async function writeToURL() {
 function buildSearchParams({ append = false, forcePromotion = null, customLimit = PAGE_LIMIT } = {}) {
   let precoMin = normalizeNumber(filters.value.precoMin)
   let precoMax = normalizeNumber(filters.value.precoMax)
+  const estoque = normalizeInteger(filters.value.estoque)
+  const codBarras = normalizeBarcode(filters.value.codBarras || '')
 
   if (precoMin !== null && precoMax !== null && precoMin > precoMax) {
     const temp = precoMin
@@ -994,9 +1316,11 @@ function buildSearchParams({ append = false, forcePromotion = null, customLimit 
     offset: append ? Number(offset.value) : 0,
     descricaoProduto: String(filters.value.descricaoProduto || '').trim() || null,
     descricaoMarca: currentBrandName.value || null,
+    codBarras: codBarras || null,
     precoMin,
     precoMax,
-    orderBy: normalizeOrderValue(orderBy.value)
+    orderBy: normalizeOrderValue(orderBy.value),
+    estoque
   }
 
   const promotionValue = forcePromotion !== null
@@ -1151,7 +1475,9 @@ function openFiltersModal() {
     precoMin: filters.value.precoMin,
     precoMax: filters.value.precoMax,
     descricaoMarca: filters.value.descricaoMarca,
-    isPromotion: Boolean(filters.value.isPromotion)
+    codBarras: filters.value.codBarras,
+    isPromotion: Boolean(filters.value.isPromotion),
+    estoque: filters.value.estoque
   }
 
   modalOrderBy.value = orderBy.value
@@ -1248,7 +1574,9 @@ function clearModalFilters() {
     precoMin: null,
     precoMax: null,
     descricaoMarca: null,
-    isPromotion: false
+    codBarras: '',
+    isPromotion: false,
+    estoque: null
   }
 
   modalOrderBy.value = DEFAULT_ORDER
@@ -1260,6 +1588,8 @@ function clearModalFilters() {
 async function applyModalFilters() {
   filters.value.precoMin = normalizeNumber(modalFilters.value.precoMin)
   filters.value.precoMax = normalizeNumber(modalFilters.value.precoMax)
+  filters.value.codBarras = normalizeBarcode(modalFilters.value.codBarras || '')
+  filters.value.estoque = normalizeInteger(modalFilters.value.estoque)
   filters.value.isPromotion = Boolean(modalFilters.value.isPromotion)
   orderBy.value = normalizeOrderValue(modalOrderBy.value)
 
@@ -1323,6 +1653,16 @@ async function removePrecoMax() {
   await searchNow()
 }
 
+async function removeCodBarrasOnly() {
+  filters.value.codBarras = ''
+  await searchNow()
+}
+
+async function removeEstoqueOnly() {
+  filters.value.estoque = null
+  await searchNow()
+}
+
 async function resetOrderOnly() {
   orderBy.value = DEFAULT_ORDER
   await searchNow()
@@ -1332,9 +1672,11 @@ async function resetAllFilters() {
   filters.value = {
     descricaoProduto: '',
     descricaoMarca: null,
+    codBarras: '',
     precoMin: null,
     precoMax: null,
-    isPromotion: false
+    isPromotion: false,
+    estoque: null
   }
 
   selectedBrand.value = null
@@ -1495,8 +1837,173 @@ function scrollToSection(key) {
   })
 }
 
+function supportsBarcodeDetector() {
+  return typeof window !== 'undefined' && 'BarcodeDetector' in window
+}
+
+function stopBarcodeScanner() {
+  barcodeScanning.value = false
+
+  if (barcodeScanTimer) {
+    window.clearTimeout(barcodeScanTimer)
+    barcodeScanTimer = null
+  }
+
+  if (barcodeStream) {
+    barcodeStream.getTracks().forEach(track => track.stop())
+    barcodeStream = null
+  }
+
+  if (barcodeVideoRef.value) {
+    barcodeVideoRef.value.srcObject = null
+  }
+}
+
+function closeBarcodeScanner() {
+  stopBarcodeScanner()
+  barcodeDialog.value = false
+}
+
+async function openBarcodeScanner() {
+  barcodeScanError.value = ''
+  manualBarcode.value = ''
+
+  if (!supportsBarcodeDetector()) {
+    openManualBarcodeDialog('Seu navegador não liberou leitura automática de código de barras. Digite o código manualmente.')
+    return
+  }
+
+  barcodeDialog.value = true
+
+  await nextTick()
+  await startBarcodeScanner()
+}
+
+function openManualBarcodeDialog(message = 'Digite o código de barras do produto.') {
+  $q.dialog({
+    title: 'Código de barras',
+    message,
+    prompt: {
+      model: '',
+      type: 'text',
+      isValid: value => Boolean(normalizeBarcode(value))
+    },
+    cancel: {
+      label: 'Cancelar',
+      flat: true
+    },
+    ok: {
+      label: 'Buscar',
+      color: 'secondary',
+      unelevated: true
+    },
+    persistent: true
+  }).onOk(async value => {
+    await applyBarcodeValue(value)
+  })
+}
+
+async function startBarcodeScanner() {
+  stopBarcodeScanner()
+
+  try {
+    const formats = [
+      'ean_13',
+      'ean_8',
+      'upc_a',
+      'upc_e',
+      'code_128',
+      'code_39',
+      'itf'
+    ]
+
+    barcodeDetector = new window.BarcodeDetector({ formats })
+
+    barcodeStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: {
+          ideal: 'environment'
+        }
+      },
+      audio: false
+    })
+
+    if (!barcodeVideoRef.value) return
+
+    barcodeVideoRef.value.srcObject = barcodeStream
+    await barcodeVideoRef.value.play()
+
+    barcodeScanning.value = true
+    scanBarcodeFrame()
+  } catch (err) {
+    console.error('[Catalogo] erro ao iniciar scanner de código de barras:', err)
+
+    barcodeScanError.value = 'Não foi possível acessar a câmera. Verifique a permissão do navegador ou digite o código manualmente.'
+    barcodeScanning.value = false
+  }
+}
+
+async function scanBarcodeFrame() {
+  if (!barcodeScanning.value || !barcodeDetector || !barcodeVideoRef.value) return
+
+  try {
+    const codes = await barcodeDetector.detect(barcodeVideoRef.value)
+    const rawValue = codes?.[0]?.rawValue
+
+    if (rawValue) {
+      await applyBarcodeValue(rawValue)
+      closeBarcodeScanner()
+      return
+    }
+  } catch (err) {
+    console.warn('[Catalogo] falha ao ler frame do código de barras:', err)
+  }
+
+  barcodeScanTimer = window.setTimeout(scanBarcodeFrame, 360)
+}
+
+async function applyBarcodeValue(value) {
+  const codBarras = normalizeBarcode(value)
+
+  if (!codBarras) {
+    $q.notify({
+      type: 'warning',
+      message: 'Código de barras inválido.'
+    })
+
+    return
+  }
+
+  filters.value.codBarras = codBarras
+  modalFilters.value.codBarras = codBarras
+  filters.value.descricaoProduto = ''
+  page.value = 1
+
+  $q.notify({
+    type: 'positive',
+    message: `Código lido: ${codBarras}`
+  })
+
+  await searchNow()
+  scrollToSection('results')
+}
+
+async function applyManualBarcode() {
+  await applyBarcodeValue(manualBarcode.value)
+  closeBarcodeScanner()
+}
+
 function confirmAddToCart(product) {
   const name = product?.descricao || 'Produto'
+
+  if (isOutOfStock(product)) {
+    $q.notify({
+      type: 'warning',
+      message: 'Produto sem estoque no momento.'
+    })
+
+    return
+  }
 
   $q.dialog({
     title: '🛒 Adicionar ao carrinho',
@@ -1542,6 +2049,8 @@ function openDetails(product) {
     marca: brand,
     sku,
     codOriginal: sku,
+    codBarras: product.codBarras ?? product.raw?.CODBARRAS ?? null,
+    estoque: getStockValue(product),
     preco: product.preco,
     precoPromocao: product.precoPromocao,
     precoEfetivo: product.precoEfetivo,
@@ -1587,6 +2096,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  stopBarcodeScanner()
   unbindScrollListener()
 })
 </script>
@@ -1594,7 +2104,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .catalog-page {
   --en-yellow: #F7D102;
-  --en-blue: #021E58;
+  --en-blue: #063186;
   --en-blue-dark: #03122E;
   --en-white: #ffffff;
   --en-muted: rgba(255, 255, 255, 0.72);
@@ -2012,6 +2522,37 @@ onBeforeUnmount(() => {
   border-radius: 999px;
 }
 
+.stock-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  max-width: calc(100% - 112px);
+  border-radius: 999px;
+  font-weight: 950;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.stock-badge--available {
+  background: #14964f !important;
+}
+
+.stock-watermark {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(3, 18, 46, 0.12);
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  transform: rotate(-18deg);
+  pointer-events: none;
+}
+
 .price-tag {
   position: absolute;
   top: 10px;
@@ -2119,6 +2660,73 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   color: var(--en-blue-dark);
   background: var(--en-yellow);
+}
+
+.barcode-modal-card {
+  width: min(94vw, 560px);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.barcode-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  color: var(--en-blue-dark);
+  background: var(--en-yellow);
+}
+
+.barcode-video-wrap {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #03122e;
+}
+
+.barcode-video {
+  width: 100%;
+  height: 320px;
+  display: block;
+  object-fit: cover;
+}
+
+.barcode-frame {
+  position: absolute;
+  inset: 42px 28px;
+  border: 2px solid rgba(247, 209, 2, 0.92);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 999px rgba(0, 0, 0, 0.32),
+    0 0 26px rgba(247, 209, 2, 0.28);
+  pointer-events: none;
+}
+
+.barcode-frame-line {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 50%;
+  height: 2px;
+  background: var(--en-yellow);
+  box-shadow: 0 0 14px rgba(247, 209, 2, 0.9);
+}
+
+.barcode-status {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: rgba(3, 18, 46, 0.78);
+  font-weight: 800;
+  backdrop-filter: blur(8px);
 }
 
 .ellipsis-3-lines {
