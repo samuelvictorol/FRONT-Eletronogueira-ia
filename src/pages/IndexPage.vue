@@ -8,11 +8,11 @@
         class="banner-section q-mx-sm q-mt-xl q-pt-sm animate__animated animate__fadeInDown animate__delay-2s animate__slower">
         <!-- DESKTOP/TABLET (>= md) -->
         <q-carousel v-if="!isMobile" v-model="bannerSlideDesktop" class="banner-carousel rounded-borders" animated
-          swipeable infinite arrows navigation height="620px" :autoplay="bannerAutoplay"
+          swipeable infinite arrows navigation height="750px" :autoplay="bannerAutoplay"
           @mousedown="bannerAutoplay = false" @touchstart="bannerAutoplay = false" @mouseup="resumeBannerAutoplay"
           @touchend="resumeBannerAutoplay" @mouseleave="resumeBannerAutoplay">
           <q-carousel-slide v-for="(b, idx) in bannersDesktop" :key="`desk-${idx}`" :name="idx" class="q-pa-none">
-            <q-img :src="b.url" :alt="b.alt || `Banner ${idx + 1}`" class="banner-img cursor-pointer" fit="cover"
+            <q-img :src="b.url" :alt="b.alt || `Banner ${idx + 1}`" class="banner-img cursor-pointer" fit="fit"
               loading="lazy" @click="onBannerClick(b)">
               <!-- <div v-if="b.title || b.subtitle" class="banner-overlay">
                 <div class="banner-title">{{ b.title }}</div>
@@ -486,13 +486,12 @@
           </q-card>
         </div>
       </section>
-      <section id="buscar"
+      <!-- <section id="buscar"
         class="hero bg-grad-secondary animate__animated animate__fadeIn animate__delay-4s animate__slower ">
         <div class="hero-overlay"></div>
 
         <div
           class="hero-content  rounded-borders bg-primary animate__animated animate__zoomIn animate__delay-3s q-mx-sm q-mb-md q-mt-md">
-          <!-- <p class="text-bold text-primary q-mt-sm">Ferramentas & Soluções</p>  -->
           <div v-if="!isMobile" class="w100 row justify-center text-center bg-primary">
             <div
               class="text-h5 text-secondary text-bold animate__animated animate__zoomIn animate__delay-43s animate__slower">
@@ -527,7 +526,7 @@
             class="open-now text-secondary q-pt-md text-center animate__animated animate__fadeInDown animate__delay-3s animate__slower">
             {{ openNowText }}</div>
         </div>
-      </section>
+      </section> -->
       <footer class="footer bg-primary text-secondary q-pt-lg">
         <div class="container footer-grid q-pt-xl q-pb-md">
           <div>
@@ -636,13 +635,6 @@ const bannersDesktop = ref([
     subtitle: 'Ferramentas e elétrica com preço bom'
   },
   {
-    url: '/assets/promo2.png',
-    alt: 'Kärcher',
-    action: { type: 'route', to: '/catalogo?q=furadeira&limit=15&page=1&orderBy=updated_desc' },
-    title: 'Kärcher',
-    subtitle: 'Lavadoras e aspiradores'
-  },
-  {
     url: '/assets/promo3.png',
     alt: 'Serviços',
     action: { type: 'route', to: '/servicos-manutencao' },
@@ -656,6 +648,13 @@ const bannersDesktop = ref([
     title: 'Agro & Irrigação',
     subtitle: 'Bombas, mangueiras e conexões'
   },
+  {
+    url: '/assets/promo2.png',
+    alt: 'Kärcher',
+    action: { type: 'route', to: '/catalogo?q=furadeira&limit=15&page=1&orderBy=updated_desc' },
+    title: 'Kärcher',
+    subtitle: 'Lavadoras e aspiradores'
+  },
 ])
 
 const bannersMobile = ref([
@@ -665,13 +664,6 @@ const bannersMobile = ref([
     action: { type: 'route', to: '/localizacao' },
     title: 'Kärcher',
     subtitle: 'Lavadoras e aspiradores'
-  },
-  {
-    url: '/assets/promo1.png',
-    alt: 'Mobile 1',
-    action: { type: 'scroll', to: '#buscar' },
-    title: 'Furadeiras',
-    subtitle: 'Clique e veja'
   },
   {
     url: '/assets/promo2.png',
@@ -693,6 +685,12 @@ const bannersMobile = ref([
     action: { type: 'route', to: '/servicos-manutencao' },
     title: 'Automação',
     subtitle: 'CLP, inversores, sensores e painéis'
+  },
+    {
+    url: '/assets/promo1.png',
+    alt: 'Mobile 1',
+    action: { type: 'route', to: '/catalogo' },
+    subtitle: 'Clique e veja'
   },
 ])
 

@@ -14,8 +14,8 @@
 
           <div class="brand-text animate__animated animate__fadeInLeft animate__delay-3s animate__slower"
             v-if="!isMobile">
-            <div class="row no-wrap"> <strong class="text-negative">ELETRO</strong><strong class="text-secondary">NOGUEIRA</strong></div>
-            <small>Valparaíso de Goiás • BR-040</small>
+            <div class="row no-wrap" > <strong class="text-negative">ELETRO</strong><strong class="text-secondary">NOGUEIRA</strong></div>
+            <small class="text-secondary q-pt-xs">Valparaíso de Goiás • BR-040</small>
           </div>
 
           <div
@@ -259,7 +259,48 @@ watch(() => route.fullPath, syncTabWithRoute, { immediate: true })
 onMounted(() => {
   if ($q.screen.gt.md) leftDrawerOpen.value = false
   syncTabWithRoute()
+    enableDragScroll(
+    '.promo-rail, .sticky-section-tabs, .quick-filter-row, .active-filters-row, .modal-brand-chips'
+  )
 })
+
+function enableDragScroll(selector) {
+  const elements = document.querySelectorAll(selector)
+
+  elements.forEach((el) => {
+    let isDown = false
+    let startX = 0
+    let scrollLeft = 0
+
+    el.addEventListener('mousedown', (e) => {
+      isDown = true
+      el.classList.add('is-dragging')
+      startX = e.pageX - el.offsetLeft
+      scrollLeft = el.scrollLeft
+    })
+
+    el.addEventListener('mouseleave', () => {
+      isDown = false
+      el.classList.remove('is-dragging')
+    })
+
+    el.addEventListener('mouseup', () => {
+      isDown = false
+      el.classList.remove('is-dragging')
+    })
+
+    el.addEventListener('mousemove', (e) => {
+      if (!isDown) return
+
+      e.preventDefault()
+
+      const x = e.pageX - el.offsetLeft
+      const walk = (x - startX) * 1.4
+
+      el.scrollLeft = scrollLeft - walk
+    })
+  })
+}
 </script>
 
 <style scoped>

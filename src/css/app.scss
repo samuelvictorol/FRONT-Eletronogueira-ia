@@ -400,3 +400,143 @@ a {
 .low-opacity {
   opacity: .8;
 }
+
+/* Trilhos horizontais: promoções, marcas, tabs e chips */
+.promo-rail,
+.sticky-section-tabs,
+.quick-filter-row,
+.active-filters-row,
+.modal-brand-chips {
+  scrollbar-width: thin;
+  scrollbar-color: #F7D102 rgba(255, 255, 255, 0.08);
+  overscroll-behavior-x: contain;
+}
+
+/* Chrome, Edge, Safari */
+.promo-rail::-webkit-scrollbar,
+.sticky-section-tabs::-webkit-scrollbar,
+.quick-filter-row::-webkit-scrollbar,
+.active-filters-row::-webkit-scrollbar,
+.modal-brand-chips::-webkit-scrollbar {
+  height: 9px;
+}
+
+.promo-rail::-webkit-scrollbar-track,
+.sticky-section-tabs::-webkit-scrollbar-track,
+.quick-filter-row::-webkit-scrollbar-track,
+.active-filters-row::-webkit-scrollbar-track,
+.modal-brand-chips::-webkit-scrollbar-track {
+  background: linear-gradient(
+    90deg,
+    rgba(2, 30, 88, 0.65),
+    rgba(3, 18, 46, 0.85)
+  );
+  border-radius: 999px;
+  border: 1px solid rgba(247, 209, 2, 0.12);
+}
+
+.promo-rail::-webkit-scrollbar-thumb,
+.sticky-section-tabs::-webkit-scrollbar-thumb,
+.quick-filter-row::-webkit-scrollbar-thumb,
+.active-filters-row::-webkit-scrollbar-thumb,
+.modal-brand-chips::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #F7D102, #ffe86a);
+  border-radius: 999px;
+  border: 2px solid #03122E;
+  box-shadow: 0 0 14px rgba(247, 209, 2, 0.35);
+}
+
+.promo-rail::-webkit-scrollbar-thumb:hover,
+.sticky-section-tabs::-webkit-scrollbar-thumb:hover,
+.quick-filter-row::-webkit-scrollbar-thumb:hover,
+.active-filters-row::-webkit-scrollbar-thumb:hover,
+.modal-brand-chips::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #ffe86a, #F7D102);
+}
+
+/* Melhora visual do overflow horizontal */
+.promo-rail,
+.sticky-section-tabs {
+  position: relative;
+  padding-bottom: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sombra lateral indicando que tem conteúdo para arrastar */
+.promo-rail::after,
+.sticky-section-tabs::after {
+  content: '';
+  position: sticky;
+  right: 0;
+  min-width: 42px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(3, 18, 46, 0),
+    rgba(3, 18, 46, 0.96)
+  );
+}
+
+/* Scroll vertical da página */
+:global(html) {
+  scrollbar-width: thin;
+  scrollbar-color: #F7D102 #03122E;
+}
+
+:global(body::-webkit-scrollbar) {
+  width: 11px;
+}
+
+:global(body::-webkit-scrollbar-track) {
+  background: linear-gradient(180deg, #021E58, #03122E);
+}
+
+:global(body::-webkit-scrollbar-thumb) {
+  background: linear-gradient(180deg, #F7D102, #ffe86a);
+  border-radius: 999px;
+  border: 3px solid #03122E;
+}
+
+:global(body::-webkit-scrollbar-thumb:hover) {
+  background: #F7D102;
+}
+
+.promo-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 285px);
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 4px 18px;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 8px;
+}
+/* Cursor grab em todos os trilhos com overflow horizontal */
+.promo-rail,
+.sticky-section-tabs,
+.quick-filter-row,
+.active-filters-row,
+.modal-brand-chips {
+  cursor: grab;
+  user-select: none;
+}
+
+.promo-rail:active,
+.sticky-section-tabs:active,
+.quick-filter-row:active,
+.active-filters-row:active,
+.modal-brand-chips:active {
+  cursor: grabbing;
+}
+
+/* Evita selecionar texto enquanto arrasta */
+.promo-rail *,
+.sticky-section-tabs *,
+.quick-filter-row *,
+.active-filters-row *,
+.modal-brand-chips * {
+  user-select: none;
+}
+
