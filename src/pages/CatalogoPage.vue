@@ -6,8 +6,9 @@
       <div class="q-mt-sm text-white">Carregando produtos...</div>
     </q-inner-loading>
 
-    <div ref="stickyHeaderEl" class="catalog-sticky-header animate__animated animate__fadeInDown animate__delay-1s animate__slower">
-      <div class="sticky-main-row"  v-if="showStickySearch || isMobile">
+    <div ref="stickyHeaderEl"
+      class="catalog-sticky-header animate__animated animate__fadeInDown animate__delay-1s animate__slower">
+      <div class="sticky-main-row" v-if="showStickySearch || isMobile">
         <div class="sticky-actions">
           <transition name="fade-slide">
             <q-input v-model="filters.descricaoProduto" dense outlined clearable bg-color="white" color="secondary"
@@ -18,14 +19,7 @@
               </template>
 
               <template #append>
-                <q-btn
-                  flat
-                  dense
-                  round
-                  icon="qr_code_scanner"
-                  color="secondary"
-                  @click="openBarcodeScanner"
-                >
+                <q-btn flat dense round icon="qr_code_scanner" color="secondary" @click="openBarcodeScanner">
                   <q-tooltip>Ler código de barras</q-tooltip>
                 </q-btn>
 
@@ -57,8 +51,8 @@
             Ferramentas, elétrica, hidráulica e manutenção
           </div> -->
 
-          <h1>
-            Encontre os melhores produtos na EletroNogueira
+          <h1 class="text-shadow">
+            Catálogo EletroNogueira
           </h1>
           <div class="hero-metrics">
             <div>
@@ -87,14 +81,7 @@
             </template>
 
             <template #append>
-              <q-btn
-                flat
-                round
-                dense
-                color="secondary"
-                icon="qr_code_scanner"
-                @click="openBarcodeScanner"
-              >
+              <q-btn flat round dense color="secondary" icon="qr_code_scanner" @click="openBarcodeScanner">
                 <q-tooltip>Ler código de barras</q-tooltip>
               </q-btn>
 
@@ -119,13 +106,7 @@
             <q-btn unelevated color="secondary" text-color="white" icon="tune" label="Filtros avançados"
               @click="openFiltersModal" />
 
-            <q-btn
-              outline
-              color="secondary"
-              icon="qr_code_scanner"
-              label="Ler código"
-              @click="openBarcodeScanner"
-            />
+            <q-btn outline color="secondary" icon="qr_code_scanner" label="Ler código" @click="openBarcodeScanner" />
 
             <q-btn flat color="secondary" icon="restart_alt" label="Limpar tudo" @click="resetAllFilters" />
           </div>
@@ -166,11 +147,6 @@
             Máx: {{ money(filters.precoMax) }}
           </q-chip>
 
-          <q-chip v-if="filters.estoque !== null && filters.estoque !== ''" removable color="white"
-            text-color="secondary" icon="inventory" @remove="removeEstoqueOnly">
-            Estoque: {{ filters.estoque }}
-          </q-chip>
-
           <q-chip v-if="orderBy !== DEFAULT_ORDER" removable color="white" text-color="secondary" icon="sort"
             @remove="resetOrderOnly">
             {{ currentOrderLabel }}
@@ -195,32 +171,13 @@
         <div class="promo-rail">
           <q-card v-for="p in showcaseProducts" :key="`promo-${productKey(p)}`" flat bordered
             class="catalog-product-card catalog-product-card--promo" @click="openDetails(p)">
-            <div class="product-image-wrap">
-              <div
-                v-if="isOutOfStock(p)"
-                class="stock-watermark"
-              >
+            <div class="product-image-wrap" :class="{ 'product-image-wrap--out-stock': isOutOfStock(p) }">
+              <div v-if="isOutOfStock(p)" class="stock-watermark">
                 Sem estoque
               </div>
 
-              <q-badge
-                v-if="isOutOfStock(p)"
-                class="stock-badge"
-                color="grey-10"
-                text-color="white"
-                icon="block"
-              >
+              <q-badge v-if="isOutOfStock(p)" class="stock-badge" color="grey-10" text-color="white" icon="block">
                 Sem estoque
-              </q-badge>
-
-              <q-badge
-                v-else-if="hasStockValue(p)"
-                class="stock-badge stock-badge--available"
-                color="positive"
-                text-color="white"
-                icon="inventory_2"
-              >
-                {{ getStockLabel(p) }}
               </q-badge>
 
               <q-img :src="resolveImage(p)" :alt="p.descricao" fit="contain" class="product-img"
@@ -250,16 +207,8 @@
                 </template>
               </div>
 
-              <q-btn
-                round
-                dense
-                glossy
-                :color="isOutOfStock(p) ? 'grey-6' : 'green-14'"
-                icon="add_shopping_cart"
-                class="cart-btn"
-                :disable="isOutOfStock(p)"
-                @click.stop="confirmAddToCart(p)"
-              >
+              <q-btn round dense glossy :color="isOutOfStock(p) ? 'grey-6' : 'green-14'" icon="add_shopping_cart"
+                class="cart-btn" :disable="isOutOfStock(p)" @click.stop="confirmAddToCart(p)">
                 <q-tooltip>
                   {{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}
                 </q-tooltip>
@@ -309,7 +258,15 @@
             <div class="brand-products-grid">
               <q-card v-for="p in topic.products" :key="`brand-${topic.key}-${productKey(p)}`" flat bordered
                 class="catalog-product-card catalog-product-card--compact" @click="openDetails(p)">
-                <div class="product-image-wrap">
+                <div class="product-image-wrap" :class="{ 'product-image-wrap--out-stock': isOutOfStock(p) }">
+                  <div v-if="isOutOfStock(p)" class="stock-watermark">
+                    Sem estoque
+                  </div>
+
+                  <q-badge v-if="isOutOfStock(p)" class="stock-badge" color="grey-10" text-color="white" icon="block">
+                    Sem estoque
+                  </q-badge>
+
                   <q-img :src="resolveImage(p)" :alt="p.descricao" fit="contain" class="product-img"
                     spinner-color="secondary">
                     <template #error>
@@ -333,8 +290,12 @@
                     </template>
                   </div>
 
-                  <q-btn round dense glossy color="green-14" icon="add_shopping_cart" class="cart-btn"
-                    @click.stop="confirmAddToCart(p)" />
+                  <q-btn round dense glossy :color="isOutOfStock(p) ? 'grey-6' : 'green-14'" icon="add_shopping_cart"
+                    class="cart-btn" :disable="isOutOfStock(p)" @click.stop="confirmAddToCart(p)">
+                    <q-tooltip>
+                      {{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}
+                    </q-tooltip>
+                  </q-btn>
                 </div>
 
                 <q-card-section class="product-info">
@@ -378,32 +339,13 @@
         <div v-else class="catalog-grid">
           <q-card v-for="p in items" :key="`result-${productKey(p)}`" flat bordered class="catalog-product-card"
             @click="openDetails(p)">
-            <div class="product-image-wrap">
-              <div
-                v-if="isOutOfStock(p)"
-                class="stock-watermark"
-              >
+            <div class="product-image-wrap" :class="{ 'product-image-wrap--out-stock': isOutOfStock(p) }">
+              <div v-if="isOutOfStock(p)" class="stock-watermark">
                 Sem estoque
               </div>
 
-              <q-badge
-                v-if="isOutOfStock(p)"
-                class="stock-badge"
-                color="grey-10"
-                text-color="white"
-                icon="block"
-              >
+              <q-badge v-if="isOutOfStock(p)" class="stock-badge" color="grey-10" text-color="white" icon="block">
                 Sem estoque
-              </q-badge>
-
-              <q-badge
-                v-else-if="hasStockValue(p)"
-                class="stock-badge stock-badge--available"
-                color="positive"
-                text-color="white"
-                icon="inventory_2"
-              >
-                {{ getStockLabel(p) }}
               </q-badge>
 
               <q-img :src="resolveImage(p)" :alt="p.descricao" fit="contain" class="product-img"
@@ -435,16 +377,8 @@
                 </template>
               </div>
 
-              <q-btn
-                round
-                dense
-                glossy
-                :color="isOutOfStock(p) ? 'grey-6' : 'green-14'"
-                icon="add_shopping_cart"
-                class="cart-btn"
-                :disable="isOutOfStock(p)"
-                @click.stop="confirmAddToCart(p)"
-              >
+              <q-btn round dense glossy :color="isOutOfStock(p) ? 'grey-6' : 'green-14'" icon="add_shopping_cart"
+                class="cart-btn" :disable="isOutOfStock(p)" @click.stop="confirmAddToCart(p)">
                 <q-tooltip>
                   {{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}
                 </q-tooltip>
@@ -459,9 +393,6 @@
               <div class="product-meta">
                 <span v-if="p.marca">{{ p.marca }}</span>
                 <span v-if="p.codProduto">#{{ p.codProduto }}</span>
-                <span v-if="hasStockValue(p)" :class="{ 'text-negative': isOutOfStock(p) }">
-                  {{ getStockLabel(p) }}
-                </span>
               </div>
             </q-card-section>
           </q-card>
@@ -509,29 +440,14 @@
           <q-toggle v-model="modalFilters.isPromotion" color="negative" checked-icon="local_offer" unchecked-icon="sell"
             label="Mostrar somente produtos em promoção" />
 
-          <q-input
-            v-model="modalFilters.codBarras"
-            outlined
-            dense
-            clearable
-            color="secondary"
-            label="Código de barras"
-            placeholder="Leia ou digite o código"
-            inputmode="numeric"
-          >
+          <q-input v-model="modalFilters.codBarras" outlined dense clearable color="secondary" label="Código de barras"
+            placeholder="Leia ou digite o código" inputmode="numeric">
             <template #prepend>
               <q-icon name="qr_code_scanner" color="secondary" />
             </template>
 
             <template #append>
-              <q-btn
-                flat
-                dense
-                round
-                icon="photo_camera"
-                color="secondary"
-                @click="openBarcodeScanner"
-              >
+              <q-btn flat dense round icon="photo_camera" color="secondary" @click="openBarcodeScanner">
                 <q-tooltip>Ler com a câmera</q-tooltip>
               </q-btn>
             </template>
@@ -594,26 +510,21 @@
         <q-separator />
 
         <q-card-actions align="between" class="q-pa-md w100 row no-wrap">
-            <q-btn flat color="grey-7" label="Cancelar" v-close-popup />
-            <q-btn flat color="negative" label="Limpar" @click="clearModalFilters" />
-            <q-btn unelevated color="secondary" icon-right="search" label="Buscar" :loading="loading"
-              @click="applyModalFilters" />
+          <q-btn flat color="grey-7" label="Cancelar" v-close-popup />
+          <q-btn flat color="negative" label="Limpar" @click="clearModalFilters" />
+          <q-btn unelevated color="secondary" icon-right="search" label="Buscar" :loading="loading"
+            @click="applyModalFilters" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="barcodeDialog"
-      persistent
-      :maximized="isMobile"
-      @hide="stopBarcodeScanner"
-    >
+    <q-dialog v-model="barcodeDialog" persistent :maximized="isMobile" @hide="stopBarcodeScanner">
       <q-card class="barcode-modal-card">
         <q-card-section class="barcode-modal-header">
           <div>
-            <div class="text-h6 text-weight-bold">Código de barras</div>
+            <div class="text-h6 text-weight-bold">Leitor de código</div>
             <div class="text-caption">
-              Escaneie com a câmera ou digite o código manualmente.
+              Use a câmera ou insira manualmente o código do produto.
             </div>
           </div>
 
@@ -622,41 +533,40 @@
 
         <q-separator />
 
-        <q-card-section>
-          <div class="barcode-video-wrap">
-            <video
-              ref="barcodeVideoRef"
-              class="barcode-video"
-              autoplay
-              muted
-              playsinline
-            />
+        <q-card-section class="barcode-modal-body">
+          <div class="barcode-action-row">
+            <q-btn unelevated color="secondary" text-color="white" icon="photo_camera" label="Iniciar câmera"
+              :loading="barcodeCameraLoading" @click="startBarcodeScanner" />
+
+            <q-btn outline color="secondary" icon="edit" label="Inserir manualmente" @click="focusManualBarcodeInput" />
+          </div>
+
+          <div class="barcode-video-wrap q-mt-md">
+            <video ref="barcodeVideoRef" class="barcode-video" autoplay muted playsinline />
 
             <div class="barcode-frame">
               <div class="barcode-frame-line" />
             </div>
 
-            <div
-              v-if="barcodeCameraLoading || barcodeScanning"
-              class="barcode-status"
-            >
-              <q-spinner-dots color="primary" size="28px" />
-              {{ barcodeCameraLoading ? 'Solicitando câmera...' : 'Procurando código...' }}
+            <div v-if="!barcodeScanning && !barcodeCameraLoading" class="barcode-start-overlay">
+              <q-icon name="qr_code_scanner" size="44px" color="primary" />
+
+              <div class="text-weight-bold q-mt-sm">
+                Toque em “Iniciar câmera”
+              </div>
+
+              <div class="text-caption q-mt-xs">
+                Funciona melhor apontando para o código com boa iluminação.
+              </div>
             </div>
 
-            <div
-              v-else-if="barcodeDialog && !barcodeScanError"
-              class="barcode-status barcode-status--idle"
-            >
-              Aguardando câmera ou digitação
+            <div v-if="barcodeCameraLoading || barcodeScanning" class="barcode-status">
+              <q-spinner-dots color="primary" size="28px" />
+              {{ barcodeCameraLoading ? 'Abrindo câmera...' : 'Procurando código...' }}
             </div>
           </div>
 
-          <q-banner
-            v-if="barcodeScanError"
-            rounded
-            class="q-mt-md bg-red-1 text-negative"
-          >
+          <q-banner v-if="barcodeScanError" rounded class="q-mt-md bg-red-1 text-negative">
             <template #avatar>
               <q-icon name="warning" color="negative" />
             </template>
@@ -664,68 +574,30 @@
             {{ barcodeScanError }}
           </q-banner>
 
-          <q-input
-            v-model="manualBarcode"
-            class="q-mt-md"
-            outlined
-            dense
-            color="secondary"
-            label="Digite o código manualmente"
-            hint="Funciona mesmo se o navegador não suportar leitura automática pela câmera."
-            inputmode="numeric"
-            @keyup.enter="applyManualBarcode"
-          >
+          <q-input ref="manualBarcodeInputRef" v-model="manualBarcode" class="q-mt-md manual-barcode-input" outlined
+            dense clearable color="secondary" label="Inserir manualmente" placeholder="Digite ou cole o código"
+            inputmode="numeric" @keyup.enter="applyManualBarcode">
             <template #prepend>
-              <q-icon name="qr_code_scanner" color="secondary" />
+              <q-icon name="keyboard" color="secondary" />
             </template>
 
             <template #append>
-              <q-btn
-                flat
-                dense
-                round
-                icon="photo_camera"
-                color="secondary"
-                :loading="barcodeCameraLoading"
-                @click="startBarcodeScanner"
-              >
-                <q-tooltip>Tentar câmera novamente</q-tooltip>
-              </q-btn>
-
-              <q-btn
-                flat
-                dense
-                round
-                icon="arrow_forward"
-                color="secondary"
-                @click="applyManualBarcode"
-              >
-                <q-tooltip>Buscar código digitado</q-tooltip>
-              </q-btn>
+              <q-btn flat dense round icon="search" color="secondary" @click="applyManualBarcode" />
             </template>
           </q-input>
         </q-card-section>
 
         <q-separator />
 
-        <q-card-actions align="between" class="q-pa-md">
-          <q-btn
-            flat
-            color="grey-7"
-            label="Cancelar"
-            @click="closeBarcodeScanner"
-          />
+        <q-card-actions class="barcode-modal-actions">
+          <q-btn flat color="grey-7" label="Cancelar" @click="closeBarcodeScanner" />
 
-          <q-btn
-            unelevated
-            color="secondary"
-            icon="search"
-            label="Buscar código digitado"
-            @click="applyManualBarcode"
-          />
+          <q-btn unelevated color="secondary" icon="search" :label="isMobile ? 'Buscar' : 'Buscar código digitado'"
+            @click="applyManualBarcode" />
         </q-card-actions>
       </q-card>
     </q-dialog>
+
   </q-page>
 </template>
 
@@ -735,8 +607,9 @@ import { useQuasar } from 'quasar'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCart } from 'src/composables/useCart'
+import { BrowserMultiFormatReader } from '@zxing/browser'
 
-const PAGE_LIMIT = 25
+const PAGE_LIMIT = 45
 const DEFAULT_ORDER = 'updated_desc'
 const PROMO_LIMIT = 12
 
@@ -760,6 +633,7 @@ const loadingPromos = ref(false)
 
 const barcodeDialog = ref(false)
 const barcodeVideoRef = ref(null)
+const manualBarcodeInputRef = ref(null)
 const barcodeScanning = ref(false)
 const barcodeCameraLoading = ref(false)
 const barcodeScanError = ref('')
@@ -837,7 +711,6 @@ const hasAnyFilter = computed(() => {
     filters.value.isPromotion ||
     filters.value.precoMin !== null ||
     filters.value.precoMax !== null ||
-    filters.value.estoque !== null ||
     orderBy.value !== DEFAULT_ORDER
   )
 })
@@ -850,7 +723,6 @@ const activeExtraFiltersCount = computed(() => {
   if (filters.value.isPromotion) count++
   if (filters.value.precoMin !== null && filters.value.precoMin !== '') count++
   if (filters.value.precoMax !== null && filters.value.precoMax !== '') count++
-  if (filters.value.estoque !== null && filters.value.estoque !== '') count++
   if (orderBy.value !== DEFAULT_ORDER) count++
 
   return count
@@ -985,9 +857,9 @@ let scrollTarget = null
 let scrollTicking = false
 let resizeHandler = null
 let routeWatchLocked = false
-let barcodeStream = null
-let barcodeDetector = null
-let barcodeScanTimer = null
+let barcodeReader = null
+let barcodeControls = null
+let barcodeApplying = false
 
 function money(value) {
   if (value === null || value === undefined || value === '') return '—'
@@ -1195,7 +1067,7 @@ function normalizeProdutos(data) {
       descricao: p.DESCRICAO ?? p.descricao ?? p.title ?? '',
       codOriginal: p.CODORIGINAL ?? p.codOriginal ?? p.sku ?? null,
       codBarras: p.CODBARRAS ?? p.codBarras ?? p.COD_BARRAS ?? p.codigoBarras ?? p.BARRAS ?? null,
-      marca: p.MARCA ?? p.marca ?? '', 
+      marca: p.MARCA ?? p.marca ?? '',
       preco: preco !== null && preco !== undefined ? Number(preco) : null,
       precoPromocao: promo !== null && promo !== undefined ? Number(promo) : null,
       precoEfetivo: efetivo !== null && efetivo !== undefined ? Number(efetivo) : null,
@@ -1285,7 +1157,6 @@ function readFromURL() {
   filters.value.codBarras = normalizeBarcode(q.codBarras || q.cb || '')
   filters.value.precoMin = normalizeNumber(q.min)
   filters.value.precoMax = normalizeNumber(q.max)
-  filters.value.estoque = normalizeInteger(q.estoque)
   filters.value.isPromotion = normalizeBoolean(q.isPromotion)
   orderBy.value = normalizeOrderValue(q.orderBy)
 
@@ -1322,7 +1193,6 @@ function getURLQuery() {
   if (filters.value.isPromotion) query.isPromotion = 'true'
   if (filters.value.precoMin !== null && filters.value.precoMin !== '') query.min = String(filters.value.precoMin)
   if (filters.value.precoMax !== null && filters.value.precoMax !== '') query.max = String(filters.value.precoMax)
-  if (filters.value.estoque !== null && filters.value.estoque !== '') query.estoque = String(filters.value.estoque)
   if (orderBy.value && orderBy.value !== DEFAULT_ORDER) query.orderBy = orderBy.value
 
   query.limit = String(PAGE_LIMIT)
@@ -1345,7 +1215,6 @@ async function writeToURL() {
 function buildSearchParams({ append = false, forcePromotion = null, customLimit = PAGE_LIMIT } = {}) {
   let precoMin = normalizeNumber(filters.value.precoMin)
   let precoMax = normalizeNumber(filters.value.precoMax)
-  const estoque = normalizeInteger(filters.value.estoque)
   const codBarras = normalizeBarcode(filters.value.codBarras || '')
 
   if (precoMin !== null && precoMax !== null && precoMin > precoMax) {
@@ -1363,7 +1232,6 @@ function buildSearchParams({ append = false, forcePromotion = null, customLimit 
     precoMin,
     precoMax,
     orderBy: normalizeOrderValue(orderBy.value),
-    estoque
   }
 
   const promotionValue = forcePromotion !== null
@@ -1520,7 +1388,6 @@ function openFiltersModal() {
     descricaoMarca: filters.value.descricaoMarca,
     codBarras: filters.value.codBarras,
     isPromotion: Boolean(filters.value.isPromotion),
-    estoque: filters.value.estoque
   }
 
   modalOrderBy.value = orderBy.value
@@ -1618,8 +1485,7 @@ function clearModalFilters() {
     precoMax: null,
     descricaoMarca: null,
     codBarras: '',
-    isPromotion: false,
-    estoque: null
+    isPromotion: false
   }
 
   modalOrderBy.value = DEFAULT_ORDER
@@ -1632,7 +1498,6 @@ async function applyModalFilters() {
   filters.value.precoMin = normalizeNumber(modalFilters.value.precoMin)
   filters.value.precoMax = normalizeNumber(modalFilters.value.precoMax)
   filters.value.codBarras = normalizeBarcode(modalFilters.value.codBarras || '')
-  filters.value.estoque = normalizeInteger(modalFilters.value.estoque)
   filters.value.isPromotion = Boolean(modalFilters.value.isPromotion)
   orderBy.value = normalizeOrderValue(modalOrderBy.value)
 
@@ -1718,8 +1583,7 @@ async function resetAllFilters() {
     codBarras: '',
     precoMin: null,
     precoMax: null,
-    isPromotion: false,
-    estoque: null
+    isPromotion: false
   }
 
   selectedBrand.value = null
@@ -1880,52 +1744,51 @@ function scrollToSection(key) {
   })
 }
 
-function supportsBarcodeDetector() {
-  return typeof window !== 'undefined' && 'BarcodeDetector' in window
-}
-
-function supportsCameraAccess() {
-  return Boolean(
-    typeof navigator !== 'undefined' &&
-    navigator.mediaDevices &&
-    typeof navigator.mediaDevices.getUserMedia === 'function'
-  )
-}
-
 function getBarcodeCameraErrorMessage(err) {
   const name = String(err?.name || '')
 
   if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
-    return 'Permissão da câmera negada. Libere a câmera no navegador ou digite o código manualmente.'
+    return 'Permissão da câmera negada. Libere a câmera no navegador ou insira o código manualmente.'
   }
 
   if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
-    return 'Nenhuma câmera foi encontrada neste dispositivo. Digite o código manualmente.'
+    return 'Nenhuma câmera foi encontrada neste dispositivo. Insira o código manualmente.'
   }
 
   if (name === 'NotReadableError' || name === 'TrackStartError') {
-    return 'A câmera está em uso por outro aplicativo. Feche outros apps ou digite o código manualmente.'
+    return 'A câmera está em uso por outro aplicativo. Feche outros apps ou insira o código manualmente.'
   }
 
-  if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-    return 'A câmera exige HTTPS ou localhost. Acesse por localhost/HTTPS ou digite o código manualmente.'
+  if (
+    location.protocol !== 'https:' &&
+    location.hostname !== 'localhost' &&
+    location.hostname !== '127.0.0.1'
+  ) {
+    return 'A câmera exige HTTPS ou localhost. Acesse por HTTPS ou insira o código manualmente.'
   }
 
-  return 'Não foi possível acessar a câmera. Você ainda pode digitar o código manualmente.'
+  return 'Não foi possível iniciar a leitura pela câmera. Insira o código manualmente ou tente novamente.'
 }
 
 function stopBarcodeScanner() {
   barcodeScanning.value = false
   barcodeCameraLoading.value = false
 
-  if (barcodeScanTimer) {
-    window.clearTimeout(barcodeScanTimer)
-    barcodeScanTimer = null
+  try {
+    if (barcodeControls) {
+      barcodeControls.stop()
+      barcodeControls = null
+    }
+  } catch (err) {
+    console.warn('[Catalogo] erro ao parar controles do scanner:', err)
   }
 
-  if (barcodeStream) {
-    barcodeStream.getTracks().forEach(track => track.stop())
-    barcodeStream = null
+  try {
+    if (barcodeReader?.reset) {
+      barcodeReader.reset()
+    }
+  } catch (err) {
+    console.warn('[Catalogo] erro ao resetar scanner:', err)
   }
 
   if (barcodeVideoRef.value) {
@@ -1933,7 +1796,8 @@ function stopBarcodeScanner() {
     barcodeVideoRef.value.srcObject = null
   }
 
-  barcodeDetector = null
+  barcodeReader = null
+  barcodeApplying = false
 }
 
 function closeBarcodeScanner() {
@@ -1947,68 +1811,68 @@ async function openBarcodeScanner() {
   barcodeDialog.value = true
 
   await nextTick()
-  await startBarcodeScanner()
+}
+
+function focusManualBarcodeInput() {
+  manualBarcodeInputRef.value?.focus?.()
 }
 
 async function startBarcodeScanner() {
   stopBarcodeScanner()
+
   barcodeScanError.value = ''
   barcodeCameraLoading.value = true
+  barcodeApplying = false
 
   try {
-    if (!supportsCameraAccess()) {
-      throw new Error('CAMERA_UNAVAILABLE')
-    }
-
-    barcodeStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: {
-          ideal: 'environment'
-        },
-        width: {
-          ideal: 1280
-        },
-        height: {
-          ideal: 720
-        }
-      },
-      audio: false
-    })
-
     await nextTick()
 
     if (!barcodeVideoRef.value) {
       throw new Error('VIDEO_ELEMENT_NOT_FOUND')
     }
 
-    barcodeVideoRef.value.srcObject = barcodeStream
-    barcodeVideoRef.value.setAttribute('playsinline', 'true')
-    barcodeVideoRef.value.muted = true
+    barcodeReader = new BrowserMultiFormatReader()
 
-    await barcodeVideoRef.value.play()
+    barcodeControls = await barcodeReader.decodeFromConstraints(
+      {
+        video: {
+          facingMode: {
+            ideal: 'environment'
+          },
+          width: {
+            ideal: 1280
+          },
+          height: {
+            ideal: 720
+          }
+        },
+        audio: false
+      },
+      barcodeVideoRef.value,
+      async (result) => {
+        if (!result || barcodeApplying) return
 
-    if (!supportsBarcodeDetector()) {
-      barcodeScanError.value = 'A câmera abriu, mas este navegador não suporta leitura automática de código de barras. Digite o código no campo abaixo.'
-      barcodeScanning.value = false
-      return
-    }
+        const rawText =
+          result.getText?.() ||
+          result.text ||
+          result.rawValue ||
+          ''
 
-    const formats = [
-      'ean_13',
-      'ean_8',
-      'upc_a',
-      'upc_e',
-      'code_128',
-      'code_39',
-      'itf',
-      'codabar'
-    ]
+        const code = normalizeBarcode(rawText)
 
-    barcodeDetector = new window.BarcodeDetector({ formats })
+        if (!code) return
+
+        barcodeApplying = true
+
+        stopBarcodeScanner()
+        await applyBarcodeValue(code)
+        barcodeDialog.value = false
+      }
+    )
+
     barcodeScanning.value = true
-    scanBarcodeFrame()
   } catch (err) {
-    console.error('[Catalogo] erro ao iniciar scanner de código de barras:', err)
+    console.error('[Catalogo] erro ao iniciar ZXing scanner:', err)
 
     barcodeScanError.value = getBarcodeCameraErrorMessage(err)
     barcodeScanning.value = false
@@ -2017,32 +1881,13 @@ async function startBarcodeScanner() {
   }
 }
 
-async function scanBarcodeFrame() {
-  if (!barcodeScanning.value || !barcodeDetector || !barcodeVideoRef.value) return
-
-  try {
-    const codes = await barcodeDetector.detect(barcodeVideoRef.value)
-    const rawValue = codes?.[0]?.rawValue
-
-    if (rawValue) {
-      await applyBarcodeValue(rawValue)
-      closeBarcodeScanner()
-      return
-    }
-  } catch (err) {
-    console.warn('[Catalogo] falha ao ler frame do código de barras:', err)
-  }
-
-  barcodeScanTimer = window.setTimeout(scanBarcodeFrame, 360)
-}
-
 async function applyBarcodeValue(value) {
   const codBarras = normalizeBarcode(value)
 
   if (!codBarras) {
     $q.notify({
       type: 'warning',
-      message: 'Código de barras inválido.'
+      message: 'Código inválido.'
     })
 
     return false
@@ -2055,7 +1900,7 @@ async function applyBarcodeValue(value) {
 
   $q.notify({
     type: 'positive',
-    message: `Código lido: ${codBarras}`
+    message: `Código aplicado: ${codBarras}`
   })
 
   await searchNow()
@@ -3004,5 +2849,130 @@ onBeforeUnmount(() => {
   .product-title {
     font-size: 12px;
   }
+}
+
+/* Ajustes finais: ZXing scanner, mobile seguro e estoque positivo oculto */
+.barcode-modal-card {
+  width: min(94vw, 560px);
+  max-height: min(92vh, 760px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.barcode-modal-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-bottom: 18px;
+}
+
+.barcode-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.barcode-action-row .q-btn {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.barcode-start-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 24px;
+  text-align: center;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at center, rgba(247, 209, 2, 0.1), transparent 42%),
+    rgba(3, 18, 46, 0.76);
+  backdrop-filter: blur(2px);
+}
+
+.barcode-modal-actions {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #ffffff;
+}
+
+.manual-barcode-input {
+  scroll-margin-bottom: 120px;
+}
+
+@media (max-width: 600px) {
+  .barcode-modal-card {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  .barcode-modal-body {
+    padding: 14px;
+    overflow-y: auto;
+  }
+
+  .barcode-video-wrap {
+    min-height: 42dvh;
+  }
+
+  .barcode-video {
+    height: 42dvh;
+  }
+
+  .barcode-frame {
+    inset: 56px 22px;
+  }
+
+  .barcode-action-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .barcode-action-row .q-btn {
+    width: 100%;
+  }
+
+  .barcode-modal-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .barcode-modal-actions .q-btn {
+    min-width: 0;
+  }
+}
+.product-image-wrap--out-stock .product-img {
+  filter: grayscale(100%);
+  opacity: 0.48;
+}
+
+.product-image-wrap--out-stock::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.34);
+  pointer-events: none;
+}
+
+.stock-watermark {
+  z-index: 4;
+}
+
+.stock-badge {
+  z-index: 5;
 }
 </style>
