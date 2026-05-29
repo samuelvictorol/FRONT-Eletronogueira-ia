@@ -18,7 +18,7 @@ Este projeto é a interface visual do site/sistema. É nele que ficam as página
 
 ---
 
-## 🧠 Explicando para leigos
+## 🧠 Contextualizando
 
 Pense no projeto como uma loja física:
 
