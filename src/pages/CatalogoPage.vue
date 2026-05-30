@@ -1152,16 +1152,22 @@ function pickTotalFromResponse(data, newItems = []) {
 
 function readFromURL() {
   const q = route.query
+  const codBarras = normalizeBarcode(q.codBarras || q.cb || '')
+
+  limit.value = PAGE_LIMIT
+  page.value = 1
+
+  if (codBarras) {
+    clearFiltersForBarcode(codBarras)
+    return
+  }
 
   filters.value.descricaoProduto = String(q.q || '')
-  filters.value.codBarras = normalizeBarcode(q.codBarras || q.cb || '')
+  filters.value.codBarras = ''
   filters.value.precoMin = normalizeNumber(q.min)
   filters.value.precoMax = normalizeNumber(q.max)
   filters.value.isPromotion = normalizeBoolean(q.isPromotion)
   orderBy.value = normalizeOrderValue(q.orderBy)
-
-  limit.value = PAGE_LIMIT
-  page.value = 1
 
   const marca = String(q.marca || '').trim()
 
@@ -1182,13 +1188,19 @@ function readFromURL() {
 function getURLQuery() {
   const query = {}
 
+  const codBarras = normalizeBarcode(filters.value.codBarras || '')
+
+  if (codBarras) {
+    return {
+      codBarras,
+      limit: String(PAGE_LIMIT)
+    }
+  }
+
   const q = String(filters.value.descricaoProduto || '').trim()
   const marca = currentBrandName.value
 
-  const codBarras = normalizeBarcode(filters.value.codBarras || '')
-
   if (q) query.q = q
-  if (codBarras) query.codBarras = codBarras
   if (marca) query.marca = marca
   if (filters.value.isPromotion) query.isPromotion = 'true'
   if (filters.value.precoMin !== null && filters.value.precoMin !== '') query.min = String(filters.value.precoMin)
@@ -1212,10 +1224,49 @@ async function writeToURL() {
   routeWatchLocked = false
 }
 
+function clearFiltersForBarcode(codBarras = '') {
+  filters.value = {
+    descricaoProduto: '',
+    descricaoMarca: null,
+    codBarras: normalizeBarcode(codBarras),
+    precoMin: null,
+    precoMax: null,
+    isPromotion: false,
+    estoque: null
+  }
+
+  selectedBrand.value = null
+  orderBy.value = DEFAULT_ORDER
+  page.value = 1
+  limit.value = PAGE_LIMIT
+}
+
+function getBarcodeOnlyParams(codBarras, { append = false, customLimit = PAGE_LIMIT } = {}) {
+  return {
+    limit: Number(customLimit || PAGE_LIMIT),
+    offset: append ? Number(offset.value) : 0,
+    codBarras: normalizeBarcode(codBarras)
+  }
+}
+
+function findBestBarcodeMatch(products = [], codBarras = '') {
+  const normalized = normalizeBarcode(codBarras)
+
+  if (!normalized) return products[0] || null
+
+  return products.find(product => normalizeBarcode(product?.codBarras || product?.raw?.CODBARRAS || '') === normalized) ||
+    products[0] ||
+    null
+}
+
 function buildSearchParams({ append = false, forcePromotion = null, customLimit = PAGE_LIMIT } = {}) {
   let precoMin = normalizeNumber(filters.value.precoMin)
   let precoMax = normalizeNumber(filters.value.precoMax)
   const codBarras = normalizeBarcode(filters.value.codBarras || '')
+
+  if (codBarras) {
+    return getBarcodeOnlyParams(codBarras, { append, customLimit })
+  }
 
   if (precoMin !== null && precoMax !== null && precoMin > precoMax) {
     const temp = precoMin
@@ -1228,7 +1279,6 @@ function buildSearchParams({ append = false, forcePromotion = null, customLimit 
     offset: append ? Number(offset.value) : 0,
     descricaoProduto: String(filters.value.descricaoProduto || '').trim() || null,
     descricaoMarca: currentBrandName.value || null,
-    codBarras: codBarras || null,
     precoMin,
     precoMax,
     orderBy: normalizeOrderValue(orderBy.value),
@@ -1246,6 +1296,12 @@ function buildSearchParams({ append = false, forcePromotion = null, customLimit 
 }
 
 async function fetchPromotions() {
+  if (normalizeBarcode(filters.value.codBarras || '')) {
+    promotionItems.value = []
+    loadingPromos.value = false
+    return
+  }
+
   const mySeq = ++promoReqSeq
   loadingPromos.value = true
 
@@ -1284,7 +1340,7 @@ async function fetchProducts({ append = false, updateURL = true } = {}) {
     const params = buildSearchParams({ append })
     const { data } = await api.get('/produtos/', { params })
 
-    if (mySeq !== reqSeq) return
+    if (mySeq !== reqSeq) return false
 
     const newItems = normalizeProdutos(data)
 
@@ -1319,8 +1375,10 @@ async function fetchProducts({ append = false, updateURL = true } = {}) {
       await writeToURL()
       sessionStorage.setItem('catalog:lastUrl', `${location.pathname}${location.search}`)
     }
+
+    return true
   } catch (err) {
-    if (mySeq !== reqSeq) return
+    if (mySeq !== reqSeq) return false
 
     console.error('[Catalogo] erro ao buscar produtos:', err)
 
@@ -1334,6 +1392,8 @@ async function fetchProducts({ append = false, updateURL = true } = {}) {
       total.value = 0
       apiIsLastPage.value = true
     }
+
+    return false
   } finally {
     if (mySeq !== reqSeq) return
 
@@ -1346,11 +1406,17 @@ async function fetchProducts({ append = false, updateURL = true } = {}) {
 }
 
 async function searchNow() {
+  const codBarras = normalizeBarcode(filters.value.codBarras || '')
+
   page.value = 1
   limit.value = PAGE_LIMIT
   items.value = []
   total.value = 0
   apiIsLastPage.value = false
+
+  if (codBarras) {
+    return searchBarcodeAndOpen(codBarras)
+  }
 
   await Promise.all([
     fetchProducts({ append: false, updateURL: true }),
@@ -1360,6 +1426,52 @@ async function searchNow() {
   await nextTick()
   updateStickyState()
   await ensureViewportFilled()
+
+  return true
+}
+
+async function searchBarcodeAndOpen(codBarras) {
+  const normalized = normalizeBarcode(codBarras)
+
+  if (!normalized) {
+    $q.notify({
+      type: 'warning',
+      message: 'Código inválido.'
+    })
+
+    return false
+  }
+
+  clearFiltersForBarcode(normalized)
+  promotionItems.value = []
+
+  const ok = await fetchProducts({ append: false, updateURL: true })
+
+  if (!ok) return false
+
+  const product = findBestBarcodeMatch(items.value, normalized)
+
+  if (!product) {
+    $q.notify({
+      type: 'warning',
+      message: `Nenhum produto encontrado para o código ${normalized}.`
+    })
+
+    await nextTick()
+    updateStickyState()
+
+    return false
+  }
+
+  $q.notify({
+    type: 'positive',
+    message: 'Produto encontrado. Abrindo detalhes...'
+  })
+
+  await nextTick()
+  openDetails(product)
+
+  return true
 }
 
 async function loadNextPageIfPossible() {
@@ -1485,7 +1597,8 @@ function clearModalFilters() {
     precoMax: null,
     descricaoMarca: null,
     codBarras: '',
-    isPromotion: false
+    isPromotion: false,
+    estoque: null
   }
 
   modalOrderBy.value = DEFAULT_ORDER
@@ -1495,9 +1608,17 @@ function clearModalFilters() {
 }
 
 async function applyModalFilters() {
+  const codBarras = normalizeBarcode(modalFilters.value.codBarras || '')
+
+  if (codBarras) {
+    filtersDialog.value = false
+    await applyBarcodeValue(codBarras)
+    return
+  }
+
   filters.value.precoMin = normalizeNumber(modalFilters.value.precoMin)
   filters.value.precoMax = normalizeNumber(modalFilters.value.precoMax)
-  filters.value.codBarras = normalizeBarcode(modalFilters.value.codBarras || '')
+  filters.value.codBarras = ''
   filters.value.isPromotion = Boolean(modalFilters.value.isPromotion)
   orderBy.value = normalizeOrderValue(modalOrderBy.value)
 
@@ -1583,7 +1704,8 @@ async function resetAllFilters() {
     codBarras: '',
     precoMin: null,
     precoMax: null,
-    isPromotion: false
+    isPromotion: false,
+    estoque: null
   }
 
   selectedBrand.value = null
@@ -1865,8 +1987,13 @@ async function startBarcodeScanner() {
         barcodeApplying = true
 
         stopBarcodeScanner()
-        await applyBarcodeValue(code)
-        barcodeDialog.value = false
+        const applied = await applyBarcodeValue(code)
+
+        if (applied) {
+          barcodeDialog.value = false
+        } else {
+          barcodeApplying = false
+        }
       }
     )
 
@@ -1893,20 +2020,19 @@ async function applyBarcodeValue(value) {
     return false
   }
 
-  filters.value.codBarras = codBarras
-  modalFilters.value.codBarras = codBarras
-  filters.value.descricaoProduto = ''
-  page.value = 1
+  clearFiltersForBarcode(codBarras)
+  modalFilters.value = {
+    precoMin: null,
+    precoMax: null,
+    descricaoMarca: null,
+    codBarras,
+    isPromotion: false,
+    estoque: null
+  }
+  modalSelectedBrand.value = null
+  modalOrderBy.value = DEFAULT_ORDER
 
-  $q.notify({
-    type: 'positive',
-    message: `Código aplicado: ${codBarras}`
-  })
-
-  await searchNow()
-  scrollToSection('results')
-
-  return true
+  return searchBarcodeAndOpen(codBarras)
 }
 
 async function applyManualBarcode() {
