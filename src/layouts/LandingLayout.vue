@@ -1,33 +1,25 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-primary relative">
     <!-- HEADER -->
-    <q-header class="text-dark bg-primary animate__animated animate__fadeInDown animate__delay-1s animate__slower">
+    <q-header class="text-dark bg-white animate__animated animate__fadeInDown animate__delay-1s animate__slower">
       <q-toolbar class="header-toolbar q-px-sm q-py-sm">
         <q-btn flat dense round class="lt-md q-mr-sm" icon="menu" aria-label="Abrir menu"
           @click="leftDrawerOpen = !leftDrawerOpen" />
 
-        <div class="brand">
-          <div class="logo">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-              alt="EN" style="border-radius:100%; width:44px; height:44px" />
-          </div>
-
-          <div class="brand-text animate__animated animate__fadeInLeft animate__delay-3s animate__slower"
-            v-if="!isMobile">
-            <div class="row no-wrap" > <strong class="text-negative">ELETRO</strong><strong class="text-secondary">NOGUEIRA</strong></div>
-            <small class="text-secondary q-pt-xs">Valparaíso de Goiás • BR-040</small>
-          </div>
+        <div class="brand q-pb-sm">
+          <img v-if="!isMobile" src="/logo.png" alt="EN" style=" width:20%" />
+          <img v-else src="/logo.png" alt="EN" style=" width:35%" />
 
           <div
-            class="brand-text mobile-brand-tabs animate__animated animate__fadeInDown animate__delay-3s animate__slower"
-            v-else>
+            class="brand-text mobile-brand-tabs animate__animated animate__fadeInDown animate__delay-3s animate__slower">
             <q-tabs v-model="tab1" dense no-caps inline-label outside-arrows mobile-arrows align="left"
               indicator-color="transparent" active-color="secondary" class="mobile-tabs">
               <q-route-tab v-for="b in brandsRow1" :key="b.name" :name="b.name.toUpperCase()" :to="brandTo(b.name)"
                 exact class="brand-mobile-tab">
                 <div class="brand-mobile-tab-inner">
                   <!-- <img :src="b.src" :alt="b.name" class="brand-mobile-logo" /> -->
-                  <span class="brand-mobile-label">{{ b.emoji }} {{ b.name.includes('BLACK') ? 'black & decker' : b.name }}</span>
+                  <span class="brand-mobile-label">{{ b.emoji }} {{ b.name.includes('BLACK') ? 'black & decker' : b.name
+                    }}</span>
                 </div>
               </q-route-tab>
             </q-tabs>
@@ -49,8 +41,7 @@
         </div>
 
         <!-- Botão carrinho -->
-        <q-btn  color="secondary" class="q-ml-sm" icon="shopping_cart"
-          @click="cart.state.drawerOpen = true">
+        <q-btn color="secondary" dense class="q-ml-sm" icon="shopping_cart" @click="cart.state.drawerOpen = true">
           <q-badge v-if="cart.count.value > 0" color="negative" floating>
             {{ cart.count.value }}
           </q-badge>
@@ -59,7 +50,8 @@
     </q-header>
 
     <!-- DRAWER MOBILE (LEFT) -->
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay class="bg-primary relative" :width="290">
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay class="bg-white relative" :width="290">
+      <img src="/logo.png" alt="EN" style=" width:45%;" class="q-pa-md" />
       <div class="q-pa-md column q-gutter-sm">
         <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/">Início</q-btn>
         <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/servicos-manutencao">
@@ -70,39 +62,16 @@
           Catálogo
         </q-btn>
         <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/localizacao">Localização</q-btn>
-        <!-- 
-        <q-btn
-          unelevated
-          color="secondary"
-          class="text-bold"
-          icon="shopping_cart"
-          @click="cart.state.drawerOpen = true; leftDrawerOpen = false"
-          label="Carrinho"
-        >
+        <q-btn unelevated color="dark" class="text-bold" icon="shopping_cart"
+          @click="cart.state.drawerOpen = true; leftDrawerOpen = false" label="Carrinho">
           <q-badge v-if="cart.count.value > 0" color="negative" floating>
             {{ cart.count.value }}
           </q-badge>
-        </q-btn> -->
+        </q-btn>
 
-        <q-btn unelevated class="bg-primary text-secondary rounded-borders" icon="mdi-instagram" type="a"
-          target="_blank" style="position:absolute; bottom:85px;" rel="noopener"
+        <q-btn unelevated class="bg-primary text-secondary text-bold rounded-borders" icon="mdi-instagram" type="a"
+          target="_blank" style="position:absolute; bottom:15px;" rel="noopener"
           href="https://www.instagram.com/nogueiravalparaiso/" label="@nogueiravalparaiso" />
-      </div>
-
-      <div class="absolute-bottom w100 row justify-center q-pb-md">
-        <div class="brand">
-          <div class="logo">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-              alt="EN" style="border-radius:100%; width:44px; height:44px" />
-          </div>
-          <div class="brand-text">
-            <strong class="text-secondary">
-              <strong class="text-negative">ELETRO</strong><strong>NOGUEIRA</strong>
-            </strong>
-            <small>Valparaíso de Goiás • BR-040</small>
-            <small class="text-negative text-bold">26.931.014/0001-12</small>
-          </div>
-        </div>
       </div>
     </q-drawer>
 
@@ -204,10 +173,12 @@ const cart = useCart()
 const isMobile = computed(() => $q.screen.lt.md)
 
 const brandsRow1 = [
+  { name: 'Cabos', emoji: '🥖', src: '/assets/black-decker-logo.png' },
   { name: 'Elétrica', emoji: '💡', src: '/assets/karcher-logo.png' },
   { name: 'Hidráulica', emoji: '⚙', src: '/assets/marluvas-logo.png' },
   { name: 'Ferramentas', emoji: '🔧', src: '/assets/tigre-logo.png' },
   { name: 'Bomba d\'água', emoji: '💦', src: '/assets/lamesa-logo.webp' },
+  { name: 'Luva', emoji: '🧤', src: '/assets/stanley-logo.png' }
 ]
 
 const schedule = {
@@ -259,7 +230,7 @@ watch(() => route.fullPath, syncTabWithRoute, { immediate: true })
 onMounted(() => {
   if ($q.screen.gt.md) leftDrawerOpen.value = false
   syncTabWithRoute()
-    enableDragScroll(
+  enableDragScroll(
     '.promo-rail, .sticky-section-tabs, .quick-filter-row, .active-filters-row, .modal-brand-chips'
   )
 })
@@ -354,7 +325,7 @@ function enableDragScroll(selector) {
 }
 
 .mobile-brand-tabs {
-  width: min(62vw, 300px);
+  width: 28%;
   min-width: 0;
 }
 
