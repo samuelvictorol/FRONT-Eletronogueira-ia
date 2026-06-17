@@ -270,6 +270,7 @@
             </div>
           </div>
         </div>
+        <div class="w100 q-py-lg"></div>
       </main>
 
       <footer class="chat-footer">
@@ -296,7 +297,7 @@
             bg-color="white"
             color="secondary"
             class="chat-input"
-            placeholder="Ex.: queria uma furadeira Makita até 500 reais"
+            placeholder="Digite sua mensagem aqui..."
             :disable="loading"
             @keyup.enter.exact.prevent="sendMessage()"
           >
