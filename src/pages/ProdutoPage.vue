@@ -22,11 +22,13 @@
         {{ stockStatusLabel }}
       </q-chip>
     </div>
+
     <div class="w100 q-mt-xl q-pt-xl"></div>
+
     <q-card
       flat
       bordered
-      class="product-main-card animate__animated animate__fadeInUp "
+      class="product-main-card animate__animated animate__fadeInUp"
       :class="{ 'product-main-card--out-stock': isOutOfStock }"
     >
       <q-card-section>
@@ -235,6 +237,7 @@
               <div class="q-mt-md">
                 <div class="q-mb-xs text-body2 text-weight-bold text-grey-9 row items-center q-gutter-sm">
                   <span>Detalhes do produto</span>
+
                   <q-spinner-dots
                     v-if="aiDescriptionLoading"
                     color="secondary"
@@ -370,6 +373,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar, useMeta } from 'quasar'
+import { api } from 'boot/axios'
 import { api_ia } from 'boot/axios-ia'
 import { useCart } from 'src/composables/useCart'
 
@@ -379,11 +383,6 @@ const router = useRouter()
 const cart = useCart()
 
 const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
-const IA_BACKEND_URL = String(
-  import.meta.env.VITE_IA_BACKEND_URL ||
-  import.meta.env.IA_BACKEND_URL ||
-  'http://localhost:10000'
-).replace(/\/+$/, '')
 
 const loading = ref(false)
 const product = ref(null)
@@ -391,6 +390,8 @@ const product = ref(null)
 const aiDescriptionLoading = ref(false)
 const aiDescription = ref('-')
 const lastAiRequestKey = ref('')
+const aiDescriptionLoadedKey = ref('')
+const aiDescriptionInFlightKey = ref('')
 
 const activeSlide = ref(0)
 const images = ref([])
@@ -418,6 +419,30 @@ function escapeHtml (value) {
     .replace(/'/g, '&#39;')
 }
 
+function normalizeTitleKey (value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/:$/, '')
+    .toUpperCase()
+    .trim()
+}
+
+function isAiSectionTitle (line) {
+  const key = normalizeTitleKey(line)
+
+  return [
+    'DESCRICAO DO PRODUTO',
+    'DESTAQUES',
+    'APLICACOES INDICADAS',
+    'FICHA TECNICA',
+    'DICAS DE USO',
+    'CUIDADOS E SEGURANCA',
+    'ANTES DE COMPRAR',
+    'DADOS DO CADASTRO'
+  ].includes(key)
+}
+
 function formatAIDescriptionToHtml (text) {
   const raw = String(text || '').trim()
 
@@ -432,16 +457,8 @@ function formatAIDescriptionToHtml (text) {
 
   return lines.map((line) => {
     const safe = escapeHtml(line)
-    const normalized = safe
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toUpperCase()
 
-    if (
-      normalized === 'DESCRICAO DO PRODUTO:' ||
-      normalized === 'DESTAQUES:' ||
-      normalized === 'DADOS DO CADASTRO:'
-    ) {
+    if (isAiSectionTitle(line)) {
       return `<div class="ai-line-title"><strong>${safe}</strong></div>`
     }
 
@@ -790,13 +807,29 @@ async function loadAIDescription (p) {
     return
   }
 
+  if (
+    aiDescriptionLoadedKey.value === requestKey &&
+    aiDescription.value &&
+    aiDescription.value !== '-'
+  ) {
+    return
+  }
+
+  if (
+    aiDescriptionInFlightKey.value === requestKey &&
+    aiDescriptionLoading.value
+  ) {
+    return
+  }
+
   lastAiRequestKey.value = requestKey
+  aiDescriptionInFlightKey.value = requestKey
   aiDescriptionLoading.value = true
   aiDescription.value = '-'
 
   try {
     const { data } = await api_ia.post(
-      `/catalog/generate-description`,
+      '/catalog/generate-description',
       {
         codProduto,
         produto: produtoNome,
@@ -811,6 +844,7 @@ async function loadAIDescription (p) {
     if (lastAiRequestKey.value !== requestKey) return
 
     aiDescription.value = extractGeneratedDescription(data) || '-'
+    aiDescriptionLoadedKey.value = requestKey
   } catch (err) {
     console.error('[ProductPage] erro ao gerar descrição com IA:', err)
 
@@ -820,6 +854,7 @@ async function loadAIDescription (p) {
   } finally {
     if (lastAiRequestKey.value === requestKey) {
       aiDescriptionLoading.value = false
+      aiDescriptionInFlightKey.value = ''
     }
   }
 }
@@ -872,26 +907,23 @@ async function loadProduct () {
 
 async function load () {
   try {
-    if (product.value) {
-      loading.value = false
-      loadAIDescription(product.value)
-    } else {
-      loading.value = true
-    }
+    loading.value = !product.value
 
     const resolved = await loadProduct()
+    const targetProduct = resolved || product.value
 
-    if (resolved) {
-      loadAIDescription(resolved)
-    } else if (!product.value) {
-      aiDescriptionLoading.value = false
-      aiDescription.value = '-'
-
-      $q.notify({
-        type: 'warning',
-        message: 'Produto não encontrado. Abra a partir do catálogo.'
-      })
+    if (targetProduct) {
+      await loadAIDescription(targetProduct)
+      return
     }
+
+    aiDescriptionLoading.value = false
+    aiDescription.value = '-'
+
+    $q.notify({
+      type: 'warning',
+      message: 'Produto não encontrado. Abra a partir do catálogo.'
+    })
   } catch (err) {
     console.error('[ProductPage] erro:', err)
 
@@ -904,7 +936,7 @@ async function load () {
         message: 'Falha ao carregar o produto.'
       })
     }
-
+  } finally {
     loading.value = false
   }
 }
@@ -978,6 +1010,8 @@ watch(() => route.params.slug, () => {
   aiDescription.value = '-'
   aiDescriptionLoading.value = false
   lastAiRequestKey.value = ''
+  aiDescriptionLoadedKey.value = ''
+  aiDescriptionInFlightKey.value = ''
 
   load()
 })
@@ -1317,9 +1351,10 @@ onMounted(load)
 }
 
 .ai-line-title {
-  margin-top: 10px;
+  margin-top: 14px;
   margin-bottom: 8px;
   color: #1f2937;
+  font-size: 15px;
 }
 
 .ai-line-title:first-child {
