@@ -1,36 +1,13 @@
 <template>
   <q-page class="product-page animate__animated animate__fadeIn">
-    <div class="product-topbar">
-      <q-btn
-        flat
-        color="secondary"
-        icon="arrow_back"
-        label="Catálogo"
-        @click="goBackToCatalog"
-      />
-
-      <q-space />
-
-      <q-chip
-        v-if="product"
-        dense
-        square
-        :color="isOutOfStock ? 'negative' : 'green-14'"
-        text-color="white"
-        :icon="isOutOfStock ? 'block' : 'check_circle'"
-      >
-        {{ stockStatusLabel }}
-      </q-chip>
+    <div v-if="!isMobile" class="w100 q-py-xl"></div>
+    <div v-else class="w100 q-pt-lg"></div>
+    <div class="product-topbar q-mt-xl q-pb-md">
+      <q-btn flat color="primary" icon="arrow_back" label="Catálogo" @click="goBackToCatalog" />
     </div>
 
-    <div class="w100 q-mt-xl q-pt-xl"></div>
-
-    <q-card
-      flat
-      bordered
-      class="product-main-card animate__animated animate__fadeInUp"
-      :class="{ 'product-main-card--out-stock': isOutOfStock }"
-    >
+    <q-card flat bordered class="product-main-card animate__animated animate__fadeInUp "
+      :class="{ 'product-main-card--out-stock': isOutOfStock }">
       <q-card-section>
         <div v-if="!product && loading" class="row q-col-gutter-xl">
           <div class="col-12 col-md-6">
@@ -64,54 +41,23 @@
         <div v-else-if="product" class="row q-col-gutter-xl">
           <div class="col-12 col-md-6">
             <div class="product-gallery-card">
-              <div
-                v-if="isOutOfStock"
-                class="out-stock-watermark"
-              >
+              <div v-if="isOutOfStock" class="out-stock-watermark">
                 SEM ESTOQUE
               </div>
 
-              <q-badge
-                v-if="isOutOfStock"
-                class="out-stock-badge"
-                color="negative"
-                text-color="white"
-                icon="block"
-              >
+              <q-badge v-if="isOutOfStock" class="out-stock-badge" color="negative" text-color="white" icon="block">
                 Produto indisponível
               </q-badge>
 
               <div v-if="images.length" class="w100">
-                <q-carousel
-                  v-model="activeSlide"
-                  swipeable
-                  animated
-                  arrows
-                  navigation
-                  height="420px"
-                  class="product-carousel"
-                >
-                  <q-carousel-slide
-                    v-for="(src, idx) in images"
-                    :key="src + idx"
-                    :name="idx"
-                    class="flex flex-center"
-                  >
-                    <q-img
-                      :src="src"
-                      :alt="product?.descricao || 'Imagem do produto'"
-                      fit="contain"
-                      class="product-detail-img cursor-pointer"
-                      @click="openFullscreen(src)"
-                      @error="onCarouselImageError(idx)"
-                    >
+                <q-carousel v-model="activeSlide" swipeable animated arrows navigation height="420px"
+                  class="product-carousel">
+                  <q-carousel-slide v-for="(src, idx) in images" :key="src + idx" :name="idx" class="flex flex-center">
+                    <q-img :src="src" :alt="product?.descricao || 'Imagem do produto'" fit="contain"
+                      class="product-detail-img cursor-pointer" @click="openFullscreen(src)"
+                      @error="onCarouselImageError(idx)">
                       <div class="absolute-bottom-right q-pa-sm">
-                        <q-chip
-                          dense
-                          color="secondary"
-                          text-color="white"
-                          icon="zoom_in"
-                        >
+                        <q-chip dense color="secondary" text-color="white" icon="zoom_in">
                           Ampliar
                         </q-chip>
                       </div>
@@ -120,26 +66,15 @@
                 </q-carousel>
 
                 <div class="thumbs-row">
-                  <q-img
-                    v-for="(src, idx) in images"
-                    :key="'thumb-' + src + idx"
-                    :src="src"
-                    fit="cover"
-                    class="thumb-img cursor-pointer"
-                    :class="{ 'thumb-active': idx === activeSlide }"
-                    @click="activeSlide = idx"
-                    @error="onThumbImageError(idx)"
-                  />
+                  <q-img v-for="(src, idx) in images" :key="'thumb-' + src + idx" :src="src" fit="cover"
+                    class="thumb-img cursor-pointer" :class="{ 'thumb-active': idx === activeSlide }"
+                    @click="activeSlide = idx" @error="onThumbImageError(idx)" />
                 </div>
               </div>
 
               <div v-else class="w100 row justify-center">
-                <q-img
-                  :src="fallbackImage"
-                  :alt="product?.descricao || 'Imagem do produto'"
-                  fit="contain"
-                  class="product-detail-img"
-                />
+                <q-img :src="fallbackImage" :alt="product?.descricao || 'Imagem do produto'" fit="contain"
+                  class="product-detail-img" />
               </div>
             </div>
           </div>
@@ -147,28 +82,15 @@
           <div class="col-12 col-md-6">
             <div class="product-info-panel">
               <div class="row items-center q-col-gutter-sm">
-                <q-badge
-                  v-if="product?.marca"
-                  color="primary"
-                  class="text-bold q-pa-sm"
-                  text-color="blue-10"
-                  :label="product.marca"
-                />
+                <q-badge v-if="product?.marca" color="primary" class="text-bold q-pa-sm" text-color="blue-10"
+                  :label="product.marca" />
 
-                <q-chip
-                  :color="isOutOfStock ? 'negative' : 'green-14'"
-                  text-color="white"
-                  :icon="isOutOfStock ? 'block' : 'check_circle'"
-                >
+                <q-chip :color="isOutOfStock ? 'negative' : 'green-14'" text-color="white"
+                  :icon="isOutOfStock ? 'block' : 'check_circle'">
                   {{ stockStatusLabel }}
                 </q-chip>
 
-                <q-chip
-                  v-if="stockQuantity !== null"
-                  color="grey-2"
-                  text-color="grey-9"
-                  icon="inventory_2"
-                >
+                <q-chip v-if="stockQuantity !== null" color="grey-2" text-color="grey-9" icon="inventory_2">
                   Estoque: {{ stockQuantity }}
                 </q-chip>
               </div>
@@ -185,12 +107,7 @@
                 <span v-if="barcodeText">Cód. barras: {{ barcodeText }}</span>
               </div>
 
-              <q-card
-                flat
-                bordered
-                class="price-card"
-                :class="{ 'price-card--out-stock': isOutOfStock }"
-              >
+              <q-card flat bordered class="price-card" :class="{ 'price-card--out-stock': isOutOfStock }">
                 <q-card-section>
                   <div class="text-caption text-grey-7">
                     Preço
@@ -205,13 +122,7 @@
                       {{ money(product.precoPromocao) }}
                     </div>
 
-                    <q-chip
-                      dense
-                      color="negative"
-                      text-color="white"
-                      icon="local_offer"
-                      class="q-mt-sm fit-content"
-                    >
+                    <q-chip dense color="negative" text-color="white" icon="local_offer" class="q-mt-sm fit-content">
                       Promoção
                     </q-chip>
                   </div>
@@ -220,16 +131,13 @@
                     {{ money(product?.precoEfetivo ?? product?.preco) }}
                   </div>
 
-                  <q-banner
-                    v-if="isOutOfStock"
-                    rounded
-                    class="out-stock-banner q-mt-md"
-                  >
+                  <q-banner v-if="isOutOfStock" rounded class="out-stock-banner q-mt-md">
                     <template #avatar>
                       <q-icon name="block" color="negative" />
                     </template>
 
-                    Este produto está sem estoque no momento. Você ainda pode compartilhar o link ou consultar disponibilidade com a loja.
+                    Este produto está sem estoque no momento. Você ainda pode compartilhar o link ou consultar
+                    disponibilidade com a loja.
                   </q-banner>
                 </q-card-section>
               </q-card>
@@ -238,11 +146,7 @@
                 <div class="q-mb-xs text-body2 text-weight-bold text-grey-9 row items-center q-gutter-sm">
                   <span>Detalhes do produto</span>
 
-                  <q-spinner-dots
-                    v-if="aiDescriptionLoading"
-                    color="secondary"
-                    size="22px"
-                  />
+                  <q-spinner-dots v-if="aiDescriptionLoading" color="secondary" size="22px" />
                 </div>
 
                 <q-card flat bordered class="description-card">
@@ -256,37 +160,22 @@
                       <q-skeleton type="text" width="75%" />
                     </div>
 
-                    <div
-                      v-else
-                      class="ai-description-text"
-                      v-html="aiDescriptionHtml"
-                    />
+                    <div v-else class="ai-description-text" v-html="aiDescriptionHtml" />
                   </q-card-section>
                 </q-card>
               </div>
 
               <div class="q-mt-lg row q-col-gutter-sm">
                 <div class="col-12 col-sm-6">
-                  <q-btn
-                    unelevated
-                    :color="isOutOfStock ? 'grey-6' : 'green-14'"
-                    :icon="isOutOfStock ? 'block' : 'add_shopping_cart'"
-                    class="w100 text-bold product-action-btn"
-                    :label="isOutOfStock ? 'Sem estoque' : 'Adicionar ao carrinho'"
-                    :disable="!product || isOutOfStock"
-                    @click="confirmAddToCart(product)"
-                  />
+                  <q-btn unelevated :color="isOutOfStock ? 'grey-6' : 'green-14'"
+                    :icon="isOutOfStock ? 'block' : 'add_shopping_cart'" class="w100 text-bold product-action-btn"
+                    :label="isOutOfStock ? 'Sem estoque' : 'Adicionar ao carrinho'" :disable="!product || isOutOfStock"
+                    @click="confirmAddToCart(product)" />
                 </div>
 
                 <div class="col-12 col-sm-6">
-                  <q-btn
-                    outline
-                    color="secondary"
-                    icon="share"
-                    class="w100 product-action-btn"
-                    label="Compartilhar"
-                    @click="shareOrCopy"
-                  />
+                  <q-btn outline color="secondary" icon="share" class="w100 product-action-btn" label="Compartilhar"
+                    @click="shareOrCopy" />
                 </div>
               </div>
             </div>
@@ -300,21 +189,10 @@
     </q-card>
 
     <div class="q-mt-lg">
-      <q-btn
-        flat
-        color="secondary"
-        icon="arrow_back"
-        label="Voltar ao catálogo"
-        @click="goBackToCatalog"
-      />
+      <q-btn flat color="primary" icon="arrow_back" label="Voltar ao catálogo" @click="goBackToCatalog" />
     </div>
 
-    <q-dialog
-      v-model="fullscreen.open"
-      maximized
-      transition-show="fade"
-      transition-hide="fade"
-    >
+    <q-dialog v-model="fullscreen.open" maximized transition-show="fade" transition-hide="fade">
       <q-card class="bg-black text-white">
         <q-bar class="bg-black text-white">
           <div class="text-caption ellipsis">
@@ -327,35 +205,18 @@
         </q-bar>
 
         <q-card-section class="q-pa-none fullscreen-body">
-          <q-img
-            :src="fullscreen.src"
-            fit="contain"
-            class="fullscreen-img"
-            @error="onFullscreenError"
-          />
+          <q-img :src="fullscreen.src" fit="contain" class="fullscreen-img" @error="onFullscreenError" />
         </q-card-section>
 
         <q-card-section class="bg-black q-pt-none">
           <div class="row items-center justify-center q-gutter-sm">
-            <q-btn
-              dense
-              flat
-              icon="chevron_left"
-              :disable="!images.length"
-              @click="prevImage"
-            />
+            <q-btn dense flat icon="chevron_left" :disable="!images.length" @click="prevImage" />
 
             <div class="text-caption">
               {{ images.length ? (activeSlide + 1) : 0 }} / {{ images.length }}
             </div>
 
-            <q-btn
-              dense
-              flat
-              icon="chevron_right"
-              :disable="!images.length"
-              @click="nextImage"
-            />
+            <q-btn dense flat icon="chevron_right" :disable="!images.length" @click="nextImage" />
           </div>
         </q-card-section>
       </q-card>
@@ -381,7 +242,7 @@ const $q = useQuasar()
 const route = useRoute()
 const router = useRouter()
 const cart = useCart()
-
+const isMobile = computed(() => $q.screen.lt.sm)
 const fallbackImage = 'https://cdn-icons-png.flaticon.com/512/971/971904.png'
 
 const loading = ref(false)
@@ -401,7 +262,7 @@ const fullscreen = ref({
   src: ''
 })
 
-function safeUrl (url) {
+function safeUrl(url) {
   if (!url) return null
 
   const s = String(url).trim()
@@ -410,7 +271,7 @@ function safeUrl (url) {
   return s.replace(/ /g, '%20')
 }
 
-function escapeHtml (value) {
+function escapeHtml(value) {
   return String(value || '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -419,7 +280,7 @@ function escapeHtml (value) {
     .replace(/'/g, '&#39;')
 }
 
-function normalizeTitleKey (value) {
+function normalizeTitleKey(value) {
   return String(value || '')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -428,7 +289,7 @@ function normalizeTitleKey (value) {
     .trim()
 }
 
-function isAiSectionTitle (line) {
+function isAiSectionTitle(line) {
   const key = normalizeTitleKey(line)
 
   return [
@@ -443,7 +304,7 @@ function isAiSectionTitle (line) {
   ].includes(key)
 }
 
-function formatAIDescriptionToHtml (text) {
+function formatAIDescriptionToHtml(text) {
   const raw = String(text || '').trim()
 
   if (!raw || raw === '-') {
@@ -480,7 +341,7 @@ function formatAIDescriptionToHtml (text) {
   }).join('')
 }
 
-function normalizeNumber (value) {
+function normalizeNumber(value) {
   if (value === null || value === undefined || value === '') return null
 
   const normalized = String(value)
@@ -493,7 +354,7 @@ function normalizeNumber (value) {
   return Number.isFinite(n) ? n : null
 }
 
-function normalizeStockValue (p) {
+function normalizeStockValue(p) {
   if (!p) return null
 
   const candidates = [
@@ -520,7 +381,7 @@ function normalizeStockValue (p) {
   return null
 }
 
-function normalizeBarcodeValue (p) {
+function normalizeBarcodeValue(p) {
   if (!p) return ''
 
   return String(
@@ -533,7 +394,7 @@ function normalizeBarcodeValue (p) {
   ).trim()
 }
 
-function isInactiveValue (value) {
+function isInactiveValue(value) {
   if (typeof value === 'string') {
     const normalized = value.trim().toUpperCase()
     return normalized === 'T' || normalized === 'S' || normalized === 'TRUE' || normalized === '1'
@@ -542,7 +403,7 @@ function isInactiveValue (value) {
   return value === true || value === 1
 }
 
-function isProductOutOfStock (p) {
+function isProductOutOfStock(p) {
   if (!p) return false
 
   if (isInactiveValue(p.inativoFlag ?? p.INATIVO ?? p.inativo)) {
@@ -554,7 +415,7 @@ function isProductOutOfStock (p) {
   return stock !== null && stock <= 0
 }
 
-function normalizeProduct (p) {
+function normalizeProduct(p) {
   if (!p) return null
 
   const imgsPathRaw = p.IMGS_PATH ?? p.imgsPath ?? p.imagensPath ?? p.IMGS_PATHS ?? null
@@ -592,7 +453,7 @@ function normalizeProduct (p) {
   }
 }
 
-function setImagesFromProduct (p) {
+function setImagesFromProduct(p) {
   const arr = Array.isArray(p?.IMGS_PATH)
     ? p.IMGS_PATH.filter(Boolean).map(String)
     : []
@@ -601,7 +462,7 @@ function setImagesFromProduct (p) {
   activeSlide.value = 0
 }
 
-function applyProduct (payload) {
+function applyProduct(payload) {
   if (!payload) return null
 
   const normalized = normalizeProduct(payload)
@@ -616,7 +477,7 @@ const stateProduct = typeof history !== 'undefined' && history?.state?.product
   ? history.state.product
   : null
 
-function extractIdFromSlug (slug) {
+function extractIdFromSlug(slug) {
   const m = String(slug).match(/-(\d+)$/) || String(slug).match(/-(\w{6,})$/)
 
   return m ? m[1] : null
@@ -634,7 +495,7 @@ if (stateProduct) {
       if (cached) {
         applyProduct(JSON.parse(cached))
       }
-    } catch {}
+    } catch { }
   }
 }
 
@@ -699,7 +560,7 @@ const aiDescriptionHtml = computed(() => {
   return formatAIDescriptionToHtml(aiDescriptionText.value)
 })
 
-function money (n) {
+function money(n) {
   if (n === null || n === undefined || n === '') return '—'
 
   const parsed = Number(String(n).replace(',', '.'))
@@ -712,7 +573,7 @@ function money (n) {
   })
 }
 
-function slugify (s = '') {
+function slugify(s = '') {
   return String(s)
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -721,7 +582,7 @@ function slugify (s = '') {
     .toLowerCase()
 }
 
-function buildSlug (p) {
+function buildSlug(p) {
   const desc = (p.DESCRICAO ?? p.descricao) || ''
   const brand = (p.MARCA ?? p.marca) || ''
   const id = p.CODPRODUTO ?? p.codProduto ?? p.id ?? p._id ?? ''
@@ -729,7 +590,7 @@ function buildSlug (p) {
   return `${slugify(`${desc} ${brand}`)}-${id}`
 }
 
-function goBackToCatalog () {
+function goBackToCatalog() {
   const last = sessionStorage.getItem('catalog:lastUrl')
 
   if (last) return router.push(last)
@@ -740,7 +601,7 @@ function goBackToCatalog () {
   })
 }
 
-function confirmAddToCart (p) {
+function confirmAddToCart(p) {
   if (!p) return
 
   if (isProductOutOfStock(p)) {
@@ -782,7 +643,7 @@ function confirmAddToCart (p) {
   })
 }
 
-function extractGeneratedDescription (payload) {
+function extractGeneratedDescription(payload) {
   const root = payload?.data ?? payload
 
   return (
@@ -794,7 +655,7 @@ function extractGeneratedDescription (payload) {
   )
 }
 
-async function loadAIDescription (p) {
+async function loadAIDescription(p) {
   const codProduto = p?.CODPRODUTO ?? p?.codProduto ?? p?.id
   const produtoNome = p?.descricao ?? p?.DESCRICAO ?? ''
   const marca = p?.marca ?? p?.MARCA ?? ''
@@ -859,7 +720,7 @@ async function loadAIDescription (p) {
   }
 }
 
-async function loadProduct () {
+async function loadProduct() {
   const slug = route.params.slug
   const idFromSlug = extractIdFromSlug(slug)
 
@@ -879,7 +740,7 @@ async function loadProduct () {
       (data?.ok && data?.data)
         ? data.data
         : (Array.isArray(data?.data) ? data.data[0] : data?.data) ||
-          (Array.isArray(data) ? data[0] : data)
+        (Array.isArray(data) ? data[0] : data)
 
     if (!payload) return null
 
@@ -887,7 +748,7 @@ async function loadProduct () {
 
     try {
       sessionStorage.setItem(`prod:${idFromSlug}`, JSON.stringify(resolved))
-    } catch {}
+    } catch { }
 
     const canonicalSlug = buildSlug(resolved)
 
@@ -905,7 +766,7 @@ async function loadProduct () {
   }
 }
 
-async function load () {
+async function load() {
   try {
     loading.value = !product.value
 
@@ -941,7 +802,7 @@ async function load () {
   }
 }
 
-async function shareOrCopy () {
+async function shareOrCopy() {
   const url = location.href
 
   try {
@@ -958,31 +819,31 @@ async function shareOrCopy () {
         message: 'Link copiado!'
       })
     }
-  } catch {}
+  } catch { }
 }
 
-function openFullscreen (src) {
+function openFullscreen(src) {
   fullscreen.value.src = src || fallbackImage
   fullscreen.value.open = true
 }
 
-function onCarouselImageError (idx) {
+function onCarouselImageError(idx) {
   if (images.value[idx]) {
     images.value[idx] = fallbackImage
   }
 }
 
-function onThumbImageError (idx) {
+function onThumbImageError(idx) {
   if (images.value[idx]) {
     images.value[idx] = fallbackImage
   }
 }
 
-function onFullscreenError () {
+function onFullscreenError() {
   fullscreen.value.src = fallbackImage
 }
 
-function prevImage () {
+function prevImage() {
   if (!images.value.length) return
 
   const next = (activeSlide.value - 1 + images.value.length) % images.value.length
@@ -991,7 +852,7 @@ function prevImage () {
   fullscreen.value.src = images.value[next] || fallbackImage
 }
 
-function nextImage () {
+function nextImage() {
   if (!images.value.length) return
 
   const next = (activeSlide.value + 1) % images.value.length
@@ -1071,9 +932,9 @@ useMeta(() => {
           sku: p?.sku || p?.CODORIGINAL || String(p?.id || ''),
           brand: p?.marca
             ? {
-                '@type': 'Brand',
-                name: p.marca
-              }
+              '@type': 'Brand',
+              name: p.marca
+            }
             : undefined,
           offers: {
             '@type': 'Offer',
@@ -1112,22 +973,6 @@ onMounted(load)
     linear-gradient(135deg, var(--en-blue) 0%, var(--en-blue-dark) 100%);
 }
 
-.product-topbar {
-  position: sticky;
-  top: 60px;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: min(100%, 1240px);
-  margin: 0 auto 18px;
-  padding: 10px 12px;
-  border-radius: 0 0 22px 22px;
-  background: rgba(247, 209, 2, 0.96);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
-  backdrop-filter: blur(12px);
-}
-
 .product-main-card {
   position: relative;
   width: min(100%, 1240px);
@@ -1149,13 +994,11 @@ onMounted(load)
   inset: 0;
   pointer-events: none;
   background:
-    repeating-linear-gradient(
-      -35deg,
+    repeating-linear-gradient(-35deg,
       rgba(220, 38, 38, 0.035) 0,
       rgba(220, 38, 38, 0.035) 12px,
       transparent 12px,
-      transparent 28px
-    );
+      transparent 28px);
 }
 
 .product-skeleton-image {
