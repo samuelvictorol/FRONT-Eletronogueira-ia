@@ -18,7 +18,8 @@ export default defineConfig(() => {
       vueRouterMode: 'history',
       // Quasar injeta isso no bundle (como constantes)
       env: {
-        BACKEND_URL: process.env.BACKEND_URL, 
+        BACKEND_URL: process.env.BACKEND_URL,
+        IA_BACKEND_URL: process.env.IA_BACKEND_URL,
         FRONTEND_URL: process.env.FRONTEND_URL,
         APP_BASE_URL: process.env.APP_BASE_URL,
         PROD_SLUGS_API: process.env.PROD_SLUGS_API
