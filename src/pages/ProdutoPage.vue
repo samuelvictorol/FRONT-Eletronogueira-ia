@@ -370,7 +370,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar, useMeta } from 'quasar'
-import { api } from 'boot/axios'
+import { api_ia } from 'boot/axios-ia'
 import { useCart } from 'src/composables/useCart'
 
 const $q = useQuasar()
@@ -795,8 +795,8 @@ async function loadAIDescription (p) {
   aiDescription.value = '-'
 
   try {
-    const { data } = await api.post(
-      `${IA_BACKEND_URL}/catalog/generate-description`,
+    const { data } = await api_ia.post(
+      `/catalog/generate-description`,
       {
         codProduto,
         produto: produtoNome,

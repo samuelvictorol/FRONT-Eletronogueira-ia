@@ -58,6 +58,10 @@ const routes = [
       { path: '', component: () => import('src/pages/admin/AdminPage.vue') },
     ]
   },
+  {
+    path: '/chat',
+    component: () => import('layouts/ChatLayout.vue'),
+  },
 
   {
     path: '/:catchAll(.*)*',

@@ -1,5 +1,5 @@
   <template>
-    <q-page class="text-black" style="position: relative;">
+    <q-page class="text-black q-pt-xl" style="position: relative;">
       <!-- HERO -->
 
       <div class="img-parallax bg-primary"></div>
@@ -8,7 +8,7 @@
         class="banner-section q-mx-sm q-mt-xl q-pt-sm animate__animated animate__fadeInDown animate__delay-2s animate__slower">
         <!-- DESKTOP/TABLET (>= md) -->
         <q-carousel v-if="!isMobile" v-model="bannerSlideDesktop" class="banner-carousel rounded-borders" animated
-          swipeable infinite arrows navigation height="750px" :autoplay="bannerAutoplay"
+          swipeable infinite arrows navigation height="650px" :autoplay="bannerAutoplay"
           @mousedown="bannerAutoplay = false" @touchstart="bannerAutoplay = false" @mouseup="resumeBannerAutoplay"
           @touchend="resumeBannerAutoplay" @mouseleave="resumeBannerAutoplay">
           <q-carousel-slide v-for="(b, idx) in bannersDesktop" :key="`desk-${idx}`" :name="idx" class="q-pa-none">
