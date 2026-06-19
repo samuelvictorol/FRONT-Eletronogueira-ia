@@ -1,6 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="app-layout bg-primary relative">
-    <q-header class="site-header text-dark bg-white animate__animated animate__fadeInDown animate__delay-1s animate__slower">
+    <q-header
+      class="site-header text-dark bg-primary animate__animated animate__fadeInDown animate__delay-1s animate__slower">
       <div class="header-shell">
         <q-toolbar class="topbar q-px-md">
           <router-link to="/" class="brand-link">
@@ -15,64 +16,29 @@
             <q-btn flat class="nav-link" to="/catalogo?limit=15&page=1&orderBy=updated_desc" label="Catálogo" />
             <q-btn flat class="nav-link" to="/localizacao" label="Localização" />
 
-            <q-btn
-              unelevated
-              color="green-14"
-              class="whatsapp-btn text-bold text-shadow"
-              type="a"
-              target="_blank"
-              rel="noopener"
-              icon-right="mdi-whatsapp"
-              label="WhatsApp"
-              href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento."
-            />
+            <q-btn unelevated color="green-14" class="whatsapp-btn text-bold text-shadow" type="a" target="_blank"
+              rel="noopener" icon-right="mdi-whatsapp" label="WhatsApp"
+              href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento." />
           </div>
 
           <q-space class="gt-sm" />
 
-          <q-btn
-            unelevated
-            color="secondary"
-            class="cart-btn"
-            icon="shopping_cart"
-            @click="cart.state.drawerOpen = true"
-          >
+          <q-btn unelevated color="secondary" class="cart-btn" icon="shopping_cart"
+            @click="cart.state.drawerOpen = true">
             <q-badge v-if="cart.count.value > 0" color="negative" floating>
               {{ cart.count.value }}
             </q-badge>
           </q-btn>
 
-          <q-btn
-            flat
-            dense
-            round
-            class="lt-md q-ml-sm menu-btn"
-            icon="menu"
-            aria-label="Abrir menu"
-            @click="leftDrawerOpen = !leftDrawerOpen"
-          />
+          <q-btn flat dense round class="lt-md q-ml-sm menu-btn" icon="menu" aria-label="Abrir menu"
+            @click="leftDrawerOpen = !leftDrawerOpen" />
         </q-toolbar>
 
         <div class="category-rail animate__animated animate__fadeInDown animate__delay-2s animate__slower">
-          <q-tabs
-            v-model="tab1"
-            dense
-            no-caps
-            outside-arrows
-            mobile-arrows
-            inline-label
-            align="left"
-            indicator-color="transparent"
-            active-color="secondary"
-            class="category-tabs"
-          >
-            <q-route-tab
-              v-for="b in brandsRow1"
-              :key="b.name"
-              :name="b.name.toUpperCase()"
-              :to="brandTo(b.name)"
-              class="category-tab"
-            >
+          <q-tabs v-model="tab1" dense no-caps outside-arrows mobile-arrows inline-label align="left"
+            indicator-color="transparent" active-color="secondary" class="category-tabs">
+            <q-route-tab v-for="b in brandsRow1" :key="b.name" :name="b.name.toUpperCase()" :to="brandTo(b.name)"
+              class="category-tab">
               <div class="category-pill">
                 <span class="category-emoji">{{ b.emoji }}</span>
                 <span class="category-label">
@@ -95,69 +61,36 @@
           Início
         </q-btn>
 
-        <q-btn
-          flat
-          align="left"
-          class="bg-secondary text-white nav-link"
-          to="/servicos-manutencao"
-          @click="leftDrawerOpen = false"
-        >
+        <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/servicos-manutencao"
+          @click="leftDrawerOpen = false">
           Serviços e Manutenção
         </q-btn>
 
-        <q-btn
-          flat
-          align="left"
-          class="bg-secondary text-white nav-link"
-          to="/catalogo?limit=15&page=1&orderBy=updated_desc"
-          @click="leftDrawerOpen = false"
-        >
+        <q-btn flat align="left" class="bg-secondary text-white nav-link"
+          to="/catalogo?limit=15&page=1&orderBy=updated_desc" @click="leftDrawerOpen = false">
           Catálogo
         </q-btn>
 
-        <q-btn
-          flat
-          align="left"
-          class="bg-secondary text-white nav-link"
-          to="/localizacao"
-          @click="leftDrawerOpen = false"
-        >
+        <q-btn flat align="left" class="bg-secondary text-white nav-link" to="/localizacao"
+          @click="leftDrawerOpen = false">
           Localização
         </q-btn>
 
-        <q-btn
-          unelevated
-          color="dark"
-          class="text-bold"
-          icon="shopping_cart"
-          label="Carrinho"
-          @click="cart.state.drawerOpen = true; leftDrawerOpen = false"
-        >
+        <q-btn unelevated color="dark" class="text-bold" icon="shopping_cart" label="Carrinho"
+          @click="cart.state.drawerOpen = true; leftDrawerOpen = false">
           <q-badge v-if="cart.count.value > 0" color="negative" floating>
             {{ cart.count.value }}
           </q-badge>
         </q-btn>
 
-        <q-btn
-          unelevated
-          class="bg-primary text-secondary text-bold rounded-borders drawer-instagram"
-          icon="mdi-instagram"
-          type="a"
-          target="_blank"
-          rel="noopener"
-          href="https://www.instagram.com/nogueiravalparaiso/"
-          label="@nogueiravalparaiso"
-        />
+        <q-btn unelevated class="bg-primary text-secondary text-bold rounded-borders drawer-instagram"
+          icon="mdi-instagram" type="a" target="_blank" rel="noopener"
+          href="https://www.instagram.com/nogueiravalparaiso/" label="@nogueiravalparaiso" />
       </div>
     </q-drawer>
 
-    <q-drawer
-      v-model="cart.state.drawerOpen"
-      side="right"
-      overlay
-      class="bg-grad-secondary text-primary"
-      :width="$q.screen.lt.md ? 330 : 420"
-    >
+    <q-drawer v-model="cart.state.drawerOpen" side="right" overlay class="bg-grad-secondary text-primary"
+      :width="$q.screen.lt.md ? 330 : 420">
       <div class="q-pa-md">
         <div class="row items-center justify-between">
           <div class="text-h6 text-weight-bold">Carrinho</div>
@@ -179,15 +112,8 @@
           </div>
 
           <div class="row no-wrap q-mt-md">
-            <q-btn
-              unelevated
-              color="green-14"
-              class="w100 text-bold"
-              icon-right="mdi-whatsapp"
-              label="Finalizar"
-              :disable="cart.state.items.length === 0"
-              @click="finishOnWhatsApp"
-            />
+            <q-btn unelevated color="green-14" class="w100 text-bold" icon-right="mdi-whatsapp" label="Finalizar"
+              :disable="cart.state.items.length === 0" @click="finishOnWhatsApp" />
           </div>
         </div>
 
@@ -218,15 +144,8 @@
               <div class="row items-center q-gutter-xs q-mt-xs">
                 <q-btn dense round flat icon="remove" @click="cart.dec(it.id)" />
 
-                <q-input
-                  color="secondary"
-                  dense
-                  outlined
-                  style="width: 70px;"
-                  input-class="text-center"
-                  :model-value="it.qty"
-                  @update:model-value="(v) => cart.setQty(it.id, v)"
-                />
+                <q-input color="secondary" dense outlined style="width: 70px;" input-class="text-center"
+                  :model-value="it.qty" @update:model-value="(v) => cart.setQty(it.id, v)" />
 
                 <q-btn dense round flat icon="add" @click="cart.inc(it.id)" />
 
@@ -254,6 +173,11 @@
 
     <q-page-container class="bg-grey-3">
       <router-view />
+      <q-page-sticky style="z-index: 45;" position="bottom-right" :offset="[18, 18]">
+        <q-btn round size="lg" color="primary" text-color="secondary" glossy icon="mdi-robot-excited-outline" class="shadow-8"
+          to="/chat">
+        </q-btn>
+      </q-page-sticky>
     </q-page-container>
   </q-layout>
 </template>
@@ -378,7 +302,6 @@ function enableDragScroll(selector) {
 
 .header-shell {
   width: 100%;
-  background: #ffffff;
 }
 
 .topbar {

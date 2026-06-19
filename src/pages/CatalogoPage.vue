@@ -44,8 +44,8 @@
       </div>
     </div>
 
-    <main class="catalog-shell q-pt-xl">
-      <section ref="mainSearchEl" class=" q-mt-xl catalog-hero" v-if="!isMobile">
+    <main class="catalog-shell">
+      <section ref="mainSearchEl" class="catalog-hero" v-if="!isMobile">
         <div class="hero-copy">
           <!-- <div class="hero-kicker">
             Ferramentas, elétrica, hidráulica e manutenção
@@ -112,7 +112,6 @@
           </div>
         </div>
       </section>
-
       <section v-if="hasAnyFilter" class="active-filters-card">
         <div class="active-filters-title">Filtros aplicados</div>
 
@@ -411,15 +410,6 @@
         </div>
       </section>
     </main>
-
-    <q-page-sticky v-if="isMobile" style="z-index: 45;" position="bottom-right" :offset="[18, 18]">
-      <q-btn round size="lg" color="primary" text-color="secondary" glossy icon="tune" class="shadow-8"
-        @click="openFiltersModal">
-        <q-badge v-if="activeExtraFiltersCount > 0" color="negative" floating>
-          {{ activeExtraFiltersCount }}
-        </q-badge>
-      </q-btn>
-    </q-page-sticky>
 
     <q-dialog v-model="filtersDialog" :position="isMobile ? 'bottom' : 'standard'">
       <q-card class="filters-modal-card">
@@ -1772,6 +1762,23 @@ function updateStickySearchVisibility() {
   showStickySearch.value = mainSearchRect.bottom <= headerRect.bottom + 8
 }
 
+function getStickyTopOffset() {
+  const stickyEl = stickyHeaderEl.value
+
+  if (stickyEl) {
+    const computedTop = window.getComputedStyle(stickyEl).top
+    const parsedTop = Number.parseFloat(computedTop)
+
+    if (Number.isFinite(parsedTop)) return parsedTop
+  }
+
+  const pageRoot = pageEl.value?.$el || pageEl.value || document.documentElement
+  const raw = window.getComputedStyle(pageRoot).getPropertyValue('--catalog-layout-header-height')
+  const parsed = Number.parseFloat(raw)
+
+  return Number.isFinite(parsed) ? parsed : 0
+}
+
 function updateActiveSection() {
   const candidates = [
     { key: 'promos', el: promotionsSectionEl.value },
@@ -1784,13 +1791,15 @@ function updateActiveSection() {
     return
   }
 
-  const headerHeight = stickyHeaderEl.value?.offsetHeight || 90
+  const stickyOffset = getStickyTopOffset()
+  const stickyHeight = stickyHeaderEl.value?.offsetHeight || 90
+  const activationLine = stickyOffset + stickyHeight + 64
   let current = candidates[0].key
 
   for (const item of candidates) {
     const rect = item.el.getBoundingClientRect()
 
-    if (rect.top <= headerHeight + 80) {
+    if (rect.top <= activationLine) {
       current = item.key
     }
   }
@@ -1857,8 +1866,23 @@ function scrollToSection(key) {
   const el = map[key]
   if (!el) return
 
-  const headerHeight = stickyHeaderEl.value?.offsetHeight || 90
-  const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - 18
+  const stickyOffset = getStickyTopOffset()
+  const stickyHeight = stickyHeaderEl.value?.offsetHeight || 90
+  const safeGap = stickyOffset + stickyHeight + 18
+
+  if (scrollTarget && scrollTarget !== window) {
+    const containerRect = scrollTarget.getBoundingClientRect()
+    const top = scrollTarget.scrollTop + el.getBoundingClientRect().top - containerRect.top - safeGap
+
+    scrollTarget.scrollTo({
+      top,
+      behavior: 'smooth'
+    })
+
+    return
+  }
+
+  const top = el.getBoundingClientRect().top + window.scrollY - safeGap
 
   window.scrollTo({
     top,
@@ -2159,8 +2183,11 @@ onBeforeUnmount(() => {
   --en-white: #ffffff;
   --en-muted: rgba(255, 255, 255, 0.72);
 
+  --catalog-layout-header-height: 132px;
+  --catalog-sticky-top: calc(var(--catalog-layout-header-height) + env(safe-area-inset-top) + 8px);
+
   min-height: 100vh;
-  padding: 0 18px 88px;
+  padding: calc(var(--catalog-layout-header-height) + 18px) 18px 88px;
   color: var(--en-white);
   background:
     radial-gradient(circle at top left, rgba(247, 209, 2, 0.16), transparent 34%),
@@ -2175,11 +2202,11 @@ onBeforeUnmount(() => {
 
 .catalog-sticky-header {
   position: sticky;
-  top: 62px;
-  z-index: 40;
+  top: var(--catalog-sticky-top);
+  z-index: 90;
   width: min(100%, 1540px);
   margin: 0 auto 18px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   border: 1px solid rgba(247, 209, 2, 0.24);
   border-top: 0;
   border-bottom-left-radius: 24px;
@@ -2228,11 +2255,14 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+  width: 100%;
   min-width: 0;
 }
 
 .sticky-search {
-  width: min(720px, 38vw);
+  flex: 1 1 520px;
+  width: min(720px, 52vw);
+  min-width: 260px;
 }
 
 .sticky-filter-btn {
@@ -2241,6 +2271,7 @@ onBeforeUnmount(() => {
   font-weight: 900;
   border-radius: 999px;
   min-height: 40px;
+  flex: 0 0 auto;
   box-shadow: 0 10px 26px rgba(247, 209, 2, 0.22);
 }
 
@@ -2250,7 +2281,14 @@ onBeforeUnmount(() => {
   gap: 8px;
   margin-top: 10px;
   overflow-x: auto;
+  overflow-y: hidden;
   padding-bottom: 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sticky-section-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .section-tab {
@@ -2399,6 +2437,7 @@ onBeforeUnmount(() => {
 
 .catalog-section {
   margin-top: 30px;
+  scroll-margin-top: calc(var(--catalog-sticky-top) + 128px);
 }
 
 .section-heading {
@@ -2851,12 +2890,16 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 1180px) {
+  .catalog-page {
+    --catalog-layout-header-height: 126px;
+  }
+
   .catalog-hero {
     grid-template-columns: 1fr;
   }
 
   .sticky-search {
-    width: min(540px, 42vw);
+    width: min(620px, 58vw);
   }
 
   .catalog-grid {
@@ -2870,15 +2913,24 @@ onBeforeUnmount(() => {
 
 @media (max-width: 860px) {
   .catalog-page {
-    padding: 0 12px 86px;
+    --catalog-layout-header-height: 112px;
+    padding: calc(var(--catalog-layout-header-height) + 10px) 12px 86px;
   }
 
   .catalog-sticky-header {
-    padding: 12px;
+    margin-bottom: 14px;
+    padding: 10px;
+    border-radius: 18px;
+    border-top: 1px solid rgba(247, 209, 2, 0.24);
   }
 
   .sticky-main-row {
-    align-items: flex-start;
+    align-items: stretch;
+  }
+
+  .sticky-actions {
+    justify-content: stretch;
+    gap: 8px;
   }
 
   .sticky-breadcrumbs,
@@ -2891,7 +2943,28 @@ onBeforeUnmount(() => {
   }
 
   .sticky-search {
-    width: min(720px, 54vw);
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sticky-filter-btn {
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
+    border-radius: 14px;
+  }
+
+  .sticky-section-tabs {
+    gap: 6px;
+    margin-top: 8px;
+    padding-bottom: 0;
+  }
+
+  .section-tab {
+    min-width: max-content;
+    padding: 0 10px;
+    font-size: 12px;
   }
 
   .catalog-hero {
@@ -2913,6 +2986,14 @@ onBeforeUnmount(() => {
   .active-filters-card {
     align-items: flex-start;
     flex-direction: column;
+    margin-top: 12px;
+  }
+
+  .active-filters-row {
+    width: 100%;
+    max-height: 96px;
+    overflow-y: auto;
+    padding-right: 2px;
   }
 
   .section-heading {
@@ -2947,12 +3028,36 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 460px) {
+  .catalog-page {
+    --catalog-layout-header-height: 108px;
+    padding: calc(var(--catalog-layout-header-height) + 8px) 8px 86px;
+  }
+
+  .catalog-sticky-header {
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+
   .sticky-actions {
     gap: 6px;
   }
 
   .sticky-search {
     width: 100%;
+  }
+
+  .sticky-search :deep(.q-field__control) {
+    min-height: 42px;
+    height: 42px;
+  }
+
+  .sticky-search :deep(.q-field__prepend),
+  .sticky-search :deep(.q-field__append) {
+    height: 42px;
+  }
+
+  .sticky-search :deep(input) {
+    font-size: 13px;
   }
 
   .section-tab {

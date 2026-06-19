@@ -2,7 +2,7 @@
     <q-page class="text-black q-pt-xl" style="position: relative;">
       <!-- HERO -->
 
-      <div class="img-parallax bg-primary"></div>
+      <div class="img-parallax bg-primary "></div>
       <!-- SECTION: BANNERS / HERO CAROUSEL -->
       <section
         class="banner-section q-mx-sm q-mt-xl q-pt-sm animate__animated animate__fadeInDown animate__delay-2s animate__slower">

@@ -5,14 +5,11 @@
         <q-btn flat dense round icon="arrow_back" class="header-btn" @click="goBack" />
 
         <q-avatar size="42px" class="assistant-avatar">
-          <q-icon name="support_agent" size="26px" />
+          <q-icon name="mdi-robot-excited-outline" size="26px" />
         </q-avatar>
 
         <div class="header-info">
-          <div class="header-title ellipsis">Atendente Eletro Nogueira</div>
-          <div class="header-subtitle ellipsis">
-            Produtos, marcas, código de barras, endereço e WhatsApp
-          </div>
+          <div class="header-title "><strong class="text-red">I.A.</strong> ELETRONOGUEIRA</div>
         </div>
 
         <q-space />
