@@ -1,13 +1,11 @@
   <template>
     <q-page class="text-black q-pt-xl" style="position: relative;">
-      <!-- HERO -->
-
       <div class="img-parallax bg-primary "></div>
       <!-- SECTION: BANNERS / HERO CAROUSEL -->
       <section
-        class="banner-section q-mx-sm q-mt-xl q-pt-sm animate__animated animate__fadeInDown animate__delay-2s animate__slower">
+        class="banner-section q-mx-sm q-mt-xl q-pt-xl animate__animated animate__fadeInDown animate__delay-2s animate__slower">
         <!-- DESKTOP/TABLET (>= md) -->
-        <q-carousel v-if="!isMobile" v-model="bannerSlideDesktop" class="banner-carousel rounded-borders" animated
+        <q-carousel v-if="!isMobile" v-model="bannerSlideDesktop" class="banner-carousel rounded-borders q-mt-lg" animated
           swipeable infinite arrows navigation height="650px" :autoplay="bannerAutoplay"
           @mousedown="bannerAutoplay = false" @touchstart="bannerAutoplay = false" @mouseup="resumeBannerAutoplay"
           @touchend="resumeBannerAutoplay" @mouseleave="resumeBannerAutoplay">
@@ -23,7 +21,7 @@
         </q-carousel>
 
         <!-- MOBILE (< md) -->
-        <q-carousel v-else v-model="bannerSlideMobile" class="banner-carousel rounded-borders" animated swipeable
+        <q-carousel v-else v-model="bannerSlideMobile" class="banner-carousel rounded-borders q-pt-sm" animated swipeable
           infinite arrows navigation height="320px" :autoplay="bannerAutoplay" @mousedown="bannerAutoplay = false"
           @touchstart="bannerAutoplay = false" @mouseup="resumeBannerAutoplay" @touchend="resumeBannerAutoplay"
           @mouseleave="resumeBannerAutoplay">
@@ -353,12 +351,12 @@
       <!-- SOBRE / COMO CHEGAR -->
       <div id="como-chegar"></div>
 
-      <section class="about-section bg-primary">
+      <section class="about-section bg-secondary">
         <div class="container q-py-xl q-px-md">
           <!-- Header -->
           <div class="row items-center justify-between q-mb-lg">
             <div>
-              <div class="text-h4 text-secondary text-weight-bolder">Sobre a loja</div>
+              <div class="text-h4 text-primary text-weight-bolder">Sobre a loja</div>
             </div>
 
             <div class="row q-gutter-sm items-center q-mt-sm">
@@ -478,7 +476,7 @@
                     Eletro Nogueira — Av. Marginal, QD, Lote 01 • Esplanada I • Valparaíso de Goiás
                   </div>
                 </div>
-                <q-btn dense unelevated glossy color="primary" text-color="secondary" icon="directions"
+                <q-btn dense unelevated color="primary" text-color="secondary" icon="directions"
                   label="Ver no Maps" class="q-mt-md text-bold w100 q-mx-lg" type="a" target="_blank" rel="noopener"
                   href="https://maps.app.goo.gl/HmBYXDVNAGxB2iiZA" />
               </div>
@@ -486,47 +484,6 @@
           </q-card>
         </div>
       </section>
-      <!-- <section id="buscar"
-        class="hero bg-grad-secondary animate__animated animate__fadeIn animate__delay-4s animate__slower ">
-        <div class="hero-overlay"></div>
-
-        <div
-          class="hero-content  rounded-borders bg-primary animate__animated animate__zoomIn animate__delay-3s q-mx-sm q-mb-md q-mt-md">
-          <div v-if="!isMobile" class="w100 row justify-center text-center bg-primary">
-            <div
-              class="text-h5 text-secondary text-bold animate__animated animate__zoomIn animate__delay-43s animate__slower">
-              <q-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWkoE4wphrr3rmiQjB_WamkBHm2CQ4POAbnQ&s"
-                alt="EN" style="border-radius:100%; width:44px; height:44px" /> <strong
-                class="text-negative">ELETRO</strong>NOGUEIRA<br>
-            </div>
-          </div>
-          <div
-            class="w100 row justify-center no-wrap items-center text-center bg-primary  animate__animated animate__zoomIn animate__delay-5s animate__slower ">
-            <q-input outlined color="secondary" v-model.trim="inputBuscar" class=" w100 rounded-borders bg-grey-2"
-              @keyup.enter="buscarCatalogo()" label="O que você precisa?"></q-input>
-            <q-btn color="secondary" unelevated class="btn q-ml-sm text-shadow" icon="search"
-              @click="buscarCatalogo()"></q-btn>
-          </div>
-          <div class="cta-row">
-            <q-btn color="secondary" unelevated class="btn  text-shadow" @click="scrollTo('#produtos')"
-              label="produtos" />
-            <q-btn color="secondary" unelevated class="btn text-shadow" @click="scrollTo('#servicos')"
-              label="Serviços e Manutenção" />
-            <q-btn class="btn text-shadow" color="secondary" @click="scrollTo('#como-chegar')" label="Como chegar" />
-          </div>
-          <div class="hero-badges flex flex-center">
-            <div class="badge bg-grey-2 text-dark">Elétrica</div>
-            <div class="badge bg-grey-2 text-dark">Hidráulica</div>
-            <div class="badge bg-grey-2 text-dark">Automação</div>
-            <div class="badge bg-grey-2 text-dark">Agro</div>
-            <div class="badge bg-grey-2 text-dark">Industrial</div>
-            <div class="badge bg-grey-2 text-dark">Manutenção</div>
-          </div>
-          <div
-            class="open-now text-secondary q-pt-md text-center animate__animated animate__fadeInDown animate__delay-3s animate__slower">
-            {{ openNowText }}</div>
-        </div>
-      </section> -->
       <footer class="footer bg-primary text-secondary q-pt-lg">
         <div class="container footer-grid q-pt-xl q-pb-md">
           <div>
@@ -539,7 +496,7 @@
                 <small class="text-black">Em frente à BR-040 • Valparaíso de Goiás</small>
               </div>
             </div>
-            <p class="foot-copy q-pt-sm">Soluções em elétrica, hidráulica, automação e agro.<br>Pronta-entrega e
+            <p class="foot-copy text-secondary q-pt-sm">Soluções em elétrica, hidráulica, automação e agro.<br>Pronta-entrega e
               suporte técnico.<br><br>CNPJ • <strong>26.931.014/0001-12.</strong>
             </p>
           </div>
@@ -549,24 +506,16 @@
             <a class="cursor-pointer" @click.prevent="scrollTo('#como-chegar')">Como chegar</a>
           </div>
           <div class="column">
-            <q-btn unelevated color="positive" class="text-shadow q-ml-xs shadow-1" type="a" target="_blank"
+            <q-btn unelevated color="green-14" class="text-shadow shadow-1" type="a" target="_blank"
               rel="noopener"
-              href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento.">
-              WhatsApp
-              <q-img
-                src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN"
-                alt="EN" style="border-radius:100%; width:30px; height:30px" /></q-btn>
+              href="https://wa.me/556136290040?text=Ol%C3%A1%20Eletro%20Nogueira!%20Quero%20um%20or%C3%A7amento." label="Fale Conosco" icon-right="mdi-whatsapp" />
             <q-btn icon-right="phone" class="bg-secondary text-white rounded-borders q-mt-sm" href="tel:+556136296858"
               label="(61) 3629-6858" />
           </div>
         </div>
-        <div class="w100 column justify-center items-center text-center"><q-btn unelevated color="secondary"
-            class="text-shadow" type="a" target="_blank" rel="noopener"
-            href="https://www.instagram.com/nogueiravalparaiso/">
-            @nogueiravalparaiso
-            <q-img class="q-ml-sm"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png"
-              alt="Logo Instagram" style="border-radius:100%; width:30px; height:30px;filter: grayscale(1);" /></q-btn>
+        <div class="w100 column justify-center items-center text-center"><q-btn  color="secondary"
+          type="a" target="_blank" rel="noopener"
+            href="https://www.instagram.com/nogueiravalparaiso/" label="@nogueiravalparaiso" icon-right="mdi-instagram" /> 
         </div>
         <div class="copy q-mt-md">© {{ year }} Eletro Nogueira — 26.931.014/0001-12.</div>
       </footer>
@@ -906,13 +855,13 @@ onMounted(() => {
   z-index: -999 !important;
   width: 100%;
   height: 100%;
-  top: 0;
   background: #F7D102;
-  background-image: url('/assets/loja.webp');
+  top: 0;
+  /* background-image: url('/assets/loja.webp');
   left: 0;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
 }
 
 .brand-badge {

@@ -74,7 +74,7 @@
           <div class="hero-search-title">O que você precisa hoje?</div>
 
           <q-input v-model="filters.descricaoProduto" outlined clearable bg-color="white" color="secondary"
-            label="Buscar produto" hint="Ex.: furadeira, extensão, bomba, Makita, 3M..." debounce="350"
+            label="Buscar produto" debounce="350"
             @keyup.enter="searchNow" @clear="clearSearchOnly">
             <template #prepend>
               <q-icon name="search" color="secondary" />
@@ -2178,21 +2178,19 @@ onBeforeUnmount(() => {
 <style scoped>
 .catalog-page {
   --en-yellow: #F7D102;
-  --en-blue: #063186;
-  --en-blue-dark: #03122E;
+  --en-blue: #01205F;
+  --en-blue-dark: #03122F;
   --en-white: #ffffff;
   --en-muted: rgba(255, 255, 255, 0.72);
 
   --catalog-layout-header-height: 132px;
-  --catalog-sticky-top: calc(var(--catalog-layout-header-height) + env(safe-area-inset-top) + 8px);
+  --catalog-sticky-top: calc(var(--catalog-layout-header-height) + env(safe-area-inset-top) + 18px);
 
   min-height: 100vh;
   padding: calc(var(--catalog-layout-header-height) + 18px) 18px 88px;
   color: var(--en-white);
   background:
-    radial-gradient(circle at top left, rgba(247, 209, 2, 0.16), transparent 34%),
-    radial-gradient(circle at 80% 18%, rgba(247, 209, 2, 0.09), transparent 24%),
-    linear-gradient(135deg, var(--en-blue) 0%, var(--en-blue-dark) 100%);
+    linear-gradient(135deg, var(--en-blue-dark) 30%, var(--en-blue) 40%);
 }
 
 .catalog-shell {
@@ -2208,9 +2206,8 @@ onBeforeUnmount(() => {
   margin: 0 auto 18px;
   padding: 12px 16px;
   border: 1px solid rgba(247, 209, 2, 0.24);
+  border-radius: 8px;
   border-top: 0;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
   background:
     linear-gradient(135deg, rgba(2, 30, 88, 0.94) 0%, rgba(3, 18, 46, 0.98) 100%);
   backdrop-filter: blur(16px);
@@ -2920,7 +2917,6 @@ onBeforeUnmount(() => {
   .catalog-sticky-header {
     margin-bottom: 14px;
     padding: 10px;
-    border-radius: 18px;
     border-top: 1px solid rgba(247, 209, 2, 0.24);
   }
 
