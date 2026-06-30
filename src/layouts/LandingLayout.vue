@@ -35,7 +35,7 @@
           <div v-if="showSmartSearch" class="smart-search-rail">
             <q-form class="smart-search-card" @submit.prevent="submitSmartCatalogSearch">
               <div class="smart-search-copy gt-xs">
-                <div class="smart-search-title">✨ Buscar no Catálogo</div>
+                <div class="">✨ Buscar no Catálogo</div>
               </div>
 
               <q-input v-model="smartSearchText" dense outlined clearable bg-color="white" color="secondary"
@@ -62,7 +62,7 @@
             <q-route-tab v-for="b in categoriesRow" :key="b.name" :name="b.name.toUpperCase()" :to="categoryTo(b.name)"
               class="category-tab">
               <div class="category-pill">
-                <span class="category-emoji">{{ b.emoji }}</span>
+                <q-icon v-if="b.emoji.startsWith('mdi-')" :name="b.emoji" size="16px" />
                 <span class="category-label">
                   {{ b.name.includes('BLACK') ? 'black & decker' : b.name }}
                 </span>
@@ -113,8 +113,8 @@
           <q-card flat class="drawer-cart-card">
             <q-card-section class="drawer-cart-head">
               <div>
-                <div class="drawer-card-title">Carrinho</div>
-                <div class="drawer-card-subtitle">
+                <div class="drawer-card-title text-secondary">Carrinho</div>
+                <div class="drawer-card-subtitle text-grey">
                   {{ cart.count.value }} produto(s) selecionado(s)
                 </div>
               </div>
@@ -146,8 +146,8 @@
       <div class="cart-drawer-shell">
         <div class="cart-drawer-header">
           <div>
-            <div class="cart-drawer-title">Carrinho</div>
-            <div class="cart-drawer-subtitle">
+            <div class="cart-drawer-title text-secondary">Carrinho</div>
+            <div class="cart-drawer-subtitle text-grey">
               {{ cart.count.value }} produto(s)
             </div>
           </div>
@@ -233,7 +233,7 @@
       <router-view />
 
       <q-page-sticky style="z-index: 45;" position="bottom-right" :offset="[18, 18]">
-        <q-btn round size="xl" color="primary" text-color="secondary" icon="mdi-robot-excited-outline" class="shadow-8"
+        <q-btn round size="xl" color="primary" text-color="secondary" icon="mdi-face-agent" class="shadow-8"
           to="/chat" />
       </q-page-sticky>
     </q-page-container>
@@ -294,12 +294,38 @@ const drawerNavItems = [
 ]
 
 const categoriesRow = [
-  { name: 'Cabos', emoji: '🥖', src: '/assets/black-decker-logo.png' },
-  { name: 'Elétrica', emoji: '💡', src: '/assets/karcher-logo.png' },
-  { name: 'Hidráulica', emoji: '⚙', src: '/assets/marluvas-logo.png' },
-  { name: 'Ferramentas', emoji: '🔧', src: '/assets/tigre-logo.png' },
-  { name: 'Bomba d\'água', emoji: '💦', src: '/assets/lamesa-logo.webp' },
-  { name: 'Luva', emoji: '🧤', src: '/assets/stanley-logo.png' }
+  { name: 'Cabos', emoji: 'mdi-vector-line', },
+  { name: 'Elétrica', emoji: 'mdi-lightning-bolt', },
+  { name: 'Hidráulica', emoji: 'mdi-cog', },
+  { name: 'Ferramentas', emoji: 'mdi-wrench', },
+  { name: 'Motor', emoji: 'mdi-engine', },
+  { name: 'Bomba d\'água', emoji: 'mdi-water-pump', },
+  { name: 'Luva', emoji: 'mdi-hand', },
+  { name: 'Cola', emoji: 'mdi-bottle-wine', },
+  { name: 'Alicate', emoji: 'mdi-pipe-wrench', },
+  { name: 'Conexão', emoji: 'mdi-connection', },
+  { name: 'Fita', emoji: 'mdi-car-windshield-outline', },
+  { name: 'Parafusadeira', emoji: 'mdi-pistol', },
+  { name: 'Bateria', emoji: 'mdi-battery-charging', },
+  { name: 'Óleo', emoji: 'mdi-oil', },
+  { name: 'Parafuso', emoji: 'mdi-screwdriver', },
+  { name: 'Porca', emoji: 'mdi-nut', },
+  { name: 'Arruela', emoji: 'mdi-circle-outline', },
+  { name: 'Chave', emoji: 'mdi-key', },
+  { name: 'Martelo', emoji: 'mdi-hammer', },
+  { name: 'Serra', emoji: 'mdi-saw-blade', },
+  { name: 'Placa', emoji: 'mdi-alert', },
+  { name: 'Filtro', emoji: 'mdi-filter', },
+  { name: 'Válvula', emoji: 'mdi-valve', },
+  { name: 'Mangueira', emoji: 'mdi-water-pump', },
+  { name: 'Esmerilhadeira', emoji: 'mdi-tools', },
+  { name: 'Interruptor', emoji: 'mdi-toggle-switch', },
+  { name: 'Tomada', emoji: 'mdi-power-socket-eu', },
+  { name: 'Lâmpada', emoji: 'mdi-lightbulb-on-outline', },
+  { name: 'Lavadora', emoji: 'mdi-washing-machine', },
+  { name: 'Transformador', emoji: 'mdi-lightbulb-multiple-outline ', },
+  { name: 'Resistência ', emoji: 'mdi-resistor', },
+  { name: 'Chuveiro', emoji: 'mdi-shower', },
 ]
 
 function categoryTo(name) {
@@ -644,18 +670,23 @@ function enableDragScroll(selector) {
   width: 100%;
   padding: 0 12px 8px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .smart-search-card {
-  width: 100%;
+  width: min(620px, calc(100% - 24px));
+  max-width: 620px;
   min-height: 50px;
   display: grid;
-  grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+  grid-template-columns: minmax(130px, 175px) minmax(260px, 1fr);
   align-items: center;
+  justify-content: center;
   gap: 10px;
   padding: 8px 10px;
   border-radius: 18px;
-  background: linear-gradient(90deg, rgba(1, 32, 96, 0.92), rgba(1, 32, 96, 0.72));
+  background: linear-gradient(90deg, rgb(1, 33, 96), rgba(1, 32, 96, 0.72));
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 8px 20px rgba(1, 32, 96, 0.14);
 }
@@ -738,10 +769,14 @@ function enableDragScroll(selector) {
   display: flex;
   align-items: center;
   gap: 6px;
+  font-weight: bold;
   min-height: 35px;
   padding: 7px 13px;
   border-radius: 999px;
-  background: var(--navy);
+  background: #e00905;
+  background:
+    radial-gradient(circle at top left, rgba(0, 10, 156, 0.22), transparent 38%),
+    linear-gradient(180deg, #eb0c08 0%, #bd0b08 100%);
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.18);
   white-space: nowrap;
@@ -1037,9 +1072,12 @@ function enableDragScroll(selector) {
 
   .smart-search-rail {
     padding: 0 8px 7px;
+    justify-content: stretch;
   }
 
   .smart-search-card {
+    width: 100%;
+    max-width: none;
     grid-template-columns: 1fr;
     min-height: unset;
     padding: 7px;

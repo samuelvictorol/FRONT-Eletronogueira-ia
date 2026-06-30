@@ -1,11 +1,11 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="assistant-layout">
+  <q-layout view="hHh lpR fFf" class="assistant-layout  animate__animated animate__slideInLeft">
     <q-header elevated class="assistant-header">
       <q-toolbar class="assistant-toolbar">
         <q-btn flat dense round icon="arrow_back" class="header-btn" @click="goBack" />
 
         <q-avatar size="42px" class="assistant-avatar">
-          <q-icon name="mdi-robot-excited-outline" size="26px" />
+          <q-icon name="mdi-face-agent" size="26px" />
         </q-avatar>
 
         <div class="header-info">
