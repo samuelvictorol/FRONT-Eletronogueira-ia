@@ -191,9 +191,9 @@
                 class="bg-primary product glass cursor-pointer"
                 @click="goTo(category.to)"
               >
-                <h4 class="text-bold text-secondary" >
+                <div class="text-h4 text-right text-bold text-secondary" >
                   {{ category.title }}
-                </h4>
+                </div>
               </article>
             </div>
           </div>
@@ -253,11 +253,11 @@
                       {{ product.brand }}
                     </q-badge>
 
-                    <div class="text-weight-bold text-primary ellipsis-2 text-caption">
+                    <div class="text-weight-bold text-secondary  ellipsis-2 text-caption">
                       {{ product.name }}
                     </div>
 
-                    <div class="text-weight-bold text-green-14 text-subtitle2">
+                    <div class="text-weight-bold text-primary bg-secondary q-pa-xs rounded-borders">
                       {{ formatBRL(product.price) }}
                     </div>
                   </q-card-section>
@@ -829,7 +829,6 @@ const bannersMobile = ref([
     alt: 'Mobile 6',
     action: { type: 'route', to: '/chat' }
   }
-  
 ])
 
 const brandsRow1 = [

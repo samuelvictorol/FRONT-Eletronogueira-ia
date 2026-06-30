@@ -39,6 +39,10 @@
         </div>
 
         <div v-else-if="product" class="row q-col-gutter-xl">
+
+          <div class="product-title text-h2">
+            {{ product?.descricao || 'Produto' }}
+          </div>
           <div class="col-12 col-md-6">
             <div class="product-gallery-card">
               <div v-if="isOutOfStock" class="out-stock-watermark">
@@ -95,9 +99,6 @@
                 </q-chip>
               </div>
 
-              <h1 class="product-title">
-                {{ product?.descricao || 'Produto' }}
-              </h1>
 
               <div class="product-code-line">
                 Cód.: {{ product?.id || product?.CODPRODUTO || '—' }}

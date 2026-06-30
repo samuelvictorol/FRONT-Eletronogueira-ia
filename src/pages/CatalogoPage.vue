@@ -1,19 +1,16 @@
-<!-- CatalogoPage.vue - Eletro Nogueira -->
 <template>
   <q-page ref="pageEl" class="catalog-page" :class="{ 'catalog-page--mobile': isMobile }">
     <q-inner-loading :showing="loading && items.length === 0">
       <q-spinner-gears size="42px" color="primary" />
-      <div class="q-mt-sm text-white">Carregando produtos...</div>
+      <div class="q-mt-sm text-white">Carregando...</div>
     </q-inner-loading>
 
-    <div ref="stickyHeaderEl"
-      class="catalog-sticky-header animate__animated animate__fadeInDown animate__delay-1s animate__slower">
-      <div class="sticky-main-row" v-if="showStickySearch || isMobile">
+    <div ref="stickyHeaderEl" class="catalog-sticky-header">
+      <div v-if="showStickySearch || isMobile" class="sticky-main-row">
         <div class="sticky-actions">
           <transition name="fade-slide">
             <q-input v-model="filters.descricaoProduto" dense outlined clearable bg-color="white" color="secondary"
-              placeholder="Pesquisar no catálogo..." class="sticky-search" @keyup.enter="searchNow"
-              @clear="clearSearchOnly">
+              placeholder="Buscar produto..." class="sticky-search" @keyup.enter="searchNow" @clear="clearSearchOnly">
               <template #prepend>
                 <q-icon name="search" color="secondary" />
               </template>
@@ -28,7 +25,7 @@
             </q-input>
           </transition>
 
-          <q-btn unelevated class="sticky-filter-btn" icon="tune" :label="isMobile ? '' : 'Filtros'"
+          <q-btn unelevated class="sticky-filter-btn text-secondary" icon="tune" :label="isMobile ? '' : 'Filtros'"
             @click="openFiltersModal">
             <q-badge v-if="activeExtraFiltersCount > 0" color="negative" floating>
               {{ activeExtraFiltersCount }}
@@ -47,35 +44,12 @@
     <main class="catalog-shell">
       <section ref="mainSearchEl" class="catalog-hero" v-if="!isMobile">
         <div class="hero-copy">
-          <!-- <div class="hero-kicker">
-            Ferramentas, elétrica, hidráulica e manutenção
-          </div> -->
-
-          <h1 class="text-shadow">
-            Catálogo EletroNogueira
-          </h1>
-          <div class="hero-metrics">
-            <div>
-              <q-icon name="local_offer" />
-              <span>Promoções Imperdíveis</span>
-            </div>
-            <div>
-              <q-icon name="sell" />
-              <span>Marcas Selecionadas</span>
-            </div>
-            <div>
-              <q-icon name="bolt" />
-              <span>Suporte Especializado</span>
-            </div>
-          </div>
+          <h1>Catálogo</h1>
         </div>
 
         <div class="hero-search-card">
-          <div class="hero-search-title">O que você precisa hoje?</div>
-
           <q-input v-model="filters.descricaoProduto" outlined clearable bg-color="white" color="secondary"
-            label="Buscar produto" debounce="350"
-            @keyup.enter="searchNow" @clear="clearSearchOnly">
+            placeholder="Buscar produto..." debounce="350" @keyup.enter="searchNow" @clear="clearSearchOnly">
             <template #prepend>
               <q-icon name="search" color="secondary" />
             </template>
@@ -88,33 +62,41 @@
               <q-btn unelevated color="secondary" text-color="white" icon="search" @click="searchNow" />
             </template>
           </q-input>
-
+          <!-- 
           <div class="quick-filter-row">
-            <q-chip clickable :color="filters.isPromotion ? 'negative' : 'white'"
-              :text-color="filters.isPromotion ? 'white' : 'secondary'" icon="local_offer"
-              @click="togglePromotionQuickFilter">
+            <q-chip
+              clickable
+              dense
+              :color="filters.isPromotion ? 'negative' : 'white'"
+              :text-color="filters.isPromotion ? 'white' : 'secondary'"
+              icon="local_offer"
+              @click="togglePromotionQuickFilter"
+            >
               Promoção
             </q-chip>
 
-            <q-chip v-for="brand in quickBrandChips" :key="brand.value" clickable color="white" text-color="secondary"
-              icon="sell" @click="applyBrandFilter(brand)">
+            <q-chip
+              v-for="brand in quickBrandChips"
+              :key="brand.value"
+              clickable
+              dense
+              color="white"
+              text-color="secondary"
+              @click="applyBrandFilter(brand)"
+            >
               {{ brand.label }}
             </q-chip>
-          </div>
+          </div> -->
 
           <div class="hero-actions">
-            <q-btn unelevated color="secondary" text-color="white" icon="tune" label="Filtros avançados"
+            <q-btn unelevated color="secondary" text-color="white" icon="tune" label="Filtros"
               @click="openFiltersModal" />
-
-            <q-btn outline color="secondary" icon="qr_code_scanner" label="Ler código" @click="openBarcodeScanner" />
-
-            <q-btn flat color="secondary" icon="restart_alt" label="Limpar tudo" @click="resetAllFilters" />
+            <q-btn flat color="secondary" icon="restart_alt" label="Limpar" @click="resetAllFilters" />
           </div>
         </div>
       </section>
-      <section v-if="hasAnyFilter" class="active-filters-card">
-        <div class="active-filters-title">Filtros aplicados</div>
 
+      <section v-if="hasAnyFilter" class="active-filters-card">
         <div class="active-filters-row">
           <q-chip v-if="(filters.descricaoProduto || '').trim()" removable color="white" text-color="secondary"
             icon="search" @remove="clearSearchOnly">
@@ -133,7 +115,7 @@
 
           <q-chip v-if="filters.isPromotion" removable color="negative" text-color="white" icon="local_offer"
             @remove="removePromotionOnly">
-            Somente promoção
+            Promoção
           </q-chip>
 
           <q-chip v-if="filters.precoMin !== null && filters.precoMin !== ''" removable color="white"
@@ -155,89 +137,22 @@
         </div>
       </section>
 
-      <section v-if="showcaseProducts.length" ref="promotionsSectionEl" class="catalog-section">
-        <div class="section-heading">
-          <div>
-            <div class="section-kicker section-kicker--promo">Ofertas e destaques</div>
-            <h2>Produtos em promoção</h2>
-          </div>
-
-          <q-chip color="negative" text-color="white" icon="local_offer">
-            {{ showcaseProducts.length }} destaque(s)
-          </q-chip>
-        </div>
-
-        <div class="promo-rail">
-          <q-card v-for="p in showcaseProducts" :key="`promo-${productKey(p)}`" flat bordered
-            class="catalog-product-card catalog-product-card--promo" @click="openDetails(p)">
-            <div class="product-image-wrap" :class="{ 'product-image-wrap--out-stock': isOutOfStock(p) }">
-              <div v-if="isOutOfStock(p)" class="stock-watermark">
-                Sem estoque
-              </div>
-
-              <q-badge v-if="isOutOfStock(p)" class="stock-badge" color="grey-10" text-color="white" icon="block">
-                Sem estoque
-              </q-badge>
-
-              <q-img :src="resolveImage(p)" :alt="p.descricao" fit="contain" class="product-img"
-                spinner-color="secondary">
-                <template #error>
-                  <div class="absolute-full flex flex-center bg-white">
-                    <q-icon name="image_not_supported" size="42px" color="grey-5" />
-                  </div>
-                </template>
-              </q-img>
-
-              <q-badge class="promo-badge" color="negative" icon="local_offer">
-                Promoção
-              </q-badge>
-
-              <q-badge v-if="p.marca" class="brand-badge">
-                {{ p.marca }}
-              </q-badge>
-
-              <div class="price-tag" :class="{ 'price-tag--promo': hasPromotion(p) }">
-                <template v-if="hasPromotion(p) && p.precoPromocao">
-                  <div class="old-price">{{ money(p.preco) }}</div>
-                  <div class="promo-price">{{ money(p.precoPromocao) }}</div>
-                </template>
-                <template v-else>
-                  {{ money(p.precoEfetivo ?? p.preco) }}
-                </template>
-              </div>
-
-              <q-btn round dense glossy :color="isOutOfStock(p) ? 'grey-6' : 'green-14'" icon="add_shopping_cart"
-                class="cart-btn" :disable="isOutOfStock(p)" @click.stop="confirmAddToCart(p)">
-                <q-tooltip>
-                  {{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}
-                </q-tooltip>
-              </q-btn>
-            </div>
-
-            <q-card-section class="product-info">
-              <div class="product-title ellipsis-3-lines">{{ p.descricao }}</div>
-            </q-card-section>
-          </q-card>
-        </div>
-      </section>
-
       <section v-if="brandTopics.length" ref="brandsSectionEl" class="catalog-section">
-        <div class="section-heading">
-          <div>
-            <div class="section-kicker">Marcas encontradas</div>
-            <h2>Produtos por marca</h2>
+        <!-- <div class="section-heading">
+          <div class="row no-wrap">
+            <q-chip dense color="primary" text-color="secondary" icon="sell">
+              {{ brandTopics.length }} Marcas
+            </q-chip>
           </div>
 
-          <q-chip color="primary" text-color="secondary" icon="sell">
-            {{ brandTopics.length }} marca(s)
-          </q-chip>
-        </div>
+
+        </div> -->
 
         <div class="brand-topics">
           <article v-for="topic in brandTopics" :key="topic.key" class="brand-topic-card">
             <header class="brand-topic-header">
               <div class="brand-topic-title-wrap">
-                <q-avatar color="primary" text-color="secondary" size="46px" font-size="22px">
+                <q-avatar color="primary" text-color="secondary" size="38px" font-size="18px">
                   <q-icon name="sell" />
                 </q-avatar>
 
@@ -250,7 +165,7 @@
                 </div>
               </div>
 
-              <q-btn flat rounded color="primary" text-color="primary" icon-right="arrow_forward" label="Ver marca"
+              <q-btn flat rounded dense color="primary" icon-right="arrow_forward" label="Ver"
                 @click="applyBrandFilter({ label: topic.label, value: topic.key, marca: topic.label })" />
             </header>
 
@@ -258,9 +173,7 @@
               <q-card v-for="p in topic.products" :key="`brand-${topic.key}-${productKey(p)}`" flat bordered
                 class="catalog-product-card catalog-product-card--compact" @click="openDetails(p)">
                 <div class="product-image-wrap" :class="{ 'product-image-wrap--out-stock': isOutOfStock(p) }">
-                  <div v-if="isOutOfStock(p)" class="stock-watermark">
-                    Sem estoque
-                  </div>
+                  <div v-if="isOutOfStock(p)" class="stock-watermark">Sem estoque</div>
 
                   <q-badge v-if="isOutOfStock(p)" class="stock-badge" color="grey-10" text-color="white" icon="block">
                     Sem estoque
@@ -275,30 +188,32 @@
                     </template>
                   </q-img>
 
-                  <q-badge v-if="hasPromotion(p)" class="promo-badge" color="negative">
+                  <q-badge v-if="hasPromotion(p)" class="promo-badge" color="negative" text-color="white">
                     Oferta
                   </q-badge>
 
-                  <div class="price-tag" :class="{ 'price-tag--promo': hasPromotion(p) }">
-                    <template v-if="hasPromotion(p) && p.precoPromocao">
-                      <div class="old-price">{{ money(p.preco) }}</div>
-                      <div class="promo-price">{{ money(p.precoPromocao) }}</div>
-                    </template>
-                    <template v-else>
-                      {{ money(p.precoEfetivo ?? p.preco) }}
-                    </template>
-                  </div>
-
                   <q-btn round dense glossy :color="isOutOfStock(p) ? 'grey-6' : 'green-14'" icon="add_shopping_cart"
                     class="cart-btn" :disable="isOutOfStock(p)" @click.stop="confirmAddToCart(p)">
-                    <q-tooltip>
-                      {{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}
-                    </q-tooltip>
+                    <q-tooltip>{{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}</q-tooltip>
                   </q-btn>
                 </div>
 
                 <q-card-section class="product-info">
-                  <div class="product-title ellipsis-3-lines">{{ p.descricao }}</div>
+                  <div class="product-title ellipsis-2-lines">{{ p.descricao }}</div>
+
+                  <div class="product-footer">
+                    <q-badge v-if="p.marca" class="product-brand">{{ p.marca }}</q-badge>
+
+                    <div class="product-price" :class="{ 'product-price--promo': hasPromotion(p) }">
+                      <template v-if="hasPromotion(p) && p.precoPromocao">
+                        <span class="old-price">{{ money(p.preco) }}</span>
+                        <strong>{{ money(p.precoPromocao) }}</strong>
+                      </template>
+                      <template v-else>
+                        <strong>{{ money(p.precoEfetivo ?? p.preco) }}</strong>
+                      </template>
+                    </div>
+                  </div>
                 </q-card-section>
               </q-card>
             </div>
@@ -309,11 +224,10 @@
       <section ref="resultsSectionEl" class="catalog-section catalog-results-section">
         <div class="section-heading">
           <div>
-            <div class="section-kicker">Todos os resultados</div>
-            <h2>Catálogo completo</h2>
+            <h2>Produtos</h2>
           </div>
 
-          <q-chip color="primary" text-color="secondary" icon="inventory_2">
+          <q-chip dense color="primary" text-color="secondary" icon="inventory_2">
             {{ resultsCounterLabel }}
           </q-chip>
         </div>
@@ -323,11 +237,8 @@
         </div>
 
         <q-card v-else-if="!loading && items.length === 0" flat bordered class="empty-card">
-          <q-icon name="inventory_2" size="56px" color="primary" />
+          <q-icon name="inventory_2" size="48px" color="primary" />
           <div class="text-h6 text-weight-bold q-mt-md">Nenhum produto encontrado</div>
-          <div class="text-body2 text-grey-7 q-mt-xs">
-            Tente buscar por outro termo, mudar a marca ou limpar os filtros.
-          </div>
 
           <div class="row justify-center q-gutter-sm q-mt-md">
             <q-btn flat color="secondary" label="Limpar busca" @click="clearSearchOnly" />
@@ -339,9 +250,7 @@
           <q-card v-for="p in items" :key="`result-${productKey(p)}`" flat bordered class="catalog-product-card"
             @click="openDetails(p)">
             <div class="product-image-wrap" :class="{ 'product-image-wrap--out-stock': isOutOfStock(p) }">
-              <div v-if="isOutOfStock(p)" class="stock-watermark">
-                Sem estoque
-              </div>
+              <div v-if="isOutOfStock(p)" class="stock-watermark">Sem estoque</div>
 
               <q-badge v-if="isOutOfStock(p)" class="stock-badge" color="grey-10" text-color="white" icon="block">
                 Sem estoque
@@ -351,7 +260,7 @@
                 spinner-color="secondary">
                 <template #error>
                   <div class="absolute-full flex flex-center bg-white">
-                    <q-icon name="image_not_supported" size="42px" color="grey-5" />
+                    <q-icon name="image_not_supported" size="38px" color="grey-5" />
                   </div>
                 </template>
               </q-img>
@@ -361,48 +270,38 @@
                 Promoção
               </q-badge>
 
-              <q-badge v-if="p.marca" class="brand-badge">
-                {{ p.marca }}
-              </q-badge>
-
-              <div class="price-tag" :class="{ 'price-tag--promo': hasPromotion(p) }">
-                <template v-if="hasPromotion(p) && p.precoPromocao">
-                  <div class="old-price">{{ money(p.preco) }}</div>
-                  <div class="promo-price">{{ money(p.precoPromocao) }}</div>
-                </template>
-
-                <template v-else>
-                  {{ money(p.precoEfetivo ?? p.preco) }}
-                </template>
-              </div>
-
               <q-btn round dense glossy :color="isOutOfStock(p) ? 'grey-6' : 'green-14'" icon="add_shopping_cart"
                 class="cart-btn" :disable="isOutOfStock(p)" @click.stop="confirmAddToCart(p)">
-                <q-tooltip>
-                  {{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}
-                </q-tooltip>
+                <q-tooltip>{{ isOutOfStock(p) ? 'Produto sem estoque' : 'Adicionar ao carrinho' }}</q-tooltip>
               </q-btn>
             </div>
 
             <q-card-section class="product-info">
-              <div class="product-title ellipsis-3-lines">
-                {{ p.descricao }}
-              </div>
+              <div class="product-title ellipsis-2-lines">{{ p.descricao }}</div>
 
-              <div class="product-meta">
-                <span v-if="p.marca">{{ p.marca }}</span>
-                <span v-if="p.codProduto">#{{ p.codProduto }}</span>
+              <div class="product-footer">
+                <q-badge v-if="p.marca" class="product-brand">{{ p.marca }}</q-badge>
+
+                <div class="product-price" :class="{ 'product-price--promo': hasPromotion(p) }">
+                  <template v-if="hasPromotion(p) && p.precoPromocao">
+                    <span class="old-price">{{ money(p.preco) }}</span>
+                    <strong>{{ money(p.precoPromocao) }}</strong>
+                  </template>
+                  <template v-else>
+                    <strong>{{ money(p.precoEfetivo ?? p.preco) }}</strong>
+                  </template>
+                </div>
               </div>
             </q-card-section>
           </q-card>
         </div>
 
         <div class="pagination-feedback">
-          <q-spinner-dots v-if="loadingMore" size="38px" color="primary" />
+          <q-spinner-dots v-if="loadingMore" size="36px" color="primary" />
 
           <div v-else-if="!loading && isLastPage && items.length > 0" class="last-page-alert">
-            <q-icon name="done_all" size="22px" />
-            Você chegou ao final. {{ resultsCounterLabel }}.
+            <q-icon name="done_all" size="20px" />
+            Fim da lista
           </div>
 
           <q-btn v-else-if="!loading && !isLastPage && items.length > 0" outline rounded color="primary"
@@ -411,13 +310,36 @@
       </section>
     </main>
 
+    <transition name="bottom-promo">
+      <aside v-if="bottomPromoProducts.length && !barcodeDialog" class="bottom-promo-bar">
+        <div class="bottom-promo-shell">
+          <div class="bottom-promo-label">
+            <q-icon name="local_offer" />
+            <span>Promoções</span>
+          </div>
+
+          <div class="bottom-promo-list">
+            <div v-for="p in bottomPromoProducts" :key="`bottom-promo-${productKey(p)}`" class="bottom-promo-item"
+              role="button" tabindex="0" @click="openDetails(p)" @keyup.enter="openDetails(p)">
+              <q-img :src="resolveImage(p)" :alt="p.descricao" fit="contain" class="bottom-promo-img" />
+
+              <div class="bottom-promo-info">
+                <span>{{ p.descricao }}</span>
+                <strong>{{ money(getFinalPrice(p)) }}</strong>
+              </div>
+
+              <q-btn flat dense round color="green-14" icon="add_shopping_cart" :disable="isOutOfStock(p)"
+                @click.stop="confirmAddToCart(p)" />
+            </div>
+          </div>
+        </div>
+      </aside>
+    </transition>
+
     <q-dialog v-model="filtersDialog" :position="isMobile ? 'bottom' : 'standard'">
       <q-card class="filters-modal-card">
         <q-card-section class="filters-modal-header">
-          <div>
-            <div class="text-h6 text-weight-bold">Ajustar filtros</div>
-          </div>
-
+          <div class="text-h6 text-weight-bold">Filtros</div>
           <q-btn flat round dense icon="close" v-close-popup />
         </q-card-section>
 
@@ -425,13 +347,17 @@
 
         <q-card-section class="q-gutter-md">
           <q-select v-model="modalOrderBy" :options="orderOptions" emit-value map-options outlined dense
-            color="secondary" label="Ordenar" />
+            color="secondary" label="Ordenar" >
+            <template #prepend>
+              <q-icon name="sort" color="secondary" />
+            </template>
+          </q-select>
 
           <q-toggle v-model="modalFilters.isPromotion" color="negative" checked-icon="local_offer" unchecked-icon="sell"
-            label="Mostrar somente produtos em promoção" />
+            label="Somente promoção" />
 
           <q-input v-model="modalFilters.codBarras" outlined dense clearable color="secondary" label="Código de barras"
-            placeholder="Leia ou digite o código" inputmode="numeric">
+            inputmode="numeric">
             <template #prepend>
               <q-icon name="qr_code_scanner" color="secondary" />
             </template>
@@ -445,55 +371,37 @@
 
           <q-select v-model="modalSelectedBrand" :options="modalBrandOptions" option-label="label" option-value="value"
             use-input fill-input hide-selected input-debounce="350" outlined dense clearable color="secondary"
-            label="Marca" hint="Digite para buscar marcas ou escolha uma sugestão" :loading="modalBrandLoading"
-            behavior="menu" @filter="onModalBrandFilter" @clear="clearModalBrand"
-            @update:model-value="onModalBrandChanged">
+            label="Marca" :loading="modalBrandLoading" behavior="menu" @filter="onModalBrandFilter"
+            @clear="clearModalBrand" @update:model-value="onModalBrandChanged">
             <template #prepend>
               <q-icon name="sell" color="secondary" />
             </template>
 
             <template #no-option>
               <q-item>
-                <q-item-section class="text-grey-7">
-                  Digite pelo menos 2 letras ou escolha uma sugestão.
-                </q-item-section>
+                <q-item-section class="text-grey-7">Digite pelo menos 2 letras.</q-item-section>
               </q-item>
             </template>
           </q-select>
 
-          <div class="col-12 col-sm-6">
-            <q-input v-model="modalFilters.precoMin" outlined dense color="secondary" label="Preço mínimo"
-              inputmode="decimal" placeholder="0,00">
-              <template #prepend>
-                <q-icon name="payments" color="secondary" />
-              </template>
-            </q-input>
-          </div>
+          <!-- <div class="row q-col-gutter-md">
+            <div class="col-12 col-sm-6">
+              <q-input v-model="modalFilters.precoMin" outlined dense color="secondary" label="Preço mínimo"
+                inputmode="decimal">
+                <template #prepend>
+                  <q-icon name="payments" color="secondary" />
+                </template>
+              </q-input>
+            </div>
 
-          <div class="col-12 col-sm-6">
-            <q-input v-model="modalFilters.precoMax" outlined dense color="secondary" label="Preço máximo"
-              inputmode="decimal" placeholder="999,99">
-              <template #prepend>
-                <q-icon name="attach_money" color="secondary" />
-              </template>
-            </q-input>
-          </div>
-
-          <!-- <div class="col-12 col-sm-6">
-            <q-input
-              v-model="modalFilters.estoque"
-              outlined
-              dense
-              color="secondary"
-              label="Quantidade em estoque"
-              inputmode="numeric"
-              placeholder="Ex.: 1, 5, 10"
-              hint="Busca produtos com a quantidade informada no estoque."
-            >
-              <template #prepend>
-                <q-icon name="inventory" color="secondary" />
-              </template>
-            </q-input>
+            <div class="col-12 col-sm-6">
+              <q-input v-model="modalFilters.precoMax" outlined dense color="secondary" label="Preço máximo"
+                inputmode="decimal">
+                <template #prepend>
+                  <q-icon name="attach_money" color="secondary" />
+                </template>
+              </q-input>
+            </div>
           </div> -->
         </q-card-section>
 
@@ -513,9 +421,7 @@
         <q-card-section class="barcode-modal-header">
           <div>
             <div class="text-h6 text-weight-bold">Leitor de código</div>
-            <div class="text-caption">
-              Use a câmera ou insira manualmente o código do produto.
-            </div>
+            <div class="text-caption">Use a câmera ou digite o código.</div>
           </div>
 
           <q-btn flat round dense icon="close" @click="closeBarcodeScanner" />
@@ -527,8 +433,7 @@
           <div class="barcode-action-row">
             <q-btn unelevated color="secondary" text-color="white" icon="photo_camera" label="Iniciar câmera"
               :loading="barcodeCameraLoading" @click="startBarcodeScanner" />
-
-            <q-btn outline color="secondary" icon="edit" label="Inserir manualmente" @click="focusManualBarcodeInput" />
+            <q-btn outline color="secondary" icon="edit" label="Digitar" @click="focusManualBarcodeInput" />
           </div>
 
           <div class="barcode-video-wrap q-mt-md">
@@ -540,19 +445,12 @@
 
             <div v-if="!barcodeScanning && !barcodeCameraLoading" class="barcode-start-overlay">
               <q-icon name="qr_code_scanner" size="44px" color="primary" />
-
-              <div class="text-weight-bold q-mt-sm">
-                Toque em “Iniciar câmera”
-              </div>
-
-              <div class="text-caption q-mt-xs">
-                Funciona melhor apontando para o código com boa iluminação.
-              </div>
+              <div class="text-weight-bold q-mt-sm">Inicie a câmera</div>
             </div>
 
             <div v-if="barcodeCameraLoading || barcodeScanning" class="barcode-status">
               <q-spinner-dots color="primary" size="28px" />
-              {{ barcodeCameraLoading ? 'Abrindo câmera...' : 'Procurando código...' }}
+              {{ barcodeCameraLoading ? 'Abrindo...' : 'Procurando...' }}
             </div>
           </div>
 
@@ -565,8 +463,7 @@
           </q-banner>
 
           <q-input ref="manualBarcodeInputRef" v-model="manualBarcode" class="q-mt-md manual-barcode-input" outlined
-            dense clearable color="secondary" label="Inserir manualmente" placeholder="Digite ou cole o código"
-            inputmode="numeric" @keyup.enter="applyManualBarcode">
+            dense clearable color="secondary" label="Código" inputmode="numeric" @keyup.enter="applyManualBarcode">
             <template #prepend>
               <q-icon name="keyboard" color="secondary" />
             </template>
@@ -581,13 +478,10 @@
 
         <q-card-actions class="barcode-modal-actions">
           <q-btn flat color="grey-7" label="Cancelar" @click="closeBarcodeScanner" />
-
-          <q-btn unelevated color="secondary" icon="search" :label="isMobile ? 'Buscar' : 'Buscar código digitado'"
-            @click="applyManualBarcode" />
+          <q-btn unelevated color="secondary" icon="search" label="Buscar" @click="applyManualBarcode" />
         </q-card-actions>
       </q-card>
     </q-dialog>
-
   </q-page>
 </template>
 
@@ -761,6 +655,10 @@ const showcaseProducts = computed(() => {
   return sortProductsForShowcase(Array.from(map.values())).slice(0, PROMO_LIMIT)
 })
 
+const bottomPromoProducts = computed(() => {
+  return showcaseProducts.value.slice(0, isMobile.value ? 4 : 6)
+})
+
 const brandTopics = computed(() => {
   const grouped = new Map()
 
@@ -827,15 +725,11 @@ const modalSuggestedBrands = computed(() => {
 const visibleNavSections = computed(() => {
   const sections = []
 
-  if (showcaseProducts.value.length) {
-    sections.push({ key: 'promos', label: 'Promoções', icon: 'local_offer' })
-  }
-
   if (brandTopics.value.length) {
     sections.push({ key: 'brands', label: 'Marcas', icon: 'sell' })
   }
 
-  sections.push({ key: 'results', label: 'Todos', icon: 'inventory_2' })
+  sections.push({ key: 'results', label: 'Produtos', icon: 'inventory_2' })
 
   return sections
 })
@@ -2177,111 +2071,80 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .catalog-page {
-  --en-yellow: #F7D102;
-  --en-blue: #01205F;
-  --en-blue-dark: #03122F;
+  --en-yellow: #f7d102;
+  --en-blue: #01205f;
+  --en-blue-dark: #03122f;
   --en-white: #ffffff;
-  --en-muted: rgba(255, 255, 255, 0.72);
-
   --catalog-layout-header-height: 132px;
-  --catalog-sticky-top: calc(var(--catalog-layout-header-height) + env(safe-area-inset-top) + 18px);
+  --catalog-sticky-top: calc(var(--catalog-layout-header-height) + env(safe-area-inset-top) + 12px);
 
   min-height: 100vh;
-  padding: calc(var(--catalog-layout-header-height) + 18px) 18px 88px;
+  padding: calc(var(--catalog-layout-header-height) + 14px) 16px calc(116px + env(safe-area-inset-bottom));
   color: var(--en-white);
   background:
-    linear-gradient(135deg, var(--en-blue-dark) 30%, var(--en-blue) 40%);
+    radial-gradient(circle at top right, rgba(0, 22, 95, 0.12), transparent 36%),
+    linear-gradient(135deg, var(--en-blue-dark) 0%, var(--en-blue) 100%);
+  font-family: Inter, Roboto, Arial, sans-serif;
 }
 
-.catalog-shell {
-  width: min(100%, 1540px);
-  margin: 0 auto;
+.catalog-shell,
+.catalog-sticky-header {
+  width: min(100%, 1500px);
+  margin-inline: auto;
 }
 
 .catalog-sticky-header {
   position: sticky;
   top: var(--catalog-sticky-top);
   z-index: 90;
-  width: min(100%, 1540px);
-  margin: 0 auto 18px;
-  padding: 12px 16px;
-  border: 1px solid rgba(247, 209, 2, 0.24);
-  border-radius: 8px;
-  border-top: 0;
-  background:
-    linear-gradient(135deg, rgba(2, 30, 88, 0.94) 0%, rgba(3, 18, 46, 0.98) 100%);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.28);
+  margin-bottom: 14px;
+  padding: 10px;
+  border: 1px solid rgba(247, 209, 2, 0.18);
+  border-radius: 18px;
+  background: rgba(3, 18, 47, 0.86);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
 }
 
-.sticky-main-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.sticky-title-wrap {
-  min-width: 0;
-}
-
-.sticky-breadcrumbs {
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 12px;
-}
-
-.sticky-breadcrumbs :deep(.q-breadcrumbs__el),
-.sticky-breadcrumbs :deep(.q-icon) {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.sticky-title {
-  color: var(--en-yellow);
-  font-size: clamp(17px, 2vw, 24px);
-  font-weight: 900;
-  letter-spacing: -0.03em;
-}
-
-.sticky-subtitle {
-  color: var(--en-muted);
-  font-size: 12px;
+.sticky-main-row,
+.sticky-actions {
+  width: 100%;
 }
 
 .sticky-actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  width: 100%;
+  justify-content: center;
+  gap: 8px;
   min-width: 0;
 }
 
 .sticky-search {
-  flex: 1 1 520px;
-  width: min(720px, 52vw);
-  min-width: 260px;
+  flex: 0 1 640px;
+  width: min(640px, 58vw);
+  min-width: 280px;
+}
+
+.sticky-search :deep(.q-field__control) {
+  min-height: 42px;
+  border-radius: 14px;
 }
 
 .sticky-filter-btn {
-  color: var(--en-blue-dark);
+  min-height: 42px;
+  border-radius: 14px;
   background: var(--en-yellow);
-  font-weight: 900;
-  border-radius: 999px;
-  min-height: 40px;
-  flex: 0 0 auto;
-  box-shadow: 0 10px 26px rgba(247, 209, 2, 0.22);
+  font-weight: 800;
+  box-shadow: none;
 }
 
 .sticky-section-tabs {
   display: flex;
-  align-items: center;
+  justify-content: center;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 8px;
   overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 2px;
   scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
 }
 
 .sticky-section-tabs::-webkit-scrollbar {
@@ -2289,349 +2152,231 @@ onBeforeUnmount(() => {
 }
 
 .section-tab {
-  color: rgba(255, 255, 255, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  min-width: max-content;
+  color: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 700;
 }
 
 .section-tab--active {
   color: var(--en-blue-dark);
   background: var(--en-yellow);
   border-color: var(--en-yellow);
-  font-weight: 900;
 }
 
 .catalog-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
-  gap: 22px;
-  align-items: stretch;
-  padding: clamp(22px, 4vw, 46px);
-  border-radius: 34px;
-  border: 1px solid rgba(247, 209, 2, 0.18);
-  background:
-    linear-gradient(135deg, rgba(247, 209, 2, 0.97) 0%, rgba(247, 209, 2, 0.92) 36%, transparent 36%),
-    radial-gradient(circle at top right, rgba(247, 209, 2, 0.22), transparent 34%),
-    linear-gradient(135deg, rgba(2, 30, 88, 0.96) 0%, rgba(3, 18, 46, 0.98) 100%);
-  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
-  overflow: hidden;
+  grid-template-columns: minmax(220px, 0.45fr) minmax(420px, 0.55fr);
+  gap: 18px;
+  align-items: center;
+  padding: 24px;
+  border: 1px solid rgba(247, 209, 2, 0.14);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
 }
 
-.hero-copy {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  min-height: 320px;
-}
-
-.hero-kicker {
-  display: inline-flex;
-  width: fit-content;
-  padding: 8px 12px;
-  border-radius: 999px;
-  color: var(--en-yellow);
-  background: rgba(3, 18, 46, 0.88);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 12px;
+.hero-copy h1,
+.section-heading h2,
+.brand-topic-title-wrap h3 {
+  margin: 0;
+  letter-spacing: -0.045em;
+  line-height: 1;
 }
 
 .hero-copy h1 {
-  margin: 18px 0 12px;
-  max-width: 820px;
   color: var(--en-white);
-  font-size: clamp(36px, 5.4vw, 76px);
-  line-height: 0.93;
+  font-size: clamp(42px, 5vw, 74px);
   font-weight: 950;
-  letter-spacing: -0.07em;
-}
-
-.hero-copy p {
-  max-width: 630px;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: clamp(15px, 1.6vw, 19px);
-  line-height: 1.5;
-}
-
-.hero-metrics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.hero-metrics div {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: 16px;
-  color: var(--en-white);
-  background: rgba(3, 18, 46, 0.72);
-  border: 1px solid rgba(247, 209, 2, 0.18);
-  font-weight: 800;
-}
-
-.hero-metrics .q-icon {
-  color: var(--en-yellow);
-  font-size: 20px;
 }
 
 .hero-search-card {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-self: center;
-  flex-direction: column;
-  gap: 14px;
-  padding: clamp(18px, 2.3vw, 28px);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.96);
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 22px;
   color: var(--en-blue-dark);
-  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.96);
 }
 
-.hero-search-title {
-  color: var(--en-blue-dark);
-  font-size: 22px;
-  font-weight: 950;
-  letter-spacing: -0.04em;
+.hero-search-card :deep(.q-field__control) {
+  border-radius: 16px;
 }
 
 .quick-filter-row,
-.active-filters-row,
-.modal-brand-chips {
+.active-filters-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7px;
+}
+
+.quick-filter-row {
+  max-height: 76px;
+  overflow: hidden;
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .active-filters-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  margin-top: 18px;
-  padding: 14px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.09);
-  border: 1px solid rgba(247, 209, 2, 0.14);
-}
-
-.active-filters-title {
-  color: var(--en-yellow);
-  font-weight: 900;
-  white-space: nowrap;
+  margin-top: 14px;
+  padding: 10px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(247, 209, 2, 0.12);
 }
 
 .catalog-section {
-  margin-top: 30px;
-  scroll-margin-top: calc(var(--catalog-sticky-top) + 128px);
+  margin-top: 24px;
+  scroll-margin-top: calc(var(--catalog-sticky-top) + 110px);
 }
 
 .section-heading {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  align-items: flex-end;
-  margin-bottom: 16px;
-}
-
-.section-kicker {
-  color: var(--en-yellow);
-  font-size: 12px;
-  font-weight: 950;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.section-kicker--promo {
-  color: #ffdd3b;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .section-heading h2 {
-  margin: 4px 0 6px;
   color: var(--en-white);
-  font-size: clamp(26px, 3vw, 44px);
-  line-height: 1;
+  font-size: clamp(24px, 2.7vw, 38px);
   font-weight: 950;
-  letter-spacing: -0.05em;
-}
-
-.section-heading p {
-  margin: 0;
-  max-width: 720px;
-  color: rgba(255, 255, 255, 0.72);
-  line-height: 1.5;
-}
-
-.promo-rail {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(220px, 285px);
-  gap: 14px;
-  overflow-x: auto;
-  padding: 2px 2px 12px;
-  scroll-snap-type: x proximity;
-}
-
-.promo-rail .catalog-product-card {
-  scroll-snap-align: start;
 }
 
 .brand-topics {
   display: grid;
-  gap: 18px;
+  gap: 16px;
 }
 
 .brand-topic-card {
-  padding: 16px;
-  border-radius: 28px;
-  border: 1px solid rgba(247, 209, 2, 0.18);
-  background:
-    radial-gradient(circle at top right, rgba(247, 209, 2, 0.1), transparent 35%),
-    rgba(255, 255, 255, 0.06);
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(247, 209, 2, 0.14);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .brand-topic-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 14px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .brand-topic-title-wrap {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  min-width: 0;
 }
 
 .brand-topic-title-wrap h3 {
-  margin: 0;
   color: var(--en-white);
-  font-size: clamp(19px, 2vw, 26px);
-  font-weight: 950;
-  letter-spacing: -0.04em;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 900;
 }
 
 .brand-topic-meta {
-  color: rgba(255, 255, 255, 0.66);
-  font-size: 13px;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+  font-weight: 600;
 }
 
+.catalog-grid,
 .brand-products-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(170px, 1fr));
   gap: 14px;
 }
 
 .catalog-grid {
-  display: grid;
   grid-template-columns: repeat(5, minmax(178px, 1fr));
-  gap: 15px;
+}
+
+.brand-products-grid {
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
 }
 
 .catalog-product-card {
   overflow: hidden;
-  border-radius: 22px;
-  border-color: rgba(247, 209, 2, 0.22);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.94) 100%);
+  border-radius: 18px;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #ffffff;
   cursor: pointer;
   transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
 }
 
 .catalog-product-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: var(--en-yellow);
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
-}
-
-.catalog-product-card--promo {
-  border-color: rgba(255, 70, 70, 0.46);
-}
-
-.catalog-product-card--compact .product-img,
-.catalog-product-card--compact .product-image-wrap {
-  min-height: 168px;
-  height: 168px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
 }
 
 .product-image-wrap {
   position: relative;
-  height: 198px;
-  min-height: 198px;
-  background:
-    radial-gradient(circle at center, rgba(247, 209, 2, 0.08), transparent 52%),
-    #ffffff;
-}
-
-.product-img {
-  height: 198px;
+  height: 188px;
+  min-height: 188px;
   background: #ffffff;
 }
 
+.product-img {
+  height: 188px;
+  background: #ffffff;
+}
+
+.catalog-product-card--compact .product-image-wrap,
+.catalog-product-card--compact .product-img {
+  height: 158px;
+  min-height: 158px;
+}
+
 .product-img :deep(img),
-.product-img :deep(.q-img__image) {
+.product-img :deep(.q-img__image),
+.bottom-promo-img :deep(img),
+.bottom-promo-img :deep(.q-img__image) {
   object-fit: contain;
   object-position: center;
 }
 
-.promo-badge {
+.promo-badge,
+.stock-badge {
   position: absolute;
-  left: 10px;
-  bottom: 44px;
-  z-index: 3;
-  font-weight: 900;
+  z-index: 5;
   border-radius: 999px;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+  font-weight: 800;
 }
 
-.brand-badge {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-  z-index: 3;
-  max-width: calc(100% - 70px);
-  color: var(--en-blue-dark);
-  background: var(--en-yellow);
-  font-weight: 950;
-  border-radius: 999px;
+.promo-badge {
+  top: 9px;
+  left: 9px;
 }
 
 .stock-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 5;
-  max-width: calc(100% - 112px);
-  border-radius: 999px;
-  font-weight: 950;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+  top: 9px;
+  right: 9px;
 }
 
-.stock-badge--available {
-  background: #14964f !important;
+.cart-btn {
+  position: absolute;
+  right: 9px;
+  bottom: 9px;
+  z-index: 5;
 }
 
 .stock-watermark {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 4;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(3, 18, 46, 0.12);
-  font-size: clamp(28px, 5vw, 48px);
+  color: rgba(3, 18, 46, 0.16);
+  font-size: clamp(26px, 4vw, 44px);
   font-weight: 950;
   letter-spacing: -0.05em;
   text-transform: uppercase;
@@ -2639,235 +2384,215 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
-.price-tag {
+.product-image-wrap--out-stock .product-img {
+  filter: grayscale(100%);
+  opacity: 0.46;
+}
+
+.product-image-wrap--out-stock::after {
+  content: '';
   position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 3;
-  padding: 8px 10px;
-  border-radius: 14px;
-  color: #ffffff;
-  background: rgba(3, 18, 46, 0.94);
-  font-size: 13px;
-  font-weight: 950;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
-}
-
-.price-tag--promo {
-  background: rgba(0, 145, 76, 0.96);
-}
-
-.old-price {
-  color: rgba(255, 255, 255, 0.72);
-  text-decoration: line-through;
-  font-size: 11px;
-  line-height: 1;
-}
-
-.promo-price {
-  color: #ffffff;
-  font-size: 15px;
-  line-height: 1.15;
-}
-
-.cart-btn {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  z-index: 4;
+  inset: 0;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.34);
+  pointer-events: none;
 }
 
 .product-info {
   min-height: 104px;
-  background:
-    linear-gradient(135deg, rgba(2, 30, 88, 0.98) 0%, rgba(3, 18, 46, 0.98) 100%);
-  color: #ffffff;
+  padding: 12px;
+  color: var(--en-blue-dark);
+  background: #ffffff;
+  border-top: 1px solid #eef1f6;
 }
 
 .product-title {
-  min-height: 54px;
+  min-height: 38px;
+  color: var(--en-blue-dark);
   font-size: 13px;
-  line-height: 1.35;
+  line-height: 1.28;
   font-weight: 800;
 }
 
-.product-meta {
+.product-footer {
   display: flex;
-  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 8px;
-  margin-top: 8px;
-  color: rgba(247, 209, 2, 0.92);
-  font-size: 12px;
-  font-weight: 800;
+  margin-top: 10px;
+}
+
+.product-brand {
+  max-width: 50%;
+  color: var(--en-blue-dark);
+  background: rgb(255, 217, 0);
+  font-weight: 850;
+}
+
+.product-price {
+  margin-left: auto;
+  text-align: right;
+  color: var(--en-blue-dark);
+  white-space: nowrap;
+}
+
+.product-price strong {
+  display: block;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 950;
+}
+
+.product-price--promo strong {
+  color: #09924d;
+}
+
+.old-price {
+  display: block;
+  color: #7b8794;
+  text-decoration: line-through;
+  font-size: 11px;
+  line-height: 1.1;
 }
 
 .card-skeleton {
-  min-height: 302px;
-  border-radius: 22px;
+  min-height: 292px;
+  border-radius: 18px;
 }
 
 .empty-card {
-  padding: 36px 20px;
-  border-radius: 28px;
+  padding: 34px 18px;
+  border-radius: 22px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.96);
   color: var(--en-blue-dark);
+  background: #ffffff;
 }
 
 .pagination-feedback {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 86px;
-  padding: 24px 0 8px;
+  min-height: 78px;
+  padding: 22px 0 6px;
 }
 
 .last-page-alert {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.76);
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(247, 209, 2, 0.16);
-  font-weight: 800;
+  border: 1px solid rgba(247, 209, 2, 0.14);
+  font-weight: 700;
 }
 
-.filters-modal-card {
-  width: min(94vw, 660px);
-  border-radius: 24px;
-  overflow: hidden;
-}
-
-.filters-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--en-blue-dark);
-  background: var(--en-yellow);
-}
-
-.barcode-modal-card {
-  width: min(94vw, 560px);
-  border-radius: 24px;
-  overflow: hidden;
-}
-
-.barcode-modal-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-  color: var(--en-blue-dark);
-  background: var(--en-yellow);
-}
-
-.barcode-video-wrap {
-  position: relative;
-  min-height: 320px;
-  overflow: hidden;
-  border-radius: 20px;
-  background: #03122e;
-}
-
-.barcode-video {
-  width: 100%;
-  height: 320px;
-  display: block;
-  object-fit: cover;
-}
-
-.barcode-frame {
-  position: absolute;
-  inset: 42px 28px;
-  border: 2px solid rgba(247, 209, 2, 0.92);
-  border-radius: 20px;
-  box-shadow:
-    0 0 0 999px rgba(0, 0, 0, 0.32),
-    0 0 26px rgba(247, 209, 2, 0.28);
+.bottom-promo-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 120;
+  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
   pointer-events: none;
 }
 
-.barcode-frame-line {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  top: 50%;
-  height: 2px;
-  background: var(--en-yellow);
-  box-shadow: 0 0 14px rgba(247, 209, 2, 0.9);
+.bottom-promo-shell {
+  width: min(100%, 1500px);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid rgba(247, 209, 2, 0.24);
+  border-radius: 20px;
+  background: rgba(3, 18, 47, 0.93);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.24);
+  pointer-events: auto;
 }
 
-.barcode-status {
-  position: absolute;
-  left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
+.bottom-promo-label {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 0 10px;
+  color: var(--en-yellow);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.bottom-promo-list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 1fr);
   gap: 8px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  color: #ffffff;
-  background: rgba(3, 18, 46, 0.78);
-  font-weight: 800;
-  backdrop-filter: blur(8px);
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-.barcode-status--idle {
-  color: rgba(255, 255, 255, 0.82);
-  background: rgba(3, 18, 46, 0.64);
+.bottom-promo-list::-webkit-scrollbar {
+  display: none;
 }
 
-.barcode-frame-line {
-  animation: barcode-scan-line 1.35s ease-in-out infinite;
+.bottom-promo-item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 64px;
+  padding: 6px;
+  border-radius: 14px;
+  color: var(--en-blue-dark);
+  background: #ffffff;
+  cursor: pointer;
 }
 
-@keyframes barcode-scan-line {
-  0% {
-    transform: translateY(-105px);
-  }
-
-  50% {
-    transform: translateY(105px);
-  }
-
-  100% {
-    transform: translateY(-105px);
-  }
+.bottom-promo-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #ffffff;
 }
 
-@media (max-width: 600px) {
-  .barcode-modal-card {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-  }
-
-  .barcode-video-wrap {
-    min-height: 54vh;
-  }
-
-  .barcode-video {
-    height: 54vh;
-  }
-
-  .barcode-frame {
-    inset: 80px 24px;
-  }
+.bottom-promo-info {
+  min-width: 0;
 }
 
-.ellipsis-3-lines {
-  display: -webkit-box;
+.bottom-promo-info span {
+  display: block;
   overflow: hidden;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  color: var(--en-blue-dark);
+  font-size: 11px;
+  line-height: 1.15;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+.bottom-promo-info strong {
+  display: block;
+  margin-top: 3px;
+  color: #09924d;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 950;
+}
+
+.bottom-promo-enter-active,
+.bottom-promo-leave-active,
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.18s ease;
+}
+
+.bottom-promo-enter-from,
+.bottom-promo-leave-to {
+  opacity: 0;
+  transform: translateY(12px);
 }
 
 .fade-slide-enter-from,
@@ -2876,216 +2601,27 @@ onBeforeUnmount(() => {
   transform: translateY(-4px);
 }
 
-@media (max-width: 1450px) {
-  .catalog-grid {
-    grid-template-columns: repeat(4, minmax(178px, 1fr));
-  }
-
-  .brand-products-grid {
-    grid-template-columns: repeat(4, minmax(155px, 1fr));
-  }
-}
-
-@media (max-width: 1180px) {
-  .catalog-page {
-    --catalog-layout-header-height: 126px;
-  }
-
-  .catalog-hero {
-    grid-template-columns: 1fr;
-  }
-
-  .sticky-search {
-    width: min(620px, 58vw);
-  }
-
-  .catalog-grid {
-    grid-template-columns: repeat(3, minmax(170px, 1fr));
-  }
-
-  .brand-products-grid {
-    grid-template-columns: repeat(3, minmax(155px, 1fr));
-  }
-}
-
-@media (max-width: 860px) {
-  .catalog-page {
-    --catalog-layout-header-height: 112px;
-    padding: calc(var(--catalog-layout-header-height) + 10px) 12px 86px;
-  }
-
-  .catalog-sticky-header {
-    margin-bottom: 14px;
-    padding: 10px;
-    border-top: 1px solid rgba(247, 209, 2, 0.24);
-  }
-
-  .sticky-main-row {
-    align-items: stretch;
-  }
-
-  .sticky-actions {
-    justify-content: stretch;
-    gap: 8px;
-  }
-
-  .sticky-breadcrumbs,
-  .sticky-subtitle {
-    display: none;
-  }
-
-  .sticky-title {
-    font-size: 17px;
-  }
-
-  .sticky-search {
-    flex: 1 1 auto;
-    width: 100%;
-    min-width: 0;
-  }
-
-  .sticky-filter-btn {
-    width: 44px;
-    min-width: 44px;
-    padding: 0;
-    border-radius: 14px;
-  }
-
-  .sticky-section-tabs {
-    gap: 6px;
-    margin-top: 8px;
-    padding-bottom: 0;
-  }
-
-  .section-tab {
-    min-width: max-content;
-    padding: 0 10px;
-    font-size: 12px;
-  }
-
-  .catalog-hero {
-    padding: 20px;
-    border-radius: 26px;
-    background:
-      radial-gradient(circle at top right, rgba(247, 209, 2, 0.18), transparent 40%),
-      linear-gradient(135deg, rgba(2, 30, 88, 0.98) 0%, rgba(3, 18, 46, 0.99) 100%);
-  }
-
-  .hero-copy {
-    min-height: 0;
-  }
-
-  .hero-copy h1 {
-    font-size: clamp(34px, 10vw, 56px);
-  }
-
-  .active-filters-card {
-    align-items: flex-start;
-    flex-direction: column;
-    margin-top: 12px;
-  }
-
-  .active-filters-row {
-    width: 100%;
-    max-height: 96px;
-    overflow-y: auto;
-    padding-right: 2px;
-  }
-
-  .section-heading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .brand-topic-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .catalog-grid,
-  .brand-products-grid {
-    grid-template-columns: repeat(2, minmax(145px, 1fr));
-    gap: 12px;
-  }
-
-  .product-image-wrap,
-  .product-img {
-    height: 170px;
-    min-height: 170px;
-  }
-
-  .product-info {
-    min-height: 112px;
-  }
-
-  .promo-rail {
-    grid-auto-columns: minmax(210px, 72vw);
-  }
-}
-
-@media (max-width: 460px) {
-  .catalog-page {
-    --catalog-layout-header-height: 108px;
-    padding: calc(var(--catalog-layout-header-height) + 8px) 8px 86px;
-  }
-
-  .catalog-sticky-header {
-    padding: 8px;
-    margin-bottom: 12px;
-  }
-
-  .sticky-actions {
-    gap: 6px;
-  }
-
-  .sticky-search {
-    width: 100%;
-  }
-
-  .sticky-search :deep(.q-field__control) {
-    min-height: 42px;
-    height: 42px;
-  }
-
-  .sticky-search :deep(.q-field__prepend),
-  .sticky-search :deep(.q-field__append) {
-    height: 42px;
-  }
-
-  .sticky-search :deep(input) {
-    font-size: 13px;
-  }
-
-  .section-tab {
-    font-size: 12px;
-  }
-
-  .hero-actions .q-btn {
-    width: 100%;
-  }
-
-  .catalog-grid,
-  .brand-products-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .catalog-product-card {
-    border-radius: 18px;
-  }
-
-  .product-title {
-    font-size: 12px;
-  }
-}
-
-/* Ajustes finais: ZXing scanner, mobile seguro e estoque positivo oculto */
+.filters-modal-card,
 .barcode-modal-card {
-  width: min(94vw, 560px);
+  width: min(94vw, 620px);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.filters-modal-header,
+.barcode-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  color: var(--en-blue-dark);
+  background: var(--en-yellow);
+}
+
+.barcode-modal-card {
   max-height: min(92vh, 760px);
   display: flex;
   flex-direction: column;
-  border-radius: 24px;
-  overflow: hidden;
 }
 
 .barcode-modal-body {
@@ -3105,6 +2641,53 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
+.barcode-video-wrap {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #03122e;
+}
+
+.barcode-video {
+  width: 100%;
+  height: 320px;
+  display: block;
+  object-fit: cover;
+}
+
+.barcode-frame {
+  position: absolute;
+  inset: 42px 28px;
+  border: 2px solid rgba(247, 209, 2, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.32), 0 0 26px rgba(247, 209, 2, 0.28);
+  pointer-events: none;
+}
+
+.barcode-frame-line {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 50%;
+  height: 2px;
+  background: var(--en-yellow);
+  box-shadow: 0 0 14px rgba(247, 209, 2, 0.9);
+  animation: barcode-scan-line 1.35s ease-in-out infinite;
+}
+
+@keyframes barcode-scan-line {
+
+  0%,
+  100% {
+    transform: translateY(-105px);
+  }
+
+  50% {
+    transform: translateY(105px);
+  }
+}
+
 .barcode-start-overlay {
   position: absolute;
   inset: 0;
@@ -3116,10 +2699,24 @@ onBeforeUnmount(() => {
   padding: 24px;
   text-align: center;
   color: #ffffff;
-  background:
-    radial-gradient(circle at center, rgba(247, 209, 2, 0.1), transparent 42%),
-    rgba(3, 18, 46, 0.76);
+  background: rgba(3, 18, 46, 0.76);
   backdrop-filter: blur(2px);
+}
+
+.barcode-status {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: rgba(3, 18, 46, 0.78);
+  font-weight: 800;
+  backdrop-filter: blur(8px);
 }
 
 .barcode-modal-actions {
@@ -3131,11 +2728,177 @@ onBeforeUnmount(() => {
   background: #ffffff;
 }
 
-.manual-barcode-input {
-  scroll-margin-bottom: 120px;
+.ellipsis-2-lines {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1450px) {
+  .catalog-grid {
+    grid-template-columns: repeat(4, minmax(178px, 1fr));
+  }
+
+  .brand-products-grid {
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 1180px) {
+  .catalog-page {
+    --catalog-layout-header-height: 126px;
+  }
+
+  .catalog-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(3, minmax(170px, 1fr));
+  }
+
+  .brand-products-grid {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .catalog-page {
+    --catalog-layout-header-height: 112px;
+    padding: calc(var(--catalog-layout-header-height) + 10px) 10px calc(116px + env(safe-area-inset-bottom));
+  }
+
+  .catalog-sticky-header {
+    padding: 8px;
+    border-radius: 16px;
+  }
+
+  .sticky-actions {
+    justify-content: stretch;
+  }
+
+  .sticky-search {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sticky-filter-btn {
+    width: 42px;
+    min-width: 42px;
+    padding: 0;
+  }
+
+  .sticky-section-tabs {
+    justify-content: flex-start;
+  }
+
+  .section-heading,
+  .brand-topic-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .catalog-grid,
+  .brand-products-grid {
+    grid-template-columns: repeat(2, minmax(145px, 1fr));
+    gap: 10px;
+  }
+
+  .product-image-wrap,
+  .product-img {
+    height: 160px;
+    min-height: 160px;
+  }
+
+  .catalog-product-card--compact .product-image-wrap,
+  .catalog-product-card--compact .product-img {
+    height: 150px;
+    min-height: 150px;
+  }
+
+  .bottom-promo-shell {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bottom-promo-label {
+    padding: 0 4px;
+  }
+
+  .bottom-promo-list {
+    grid-auto-columns: minmax(220px, 78vw);
+  }
+}
+
+@media (max-width: 460px) {
+  .catalog-page {
+    --catalog-layout-header-height: 108px;
+    padding-inline: 8px;
+  }
+
+  .sticky-search :deep(.q-field__control),
+  .sticky-search :deep(.q-field__prepend),
+  .sticky-search :deep(.q-field__append) {
+    min-height: 40px;
+    height: 40px;
+  }
+
+  .sticky-search :deep(input) {
+    font-size: 13px;
+  }
+
+  .section-tab {
+    font-size: 12px;
+  }
+
+  .catalog-grid,
+  .brand-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .catalog-product-card {
+    border-radius: 16px;
+  }
+
+  .product-info {
+    min-height: 110px;
+    padding: 10px;
+  }
+
+  .product-title {
+    font-size: 12px;
+  }
+
+  .product-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .product-brand {
+    max-width: 100%;
+  }
+
+  .product-price {
+    text-align: left;
+  }
+
+  .bottom-promo-bar {
+    padding-inline: 8px;
+  }
+
+  .bottom-promo-item {
+    grid-template-columns: 44px minmax(0, 1fr) 32px;
+    height: 60px;
+  }
+
+  .bottom-promo-img {
+    width: 44px;
+    height: 44px;
+  }
+
   .barcode-modal-card {
     width: 100%;
     height: 100dvh;
@@ -3145,7 +2908,6 @@ onBeforeUnmount(() => {
 
   .barcode-modal-body {
     padding: 14px;
-    overflow-y: auto;
   }
 
   .barcode-video-wrap {
@@ -3160,46 +2922,10 @@ onBeforeUnmount(() => {
     inset: 56px 22px;
   }
 
-  .barcode-action-row {
+  .barcode-action-row,
+  .barcode-modal-actions {
     display: grid;
     grid-template-columns: 1fr;
   }
-
-  .barcode-action-row .q-btn {
-    width: 100%;
-  }
-
-  .barcode-modal-actions {
-    position: sticky;
-    bottom: 0;
-    z-index: 5;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .barcode-modal-actions .q-btn {
-    min-width: 0;
-  }
-}
-.product-image-wrap--out-stock .product-img {
-  filter: grayscale(100%);
-  opacity: 0.48;
-}
-
-.product-image-wrap--out-stock::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.34);
-  pointer-events: none;
-}
-
-.stock-watermark {
-  z-index: 4;
-}
-
-.stock-badge {
-  z-index: 5;
 }
 </style>

@@ -232,8 +232,8 @@
     <q-page-container class="bg-grey-3">
       <router-view />
 
-      <q-page-sticky style="z-index: 45;" position="bottom-right" :offset="[18, 18]">
-        <q-btn round size="xl" color="primary" text-color="secondary" icon="mdi-face-agent" class="shadow-8"
+      <q-page-sticky style="z-index: 999;" position="bottom-right" :offset="[18, 18]">
+        <q-btn round size="xl" color="primary" glossy text-color="secondary" icon="mdi-face-agent" class="shadow-5"
           to="/chat" />
       </q-page-sticky>
     </q-page-container>
